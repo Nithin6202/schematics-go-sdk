@@ -15,7 +15,7 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 3.17.0-8d569e8f-20201030-142059
+ * IBM OpenAPI SDK Code Generator Version: 3.30.0-bd714324-20210406-200538
  */
 
 // Package schematicsv1 : Operations and models for the SchematicsV1 service
@@ -30,7 +30,7 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/IBM/go-sdk-core/v4/core"
+	"github.com/IBM/go-sdk-core/v5/core"
 	common "github.com/IBM/schematics-go-sdk/common"
 	"github.com/go-openapi/strfmt"
 )
@@ -113,6 +113,21 @@ func NewSchematicsV1(options *SchematicsV1Options) (service *SchematicsV1, err e
 	}
 
 	return
+}
+
+// GetServiceURLForRegion returns the service URL to be used for the specified region
+func GetServiceURLForRegion(region string) (string, error) {
+	return "", fmt.Errorf("service does not support regional URLs")
+}
+
+// Clone makes a copy of "schematics" suitable for processing requests.
+func (schematics *SchematicsV1) Clone() *SchematicsV1 {
+	if core.IsNil(schematics) {
+		return nil
+	}
+	clone := *schematics
+	clone.Service = schematics.Service.Clone()
+	return &clone
 }
 
 // SetServiceURL sets the service URL
@@ -2362,8 +2377,11 @@ func (schematics *SchematicsV1) CreateActionWithContext(ctx context.Context, cre
 	if createActionOptions.Bastion != nil {
 		body["bastion"] = createActionOptions.Bastion
 	}
-	if createActionOptions.TargetsIni != nil {
-		body["targets_ini"] = createActionOptions.TargetsIni
+	if createActionOptions.Inventory != nil {
+		body["inventory"] = createActionOptions.Inventory
+	}
+	if createActionOptions.BastionCredential != nil {
+		body["bastion_credential"] = createActionOptions.BastionCredential
 	}
 	if createActionOptions.Credentials != nil {
 		body["credentials"] = createActionOptions.Credentials
@@ -2376,9 +2394,6 @@ func (schematics *SchematicsV1) CreateActionWithContext(ctx context.Context, cre
 	}
 	if createActionOptions.Settings != nil {
 		body["settings"] = createActionOptions.Settings
-	}
-	if createActionOptions.TriggerRecordID != nil {
-		body["trigger_record_id"] = createActionOptions.TriggerRecordID
 	}
 	if createActionOptions.State != nil {
 		body["state"] = createActionOptions.State
@@ -2666,8 +2681,11 @@ func (schematics *SchematicsV1) UpdateActionWithContext(ctx context.Context, upd
 	if updateActionOptions.Bastion != nil {
 		body["bastion"] = updateActionOptions.Bastion
 	}
-	if updateActionOptions.TargetsIni != nil {
-		body["targets_ini"] = updateActionOptions.TargetsIni
+	if updateActionOptions.Inventory != nil {
+		body["inventory"] = updateActionOptions.Inventory
+	}
+	if updateActionOptions.BastionCredential != nil {
+		body["bastion_credential"] = updateActionOptions.BastionCredential
 	}
 	if updateActionOptions.Credentials != nil {
 		body["credentials"] = updateActionOptions.Credentials
@@ -2680,9 +2698,6 @@ func (schematics *SchematicsV1) UpdateActionWithContext(ctx context.Context, upd
 	}
 	if updateActionOptions.Settings != nil {
 		body["settings"] = updateActionOptions.Settings
-	}
-	if updateActionOptions.TriggerRecordID != nil {
-		body["trigger_record_id"] = updateActionOptions.TriggerRecordID
 	}
 	if updateActionOptions.State != nil {
 		body["state"] = updateActionOptions.State
@@ -2706,6 +2721,73 @@ func (schematics *SchematicsV1) UpdateActionWithContext(ctx context.Context, upd
 		return
 	}
 	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalAction)
+	if err != nil {
+		return
+	}
+	response.Result = result
+
+	return
+}
+
+// UploadTemplateTarAction : Upload template tar file for the action
+// Upload template tar file for the action.
+func (schematics *SchematicsV1) UploadTemplateTarAction(uploadTemplateTarActionOptions *UploadTemplateTarActionOptions) (result *TemplateRepoTarUploadResponse, response *core.DetailedResponse, err error) {
+	return schematics.UploadTemplateTarActionWithContext(context.Background(), uploadTemplateTarActionOptions)
+}
+
+// UploadTemplateTarActionWithContext is an alternate form of the UploadTemplateTarAction method which supports a Context parameter
+func (schematics *SchematicsV1) UploadTemplateTarActionWithContext(ctx context.Context, uploadTemplateTarActionOptions *UploadTemplateTarActionOptions) (result *TemplateRepoTarUploadResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(uploadTemplateTarActionOptions, "uploadTemplateTarActionOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(uploadTemplateTarActionOptions, "uploadTemplateTarActionOptions")
+	if err != nil {
+		return
+	}
+	if uploadTemplateTarActionOptions.File == nil {
+		err = fmt.Errorf("at least one of  or file must be supplied")
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"action_id": *uploadTemplateTarActionOptions.ActionID,
+	}
+
+	builder := core.NewRequestBuilder(core.PUT)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/actions/{action_id}/template_repo_upload`, pathParamsMap)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range uploadTemplateTarActionOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "UploadTemplateTarAction")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	if uploadTemplateTarActionOptions.File != nil {
+		builder.AddFormData("file", "filename",
+			core.StringNilMapper(uploadTemplateTarActionOptions.FileContentType), uploadTemplateTarActionOptions.File)
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = schematics.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalTemplateRepoTarUploadResponse)
 	if err != nil {
 		return
 	}
@@ -3165,64 +3247,6 @@ func (schematics *SchematicsV1) ListJobLogsWithContext(ctx context.Context, list
 		return
 	}
 	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalJobLog)
-	if err != nil {
-		return
-	}
-	response.Result = result
-
-	return
-}
-
-// ListJobStates : Get state-data from the Job record
-// Get state-data from the Job record.
-func (schematics *SchematicsV1) ListJobStates(listJobStatesOptions *ListJobStatesOptions) (result *JobStateData, response *core.DetailedResponse, err error) {
-	return schematics.ListJobStatesWithContext(context.Background(), listJobStatesOptions)
-}
-
-// ListJobStatesWithContext is an alternate form of the ListJobStates method which supports a Context parameter
-func (schematics *SchematicsV1) ListJobStatesWithContext(ctx context.Context, listJobStatesOptions *ListJobStatesOptions) (result *JobStateData, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(listJobStatesOptions, "listJobStatesOptions cannot be nil")
-	if err != nil {
-		return
-	}
-	err = core.ValidateStruct(listJobStatesOptions, "listJobStatesOptions")
-	if err != nil {
-		return
-	}
-
-	pathParamsMap := map[string]string{
-		"job_id": *listJobStatesOptions.JobID,
-	}
-
-	builder := core.NewRequestBuilder(core.GET)
-	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/jobs/{job_id}/states`, pathParamsMap)
-	if err != nil {
-		return
-	}
-
-	for headerName, headerValue := range listJobStatesOptions.Headers {
-		builder.AddHeader(headerName, headerValue)
-	}
-
-	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "ListJobStates")
-	for headerName, headerValue := range sdkHeaders {
-		builder.AddHeader(headerName, headerValue)
-	}
-	builder.AddHeader("Accept", "application/json")
-
-	request, err := builder.Build()
-	if err != nil {
-		return
-	}
-
-	var rawResponse map[string]json.RawMessage
-	response, err = schematics.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalJobStateData)
 	if err != nil {
 		return
 	}
@@ -3781,6 +3805,920 @@ func (schematics *SchematicsV1) GetDiscoveredKmsInstancesWithContext(ctx context
 	return
 }
 
+// CreateInventory : Create a resource inventory definition, used to target Actions or Controls
+// Create a resource inventory definition.
+func (schematics *SchematicsV1) CreateInventory(createInventoryOptions *CreateInventoryOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
+	return schematics.CreateInventoryWithContext(context.Background(), createInventoryOptions)
+}
+
+// CreateInventoryWithContext is an alternate form of the CreateInventory method which supports a Context parameter
+func (schematics *SchematicsV1) CreateInventoryWithContext(ctx context.Context, createInventoryOptions *CreateInventoryOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(createInventoryOptions, "createInventoryOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(createInventoryOptions, "createInventoryOptions")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.POST)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/inventories`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range createInventoryOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "CreateInventory")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+	builder.AddHeader("Content-Type", "application/json")
+
+	body := make(map[string]interface{})
+	if createInventoryOptions.Name != nil {
+		body["name"] = createInventoryOptions.Name
+	}
+	if createInventoryOptions.Description != nil {
+		body["description"] = createInventoryOptions.Description
+	}
+	if createInventoryOptions.Location != nil {
+		body["location"] = createInventoryOptions.Location
+	}
+	if createInventoryOptions.ResourceGroup != nil {
+		body["resource_group"] = createInventoryOptions.ResourceGroup
+	}
+	if createInventoryOptions.InventoriesIni != nil {
+		body["inventories_ini"] = createInventoryOptions.InventoriesIni
+	}
+	if createInventoryOptions.ResourceQueries != nil {
+		body["resource_queries"] = createInventoryOptions.ResourceQueries
+	}
+	_, err = builder.SetBodyContentJSON(body)
+	if err != nil {
+		return
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = schematics.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalInventoryResourceRecord)
+	if err != nil {
+		return
+	}
+	response.Result = result
+
+	return
+}
+
+// ListInventories : Get all resource inventory definitions
+// Get all resource inventory definition.
+func (schematics *SchematicsV1) ListInventories(listInventoriesOptions *ListInventoriesOptions) (result *InventoryResourceRecordList, response *core.DetailedResponse, err error) {
+	return schematics.ListInventoriesWithContext(context.Background(), listInventoriesOptions)
+}
+
+// ListInventoriesWithContext is an alternate form of the ListInventories method which supports a Context parameter
+func (schematics *SchematicsV1) ListInventoriesWithContext(ctx context.Context, listInventoriesOptions *ListInventoriesOptions) (result *InventoryResourceRecordList, response *core.DetailedResponse, err error) {
+	err = core.ValidateStruct(listInventoriesOptions, "listInventoriesOptions")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.GET)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/inventories`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range listInventoriesOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "ListInventories")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	if listInventoriesOptions.Offset != nil {
+		builder.AddQuery("offset", fmt.Sprint(*listInventoriesOptions.Offset))
+	}
+	if listInventoriesOptions.Limit != nil {
+		builder.AddQuery("limit", fmt.Sprint(*listInventoriesOptions.Limit))
+	}
+	if listInventoriesOptions.Sort != nil {
+		builder.AddQuery("sort", fmt.Sprint(*listInventoriesOptions.Sort))
+	}
+	if listInventoriesOptions.Profile != nil {
+		builder.AddQuery("profile", fmt.Sprint(*listInventoriesOptions.Profile))
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = schematics.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalInventoryResourceRecordList)
+	if err != nil {
+		return
+	}
+	response.Result = result
+
+	return
+}
+
+// ReplaceInventory : Replace the resource inventory definition, used to target Actions or Controls
+// Replace the resource inventory definition.
+func (schematics *SchematicsV1) ReplaceInventory(replaceInventoryOptions *ReplaceInventoryOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
+	return schematics.ReplaceInventoryWithContext(context.Background(), replaceInventoryOptions)
+}
+
+// ReplaceInventoryWithContext is an alternate form of the ReplaceInventory method which supports a Context parameter
+func (schematics *SchematicsV1) ReplaceInventoryWithContext(ctx context.Context, replaceInventoryOptions *ReplaceInventoryOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(replaceInventoryOptions, "replaceInventoryOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(replaceInventoryOptions, "replaceInventoryOptions")
+	if err != nil {
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"inventory_id": *replaceInventoryOptions.InventoryID,
+	}
+
+	builder := core.NewRequestBuilder(core.PUT)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/inventories/{inventory_id}`, pathParamsMap)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range replaceInventoryOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "ReplaceInventory")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+	builder.AddHeader("Content-Type", "application/json")
+
+	body := make(map[string]interface{})
+	if replaceInventoryOptions.Name != nil {
+		body["name"] = replaceInventoryOptions.Name
+	}
+	if replaceInventoryOptions.Description != nil {
+		body["description"] = replaceInventoryOptions.Description
+	}
+	if replaceInventoryOptions.Location != nil {
+		body["location"] = replaceInventoryOptions.Location
+	}
+	if replaceInventoryOptions.ResourceGroup != nil {
+		body["resource_group"] = replaceInventoryOptions.ResourceGroup
+	}
+	if replaceInventoryOptions.InventoriesIni != nil {
+		body["inventories_ini"] = replaceInventoryOptions.InventoriesIni
+	}
+	if replaceInventoryOptions.ResourceQueries != nil {
+		body["resource_queries"] = replaceInventoryOptions.ResourceQueries
+	}
+	_, err = builder.SetBodyContentJSON(body)
+	if err != nil {
+		return
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = schematics.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalInventoryResourceRecord)
+	if err != nil {
+		return
+	}
+	response.Result = result
+
+	return
+}
+
+// UpdateInventory : Update the resource inventory definition, used to target Actions or Controls
+// Update the resource inventory definition.
+func (schematics *SchematicsV1) UpdateInventory(updateInventoryOptions *UpdateInventoryOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
+	return schematics.UpdateInventoryWithContext(context.Background(), updateInventoryOptions)
+}
+
+// UpdateInventoryWithContext is an alternate form of the UpdateInventory method which supports a Context parameter
+func (schematics *SchematicsV1) UpdateInventoryWithContext(ctx context.Context, updateInventoryOptions *UpdateInventoryOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(updateInventoryOptions, "updateInventoryOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(updateInventoryOptions, "updateInventoryOptions")
+	if err != nil {
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"inventory_id": *updateInventoryOptions.InventoryID,
+	}
+
+	builder := core.NewRequestBuilder(core.PATCH)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/inventories/{inventory_id}`, pathParamsMap)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range updateInventoryOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "UpdateInventory")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+	builder.AddHeader("Content-Type", "application/json")
+
+	body := make(map[string]interface{})
+	if updateInventoryOptions.Name != nil {
+		body["name"] = updateInventoryOptions.Name
+	}
+	if updateInventoryOptions.Description != nil {
+		body["description"] = updateInventoryOptions.Description
+	}
+	if updateInventoryOptions.Location != nil {
+		body["location"] = updateInventoryOptions.Location
+	}
+	if updateInventoryOptions.ResourceGroup != nil {
+		body["resource_group"] = updateInventoryOptions.ResourceGroup
+	}
+	if updateInventoryOptions.InventoriesIni != nil {
+		body["inventories_ini"] = updateInventoryOptions.InventoriesIni
+	}
+	if updateInventoryOptions.ResourceQueries != nil {
+		body["resource_queries"] = updateInventoryOptions.ResourceQueries
+	}
+	_, err = builder.SetBodyContentJSON(body)
+	if err != nil {
+		return
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = schematics.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalInventoryResourceRecord)
+	if err != nil {
+		return
+	}
+	response.Result = result
+
+	return
+}
+
+// DeleteInventory : Delete the resource inventory definition
+// Delete the resource inventory definition.
+func (schematics *SchematicsV1) DeleteInventory(deleteInventoryOptions *DeleteInventoryOptions) (response *core.DetailedResponse, err error) {
+	return schematics.DeleteInventoryWithContext(context.Background(), deleteInventoryOptions)
+}
+
+// DeleteInventoryWithContext is an alternate form of the DeleteInventory method which supports a Context parameter
+func (schematics *SchematicsV1) DeleteInventoryWithContext(ctx context.Context, deleteInventoryOptions *DeleteInventoryOptions) (response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(deleteInventoryOptions, "deleteInventoryOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(deleteInventoryOptions, "deleteInventoryOptions")
+	if err != nil {
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"inventory_id": *deleteInventoryOptions.InventoryID,
+	}
+
+	builder := core.NewRequestBuilder(core.DELETE)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/inventories/{inventory_id}`, pathParamsMap)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range deleteInventoryOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "DeleteInventory")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	if deleteInventoryOptions.Force != nil {
+		builder.AddHeader("force", fmt.Sprint(*deleteInventoryOptions.Force))
+	}
+	if deleteInventoryOptions.Propagate != nil {
+		builder.AddHeader("propagate", fmt.Sprint(*deleteInventoryOptions.Propagate))
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	response, err = schematics.Service.Request(request, nil)
+
+	return
+}
+
+// GetInventory : Get the resource inventory definition, used to target Actions or Controls
+// Get the resource inventory definition.
+func (schematics *SchematicsV1) GetInventory(getInventoryOptions *GetInventoryOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
+	return schematics.GetInventoryWithContext(context.Background(), getInventoryOptions)
+}
+
+// GetInventoryWithContext is an alternate form of the GetInventory method which supports a Context parameter
+func (schematics *SchematicsV1) GetInventoryWithContext(ctx context.Context, getInventoryOptions *GetInventoryOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(getInventoryOptions, "getInventoryOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(getInventoryOptions, "getInventoryOptions")
+	if err != nil {
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"inventory_id": *getInventoryOptions.InventoryID,
+	}
+
+	builder := core.NewRequestBuilder(core.GET)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/inventories/{inventory_id}`, pathParamsMap)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range getInventoryOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "GetInventory")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = schematics.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalInventoryResourceRecord)
+	if err != nil {
+		return
+	}
+	response.Result = result
+
+	return
+}
+
+// ListInventoryValues : Get all the resource inventory values
+// Get all the resource inventory values.
+func (schematics *SchematicsV1) ListInventoryValues(listInventoryValuesOptions *ListInventoryValuesOptions) (result *InventoryResourceRecordList, response *core.DetailedResponse, err error) {
+	return schematics.ListInventoryValuesWithContext(context.Background(), listInventoryValuesOptions)
+}
+
+// ListInventoryValuesWithContext is an alternate form of the ListInventoryValues method which supports a Context parameter
+func (schematics *SchematicsV1) ListInventoryValuesWithContext(ctx context.Context, listInventoryValuesOptions *ListInventoryValuesOptions) (result *InventoryResourceRecordList, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(listInventoryValuesOptions, "listInventoryValuesOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(listInventoryValuesOptions, "listInventoryValuesOptions")
+	if err != nil {
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"inventory_id": *listInventoryValuesOptions.InventoryID,
+	}
+
+	builder := core.NewRequestBuilder(core.GET)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/inventories/{inventory_id}/variables`, pathParamsMap)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range listInventoryValuesOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "ListInventoryValues")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = schematics.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalInventoryResourceRecordList)
+	if err != nil {
+		return
+	}
+	response.Result = result
+
+	return
+}
+
+// GetInventoryValue : Get the resource inventory value
+// Get the resource inventory value.
+func (schematics *SchematicsV1) GetInventoryValue(getInventoryValueOptions *GetInventoryValueOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
+	return schematics.GetInventoryValueWithContext(context.Background(), getInventoryValueOptions)
+}
+
+// GetInventoryValueWithContext is an alternate form of the GetInventoryValue method which supports a Context parameter
+func (schematics *SchematicsV1) GetInventoryValueWithContext(ctx context.Context, getInventoryValueOptions *GetInventoryValueOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(getInventoryValueOptions, "getInventoryValueOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(getInventoryValueOptions, "getInventoryValueOptions")
+	if err != nil {
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"inventory_id": *getInventoryValueOptions.InventoryID,
+		"var_name":     *getInventoryValueOptions.VarName,
+	}
+
+	builder := core.NewRequestBuilder(core.GET)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/inventories/{inventory_id}/variables/{var_name}`, pathParamsMap)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range getInventoryValueOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "GetInventoryValue")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = schematics.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalInventoryResourceRecord)
+	if err != nil {
+		return
+	}
+	response.Result = result
+
+	return
+}
+
+// CreateResourceQuery : Create a resource query definition
+// Create a resource query definition.
+func (schematics *SchematicsV1) CreateResourceQuery(createResourceQueryOptions *CreateResourceQueryOptions) (result *ResourceQueryRecord, response *core.DetailedResponse, err error) {
+	return schematics.CreateResourceQueryWithContext(context.Background(), createResourceQueryOptions)
+}
+
+// CreateResourceQueryWithContext is an alternate form of the CreateResourceQuery method which supports a Context parameter
+func (schematics *SchematicsV1) CreateResourceQueryWithContext(ctx context.Context, createResourceQueryOptions *CreateResourceQueryOptions) (result *ResourceQueryRecord, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(createResourceQueryOptions, "createResourceQueryOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(createResourceQueryOptions, "createResourceQueryOptions")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.POST)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/resources_query`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range createResourceQueryOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "CreateResourceQuery")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+	builder.AddHeader("Content-Type", "application/json")
+
+	body := make(map[string]interface{})
+	if createResourceQueryOptions.Type != nil {
+		body["type"] = createResourceQueryOptions.Type
+	}
+	if createResourceQueryOptions.Name != nil {
+		body["name"] = createResourceQueryOptions.Name
+	}
+	if createResourceQueryOptions.Queries != nil {
+		body["queries"] = createResourceQueryOptions.Queries
+	}
+	_, err = builder.SetBodyContentJSON(body)
+	if err != nil {
+		return
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = schematics.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalResourceQueryRecord)
+	if err != nil {
+		return
+	}
+	response.Result = result
+
+	return
+}
+
+// ListResourceQuery : Get all resource query definitions
+// Get all resource query definition.
+func (schematics *SchematicsV1) ListResourceQuery(listResourceQueryOptions *ListResourceQueryOptions) (result *ResourceQueryRecordList, response *core.DetailedResponse, err error) {
+	return schematics.ListResourceQueryWithContext(context.Background(), listResourceQueryOptions)
+}
+
+// ListResourceQueryWithContext is an alternate form of the ListResourceQuery method which supports a Context parameter
+func (schematics *SchematicsV1) ListResourceQueryWithContext(ctx context.Context, listResourceQueryOptions *ListResourceQueryOptions) (result *ResourceQueryRecordList, response *core.DetailedResponse, err error) {
+	err = core.ValidateStruct(listResourceQueryOptions, "listResourceQueryOptions")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.GET)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/resources_query`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range listResourceQueryOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "ListResourceQuery")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	if listResourceQueryOptions.Offset != nil {
+		builder.AddQuery("offset", fmt.Sprint(*listResourceQueryOptions.Offset))
+	}
+	if listResourceQueryOptions.Limit != nil {
+		builder.AddQuery("limit", fmt.Sprint(*listResourceQueryOptions.Limit))
+	}
+	if listResourceQueryOptions.Sort != nil {
+		builder.AddQuery("sort", fmt.Sprint(*listResourceQueryOptions.Sort))
+	}
+	if listResourceQueryOptions.Profile != nil {
+		builder.AddQuery("profile", fmt.Sprint(*listResourceQueryOptions.Profile))
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = schematics.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalResourceQueryRecordList)
+	if err != nil {
+		return
+	}
+	response.Result = result
+
+	return
+}
+
+// ExecuteResourceQuery : Run the resource query
+// Execute a resource query definition.
+func (schematics *SchematicsV1) ExecuteResourceQuery(executeResourceQueryOptions *ExecuteResourceQueryOptions) (result *ResourceQueryResponseRecord, response *core.DetailedResponse, err error) {
+	return schematics.ExecuteResourceQueryWithContext(context.Background(), executeResourceQueryOptions)
+}
+
+// ExecuteResourceQueryWithContext is an alternate form of the ExecuteResourceQuery method which supports a Context parameter
+func (schematics *SchematicsV1) ExecuteResourceQueryWithContext(ctx context.Context, executeResourceQueryOptions *ExecuteResourceQueryOptions) (result *ResourceQueryResponseRecord, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(executeResourceQueryOptions, "executeResourceQueryOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(executeResourceQueryOptions, "executeResourceQueryOptions")
+	if err != nil {
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"query_id": *executeResourceQueryOptions.QueryID,
+	}
+
+	builder := core.NewRequestBuilder(core.POST)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/resources_query/{query_id}`, pathParamsMap)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range executeResourceQueryOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "ExecuteResourceQuery")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = schematics.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalResourceQueryResponseRecord)
+	if err != nil {
+		return
+	}
+	response.Result = result
+
+	return
+}
+
+// ReplaceResourcesQuery : Replace the resources query definition
+// Replace the resources query definition.
+func (schematics *SchematicsV1) ReplaceResourcesQuery(replaceResourcesQueryOptions *ReplaceResourcesQueryOptions) (result *ResourceQueryRecord, response *core.DetailedResponse, err error) {
+	return schematics.ReplaceResourcesQueryWithContext(context.Background(), replaceResourcesQueryOptions)
+}
+
+// ReplaceResourcesQueryWithContext is an alternate form of the ReplaceResourcesQuery method which supports a Context parameter
+func (schematics *SchematicsV1) ReplaceResourcesQueryWithContext(ctx context.Context, replaceResourcesQueryOptions *ReplaceResourcesQueryOptions) (result *ResourceQueryRecord, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(replaceResourcesQueryOptions, "replaceResourcesQueryOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(replaceResourcesQueryOptions, "replaceResourcesQueryOptions")
+	if err != nil {
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"query_id": *replaceResourcesQueryOptions.QueryID,
+	}
+
+	builder := core.NewRequestBuilder(core.PUT)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/resources_query/{query_id}`, pathParamsMap)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range replaceResourcesQueryOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "ReplaceResourcesQuery")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+	builder.AddHeader("Content-Type", "application/json")
+
+	body := make(map[string]interface{})
+	if replaceResourcesQueryOptions.Type != nil {
+		body["type"] = replaceResourcesQueryOptions.Type
+	}
+	if replaceResourcesQueryOptions.Name != nil {
+		body["name"] = replaceResourcesQueryOptions.Name
+	}
+	if replaceResourcesQueryOptions.Queries != nil {
+		body["queries"] = replaceResourcesQueryOptions.Queries
+	}
+	_, err = builder.SetBodyContentJSON(body)
+	if err != nil {
+		return
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = schematics.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalResourceQueryRecord)
+	if err != nil {
+		return
+	}
+	response.Result = result
+
+	return
+}
+
+// DeleteResourcesQuery : Delete the resources query definition
+// Delete the resources query definition.
+func (schematics *SchematicsV1) DeleteResourcesQuery(deleteResourcesQueryOptions *DeleteResourcesQueryOptions) (response *core.DetailedResponse, err error) {
+	return schematics.DeleteResourcesQueryWithContext(context.Background(), deleteResourcesQueryOptions)
+}
+
+// DeleteResourcesQueryWithContext is an alternate form of the DeleteResourcesQuery method which supports a Context parameter
+func (schematics *SchematicsV1) DeleteResourcesQueryWithContext(ctx context.Context, deleteResourcesQueryOptions *DeleteResourcesQueryOptions) (response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(deleteResourcesQueryOptions, "deleteResourcesQueryOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(deleteResourcesQueryOptions, "deleteResourcesQueryOptions")
+	if err != nil {
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"query_id": *deleteResourcesQueryOptions.QueryID,
+	}
+
+	builder := core.NewRequestBuilder(core.DELETE)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/resources_query/{query_id}`, pathParamsMap)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range deleteResourcesQueryOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "DeleteResourcesQuery")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	if deleteResourcesQueryOptions.Force != nil {
+		builder.AddHeader("force", fmt.Sprint(*deleteResourcesQueryOptions.Force))
+	}
+	if deleteResourcesQueryOptions.Propagate != nil {
+		builder.AddHeader("propagate", fmt.Sprint(*deleteResourcesQueryOptions.Propagate))
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	response, err = schematics.Service.Request(request, nil)
+
+	return
+}
+
+// GetResourcesQuery : Get the resources query definition
+// Get the resources query definition.
+func (schematics *SchematicsV1) GetResourcesQuery(getResourcesQueryOptions *GetResourcesQueryOptions) (result *ResourceQueryRecord, response *core.DetailedResponse, err error) {
+	return schematics.GetResourcesQueryWithContext(context.Background(), getResourcesQueryOptions)
+}
+
+// GetResourcesQueryWithContext is an alternate form of the GetResourcesQuery method which supports a Context parameter
+func (schematics *SchematicsV1) GetResourcesQueryWithContext(ctx context.Context, getResourcesQueryOptions *GetResourcesQueryOptions) (result *ResourceQueryRecord, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(getResourcesQueryOptions, "getResourcesQueryOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(getResourcesQueryOptions, "getResourcesQueryOptions")
+	if err != nil {
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"query_id": *getResourcesQueryOptions.QueryID,
+	}
+
+	builder := core.NewRequestBuilder(core.GET)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/resources_query/{query_id}`, pathParamsMap)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range getResourcesQueryOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "GetResourcesQuery")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = schematics.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalResourceQueryRecord)
+	if err != nil {
+		return
+	}
+	response.Result = result
+
+	return
+}
+
 // Action : Complete Action details with user inputs and system generated data.
 type Action struct {
 	// Action name (unique for an account).
@@ -3811,14 +4749,17 @@ type Action struct {
 	// Type of source for the Template.
 	SourceType *string `json:"source_type,omitempty"`
 
-	// Schematics job command parameter (playbook-name, capsule-name or flow-name).
+	// Schematics job command parameter (playbook-name).
 	CommandParameter *string `json:"command_parameter,omitempty"`
 
-	// Complete Target details with user inputs and system generated data.
-	Bastion *TargetResourceset `json:"bastion,omitempty"`
+	// Describes a bastion resource.
+	Bastion *BastionResourceDefinition `json:"bastion,omitempty"`
 
-	// Inventory of host and host group for the playbook, in .ini file format.
-	TargetsIni *string `json:"targets_ini,omitempty"`
+	// Inventory ID.
+	Inventory *string `json:"inventory,omitempty"`
+
+	// User editable variable data & system generated reference to value.
+	BastionCredential *VariableData `json:"bastion_credential,omitempty"`
 
 	// credentials of the Action.
 	Credentials []VariableData `json:"credentials,omitempty"`
@@ -3831,9 +4772,6 @@ type Action struct {
 
 	// Environment variables for the Action.
 	Settings []VariableData `json:"settings,omitempty"`
-
-	// Id to the Trigger.
-	TriggerRecordID *string `json:"trigger_record_id,omitempty"`
 
 	// Action Id.
 	ID *string `json:"id,omitempty"`
@@ -3868,9 +4806,6 @@ type Action struct {
 	// Email address of user who updated the action.
 	UpdatedBy *string `json:"updated_by,omitempty"`
 
-	// name of the namespace.
-	Namespace *string `json:"namespace,omitempty"`
-
 	// Computed state of the Action.
 	State *ActionState `json:"state,omitempty"`
 
@@ -3885,10 +4820,10 @@ type Action struct {
 // List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of the
 // resources provisioned using Schematics.
 const (
-	Action_Location_EuDe    = "eu_de"
-	Action_Location_EuGb    = "eu_gb"
-	Action_Location_UsEast  = "us_east"
-	Action_Location_UsSouth = "us_south"
+	Action_Location_EuDe    = "eu-de"
+	Action_Location_EuGb    = "eu-gb"
+	Action_Location_UsEast  = "us-east"
+	Action_Location_UsSouth = "us-south"
 )
 
 // Constants associated with the Action.SourceType property.
@@ -3946,11 +4881,15 @@ func UnmarshalAction(m map[string]json.RawMessage, result interface{}) (err erro
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "bastion", &obj.Bastion, UnmarshalTargetResourceset)
+	err = core.UnmarshalModel(m, "bastion", &obj.Bastion, UnmarshalBastionResourceDefinition)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "targets_ini", &obj.TargetsIni)
+	err = core.UnmarshalPrimitive(m, "inventory", &obj.Inventory)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "bastion_credential", &obj.BastionCredential, UnmarshalVariableData)
 	if err != nil {
 		return
 	}
@@ -3967,10 +4906,6 @@ func UnmarshalAction(m map[string]json.RawMessage, result interface{}) (err erro
 		return
 	}
 	err = core.UnmarshalModel(m, "settings", &obj.Settings, UnmarshalVariableData)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "trigger_record_id", &obj.TriggerRecordID)
 	if err != nil {
 		return
 	}
@@ -4015,10 +4950,6 @@ func UnmarshalAction(m map[string]json.RawMessage, result interface{}) (err erro
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "updated_by", &obj.UpdatedBy)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "namespace", &obj.Namespace)
 	if err != nil {
 		return
 	}
@@ -4132,10 +5063,10 @@ type ActionLite struct {
 // List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of the
 // resources provisioned using Schematics.
 const (
-	ActionLite_Location_EuDe    = "eu_de"
-	ActionLite_Location_EuGb    = "eu_gb"
-	ActionLite_Location_UsEast  = "us_east"
-	ActionLite_Location_UsSouth = "us_south"
+	ActionLite_Location_EuDe    = "eu-de"
+	ActionLite_Location_EuGb    = "eu-gb"
+	ActionLite_Location_UsEast  = "us-east"
+	ActionLite_Location_UsSouth = "us-south"
 )
 
 // UnmarshalActionLite unmarshals an instance of ActionLite from the specified map of raw messages.
@@ -4286,13 +5217,13 @@ func UnmarshalActionState(m map[string]json.RawMessage, result interface{}) (err
 type ApplyWorkspaceCommandOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The IAM refresh token associated with the IBM Cloud account.
-	RefreshToken *string `json:"refresh_token" validate:"required"`
+	RefreshToken *string `validate:"required"`
 
-	// Action Options Template ...
-	ActionOptions *WorkspaceActivityOptionsTemplate `json:"action_options,omitempty"`
+	// Workspace Activity Options Template.
+	ActionOptions *WorkspaceActivityOptionsTemplate
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -4328,6 +5259,30 @@ func (options *ApplyWorkspaceCommandOptions) SetActionOptions(actionOptions *Wor
 func (options *ApplyWorkspaceCommandOptions) SetHeaders(param map[string]string) *ApplyWorkspaceCommandOptions {
 	options.Headers = param
 	return options
+}
+
+// BastionResourceDefinition : Describes a bastion resource.
+type BastionResourceDefinition struct {
+	// Bastion Name(Unique).
+	Name *string `json:"name,omitempty"`
+
+	// Reference to the Inventory resource definition.
+	Host *string `json:"host,omitempty"`
+}
+
+// UnmarshalBastionResourceDefinition unmarshals an instance of BastionResourceDefinition from the specified map of raw messages.
+func UnmarshalBastionResourceDefinition(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(BastionResourceDefinition)
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "host", &obj.Host)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
 }
 
 // CatalogRef : CatalogRef -.
@@ -4399,65 +5354,65 @@ func UnmarshalCatalogRef(m map[string]json.RawMessage, result interface{}) (err 
 // CreateActionOptions : The CreateAction options.
 type CreateActionOptions struct {
 	// Action name (unique for an account).
-	Name *string `json:"name,omitempty"`
+	Name *string
 
 	// Action description.
-	Description *string `json:"description,omitempty"`
+	Description *string
 
 	// List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of
 	// the resources provisioned using Schematics.
-	Location *string `json:"location,omitempty"`
+	Location *string
 
 	// Resource-group name for the Action.  By default, Action will be created in Default Resource Group.
-	ResourceGroup *string `json:"resource_group,omitempty"`
+	ResourceGroup *string
 
 	// Action tags.
-	Tags []string `json:"tags,omitempty"`
+	Tags []string
 
 	// User defined status of the Schematics object.
-	UserState *UserState `json:"user_state,omitempty"`
+	UserState *UserState
 
 	// URL of the README file, for the source.
-	SourceReadmeURL *string `json:"source_readme_url,omitempty"`
+	SourceReadmeURL *string
 
 	// Source of templates, playbooks, or controls.
-	Source *ExternalSource `json:"source,omitempty"`
+	Source *ExternalSource
 
 	// Type of source for the Template.
-	SourceType *string `json:"source_type,omitempty"`
+	SourceType *string
 
-	// Schematics job command parameter (playbook-name, capsule-name or flow-name).
-	CommandParameter *string `json:"command_parameter,omitempty"`
+	// Schematics job command parameter (playbook-name).
+	CommandParameter *string
 
-	// Complete Target details with user inputs and system generated data.
-	Bastion *TargetResourceset `json:"bastion,omitempty"`
+	// Describes a bastion resource.
+	Bastion *BastionResourceDefinition
 
-	// Inventory of host and host group for the playbook, in .ini file format.
-	TargetsIni *string `json:"targets_ini,omitempty"`
+	// Inventory ID.
+	Inventory *string
+
+	// User editable variable data & system generated reference to value.
+	BastionCredential *VariableData
 
 	// credentials of the Action.
-	Credentials []VariableData `json:"credentials,omitempty"`
+	Credentials []VariableData
 
 	// Input variables for the Action.
-	Inputs []VariableData `json:"inputs,omitempty"`
+	Inputs []VariableData
 
 	// Output variables for the Action.
-	Outputs []VariableData `json:"outputs,omitempty"`
+	Outputs []VariableData
 
 	// Environment variables for the Action.
-	Settings []VariableData `json:"settings,omitempty"`
-
-	// Id to the Trigger.
-	TriggerRecordID *string `json:"trigger_record_id,omitempty"`
+	Settings []VariableData
 
 	// Computed state of the Action.
-	State *ActionState `json:"state,omitempty"`
+	State *ActionState
 
 	// System lock status.
-	SysLock *SystemLock `json:"sys_lock,omitempty"`
+	SysLock *SystemLock
 
 	// The github token associated with the GIT. Required for cloning of repo.
-	XGithubToken *string `json:"X-Github-token,omitempty"`
+	XGithubToken *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -4467,10 +5422,10 @@ type CreateActionOptions struct {
 // List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of the
 // resources provisioned using Schematics.
 const (
-	CreateActionOptions_Location_EuDe    = "eu_de"
-	CreateActionOptions_Location_EuGb    = "eu_gb"
-	CreateActionOptions_Location_UsEast  = "us_east"
-	CreateActionOptions_Location_UsSouth = "us_south"
+	CreateActionOptions_Location_EuDe    = "eu-de"
+	CreateActionOptions_Location_EuGb    = "eu-gb"
+	CreateActionOptions_Location_UsEast  = "us-east"
+	CreateActionOptions_Location_UsSouth = "us-south"
 )
 
 // Constants associated with the CreateActionOptions.SourceType property.
@@ -4551,14 +5506,20 @@ func (options *CreateActionOptions) SetCommandParameter(commandParameter string)
 }
 
 // SetBastion : Allow user to set Bastion
-func (options *CreateActionOptions) SetBastion(bastion *TargetResourceset) *CreateActionOptions {
+func (options *CreateActionOptions) SetBastion(bastion *BastionResourceDefinition) *CreateActionOptions {
 	options.Bastion = bastion
 	return options
 }
 
-// SetTargetsIni : Allow user to set TargetsIni
-func (options *CreateActionOptions) SetTargetsIni(targetsIni string) *CreateActionOptions {
-	options.TargetsIni = core.StringPtr(targetsIni)
+// SetInventory : Allow user to set Inventory
+func (options *CreateActionOptions) SetInventory(inventory string) *CreateActionOptions {
+	options.Inventory = core.StringPtr(inventory)
+	return options
+}
+
+// SetBastionCredential : Allow user to set BastionCredential
+func (options *CreateActionOptions) SetBastionCredential(bastionCredential *VariableData) *CreateActionOptions {
+	options.BastionCredential = bastionCredential
 	return options
 }
 
@@ -4586,12 +5547,6 @@ func (options *CreateActionOptions) SetSettings(settings []VariableData) *Create
 	return options
 }
 
-// SetTriggerRecordID : Allow user to set TriggerRecordID
-func (options *CreateActionOptions) SetTriggerRecordID(triggerRecordID string) *CreateActionOptions {
-	options.TriggerRecordID = core.StringPtr(triggerRecordID)
-	return options
-}
-
 // SetState : Allow user to set State
 func (options *CreateActionOptions) SetState(state *ActionState) *CreateActionOptions {
 	options.State = state
@@ -4616,50 +5571,132 @@ func (options *CreateActionOptions) SetHeaders(param map[string]string) *CreateA
 	return options
 }
 
-// CreateJobOptions : The CreateJob options.
-type CreateJobOptions struct {
-	// The IAM refresh token associated with the IBM Cloud account.
-	RefreshToken *string `json:"refresh_token" validate:"required"`
+// CreateInventoryOptions : The CreateInventory options.
+type CreateInventoryOptions struct {
+	// Inventory name.
+	Name *string
 
-	// Name of the Schematics automation resource.
-	CommandObject *string `json:"command_object,omitempty"`
-
-	// Job command object id (workspace-id, action-id or control-id).
-	CommandObjectID *string `json:"command_object_id,omitempty"`
-
-	// Schematics job command name.
-	CommandName *string `json:"command_name,omitempty"`
-
-	// Schematics job command parameter (playbook-name, capsule-name or flow-name).
-	CommandParameter *string `json:"command_parameter,omitempty"`
-
-	// Command line options for the command.
-	CommandOptions []string `json:"command_options,omitempty"`
-
-	// Job inputs used by Action.
-	Inputs []VariableData `json:"inputs,omitempty"`
-
-	// Environment variables used by the Job while performing Action.
-	Settings []VariableData `json:"settings,omitempty"`
-
-	// User defined tags, while running the job.
-	Tags []string `json:"tags,omitempty"`
+	// Inventory description.
+	Description *string
 
 	// List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of
 	// the resources provisioned using Schematics.
-	Location *string `json:"location,omitempty"`
+	Location *string
+
+	// Resource-group name for the Inventory definition.  By default, Action will be created in Default Resource Group.
+	ResourceGroup *string
+
+	// Input inventory of host and host group for the playbook,  in the .ini file format.
+	InventoriesIni *string
+
+	// Input resource queries that is used to dynamically generate  the inventory of host and host group for the playbook.
+	ResourceQueries []string
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// Constants associated with the CreateInventoryOptions.Location property.
+// List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of the
+// resources provisioned using Schematics.
+const (
+	CreateInventoryOptions_Location_EuDe    = "eu-de"
+	CreateInventoryOptions_Location_EuGb    = "eu-gb"
+	CreateInventoryOptions_Location_UsEast  = "us-east"
+	CreateInventoryOptions_Location_UsSouth = "us-south"
+)
+
+// NewCreateInventoryOptions : Instantiate CreateInventoryOptions
+func (*SchematicsV1) NewCreateInventoryOptions() *CreateInventoryOptions {
+	return &CreateInventoryOptions{}
+}
+
+// SetName : Allow user to set Name
+func (options *CreateInventoryOptions) SetName(name string) *CreateInventoryOptions {
+	options.Name = core.StringPtr(name)
+	return options
+}
+
+// SetDescription : Allow user to set Description
+func (options *CreateInventoryOptions) SetDescription(description string) *CreateInventoryOptions {
+	options.Description = core.StringPtr(description)
+	return options
+}
+
+// SetLocation : Allow user to set Location
+func (options *CreateInventoryOptions) SetLocation(location string) *CreateInventoryOptions {
+	options.Location = core.StringPtr(location)
+	return options
+}
+
+// SetResourceGroup : Allow user to set ResourceGroup
+func (options *CreateInventoryOptions) SetResourceGroup(resourceGroup string) *CreateInventoryOptions {
+	options.ResourceGroup = core.StringPtr(resourceGroup)
+	return options
+}
+
+// SetInventoriesIni : Allow user to set InventoriesIni
+func (options *CreateInventoryOptions) SetInventoriesIni(inventoriesIni string) *CreateInventoryOptions {
+	options.InventoriesIni = core.StringPtr(inventoriesIni)
+	return options
+}
+
+// SetResourceQueries : Allow user to set ResourceQueries
+func (options *CreateInventoryOptions) SetResourceQueries(resourceQueries []string) *CreateInventoryOptions {
+	options.ResourceQueries = resourceQueries
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *CreateInventoryOptions) SetHeaders(param map[string]string) *CreateInventoryOptions {
+	options.Headers = param
+	return options
+}
+
+// CreateJobOptions : The CreateJob options.
+type CreateJobOptions struct {
+	// The IAM refresh token associated with the IBM Cloud account.
+	RefreshToken *string `validate:"required"`
+
+	// Name of the Schematics automation resource.
+	CommandObject *string
+
+	// Job command object id (workspace-id, action-id).
+	CommandObjectID *string
+
+	// Schematics job command name.
+	CommandName *string
+
+	// Schematics job command parameter (playbook-name, capsule-name or flow-name).
+	CommandParameter *string
+
+	// Command line options for the command.
+	CommandOptions []string
+
+	// Job inputs used by Action.
+	Inputs []VariableData
+
+	// Environment variables used by the Job while performing Action.
+	Settings []VariableData
+
+	// User defined tags, while running the job.
+	Tags []string
+
+	// List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of
+	// the resources provisioned using Schematics.
+	Location *string
 
 	// Job Status.
-	Status *JobStatus `json:"status,omitempty"`
+	Status *JobStatus
 
 	// Job data.
-	Data *JobData `json:"data,omitempty"`
+	Data *JobData
 
-	// Complete Target details with user inputs and system generated data.
-	Bastion *TargetResourceset `json:"bastion,omitempty"`
+	// Describes a bastion resource.
+	Bastion *BastionResourceDefinition
 
 	// Job log summary record.
-	LogSummary *JobLogSummary `json:"log_summary,omitempty"`
+	LogSummary *JobLogSummary
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -4669,6 +5706,7 @@ type CreateJobOptions struct {
 // Name of the Schematics automation resource.
 const (
 	CreateJobOptions_CommandObject_Action    = "action"
+	CreateJobOptions_CommandObject_System    = "system"
 	CreateJobOptions_CommandObject_Workspace = "workspace"
 )
 
@@ -4677,34 +5715,21 @@ const (
 const (
 	CreateJobOptions_CommandName_AnsiblePlaybookCheck = "ansible_playbook_check"
 	CreateJobOptions_CommandName_AnsiblePlaybookRun   = "ansible_playbook_run"
-	CreateJobOptions_CommandName_HelmInstall          = "helm_install"
-	CreateJobOptions_CommandName_HelmList             = "helm_list"
-	CreateJobOptions_CommandName_HelmShow             = "helm_show"
-	CreateJobOptions_CommandName_OpaEvaluate          = "opa_evaluate"
-	CreateJobOptions_CommandName_TerraformInit        = "terraform_init"
-	CreateJobOptions_CommandName_TerrformApply        = "terrform_apply"
-	CreateJobOptions_CommandName_TerrformDestroy      = "terrform_destroy"
-	CreateJobOptions_CommandName_TerrformPlan         = "terrform_plan"
-	CreateJobOptions_CommandName_TerrformRefresh      = "terrform_refresh"
-	CreateJobOptions_CommandName_TerrformShow         = "terrform_show"
-	CreateJobOptions_CommandName_TerrformTaint        = "terrform_taint"
-	CreateJobOptions_CommandName_WorkspaceApplyFlow   = "workspace_apply_flow"
-	CreateJobOptions_CommandName_WorkspaceCustomFlow  = "workspace_custom_flow"
-	CreateJobOptions_CommandName_WorkspaceDestroyFlow = "workspace_destroy_flow"
-	CreateJobOptions_CommandName_WorkspaceInitFlow    = "workspace_init_flow"
-	CreateJobOptions_CommandName_WorkspacePlanFlow    = "workspace_plan_flow"
-	CreateJobOptions_CommandName_WorkspaceRefreshFlow = "workspace_refresh_flow"
-	CreateJobOptions_CommandName_WorkspaceShowFlow    = "workspace_show_flow"
+	CreateJobOptions_CommandName_SystemKeyDisable     = "system_key_disable"
+	CreateJobOptions_CommandName_SystemKeyEnable      = "system_key_enable"
+	CreateJobOptions_CommandName_SystemKeyRestore     = "system_key_restore"
+	CreateJobOptions_CommandName_SystemKeyRotate      = "system_key_rotate"
+	CreateJobOptions_CommandName_SytemKeyDelete       = "sytem_key_delete"
 )
 
 // Constants associated with the CreateJobOptions.Location property.
 // List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of the
 // resources provisioned using Schematics.
 const (
-	CreateJobOptions_Location_EuDe    = "eu_de"
-	CreateJobOptions_Location_EuGb    = "eu_gb"
-	CreateJobOptions_Location_UsEast  = "us_east"
-	CreateJobOptions_Location_UsSouth = "us_south"
+	CreateJobOptions_Location_EuDe    = "eu-de"
+	CreateJobOptions_Location_EuGb    = "eu-gb"
+	CreateJobOptions_Location_UsEast  = "us-east"
+	CreateJobOptions_Location_UsSouth = "us-south"
 )
 
 // NewCreateJobOptions : Instantiate CreateJobOptions
@@ -4787,7 +5812,7 @@ func (options *CreateJobOptions) SetData(data *JobData) *CreateJobOptions {
 }
 
 // SetBastion : Allow user to set Bastion
-func (options *CreateJobOptions) SetBastion(bastion *TargetResourceset) *CreateJobOptions {
+func (options *CreateJobOptions) SetBastion(bastion *BastionResourceDefinition) *CreateJobOptions {
 	options.Bastion = bastion
 	return options
 }
@@ -4804,37 +5829,86 @@ func (options *CreateJobOptions) SetHeaders(param map[string]string) *CreateJobO
 	return options
 }
 
+// CreateResourceQueryOptions : The CreateResourceQuery options.
+type CreateResourceQueryOptions struct {
+	// Resource type (cluster, vsi, icd, vpc).
+	Type *string
+
+	// Resource query name.
+	Name *string
+
+	Queries []ResourceQuery
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// Constants associated with the CreateResourceQueryOptions.Type property.
+// Resource type (cluster, vsi, icd, vpc).
+const (
+	CreateResourceQueryOptions_Type_Vsi = "vsi"
+)
+
+// NewCreateResourceQueryOptions : Instantiate CreateResourceQueryOptions
+func (*SchematicsV1) NewCreateResourceQueryOptions() *CreateResourceQueryOptions {
+	return &CreateResourceQueryOptions{}
+}
+
+// SetType : Allow user to set Type
+func (options *CreateResourceQueryOptions) SetType(typeVar string) *CreateResourceQueryOptions {
+	options.Type = core.StringPtr(typeVar)
+	return options
+}
+
+// SetName : Allow user to set Name
+func (options *CreateResourceQueryOptions) SetName(name string) *CreateResourceQueryOptions {
+	options.Name = core.StringPtr(name)
+	return options
+}
+
+// SetQueries : Allow user to set Queries
+func (options *CreateResourceQueryOptions) SetQueries(queries []ResourceQuery) *CreateResourceQueryOptions {
+	options.Queries = queries
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *CreateResourceQueryOptions) SetHeaders(param map[string]string) *CreateResourceQueryOptions {
+	options.Headers = param
+	return options
+}
+
 // CreateSharedDatasetOptions : The CreateSharedDataset options.
 type CreateSharedDatasetOptions struct {
 	// Automatically propagate changes to consumers.
-	AutoPropagateChange *bool `json:"auto_propagate_change,omitempty"`
+	AutoPropagateChange *bool
 
 	// Dataset description.
-	Description *string `json:"description,omitempty"`
+	Description *string
 
 	// Affected workspaces.
-	EffectedWorkspaceIds []string `json:"effected_workspace_ids,omitempty"`
+	EffectedWorkspaceIds []string
 
 	// Resource group name.
-	ResourceGroup *string `json:"resource_group,omitempty"`
+	ResourceGroup *string
 
 	// Shared dataset data.
-	SharedDatasetData []SharedDatasetData `json:"shared_dataset_data,omitempty"`
+	SharedDatasetData []SharedDatasetData
 
 	// Shared dataset name.
-	SharedDatasetName *string `json:"shared_dataset_name,omitempty"`
+	SharedDatasetName *string
 
 	// Shared dataset source name.
-	SharedDatasetSourceName *string `json:"shared_dataset_source_name,omitempty"`
+	SharedDatasetSourceName *string
 
 	// Shared dataset type.
-	SharedDatasetType []string `json:"shared_dataset_type,omitempty"`
+	SharedDatasetType []string
 
 	// Shared dataset tags.
-	Tags []string `json:"tags,omitempty"`
+	Tags []string
 
 	// Shared dataset version.
-	Version *string `json:"version,omitempty"`
+	Version *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -4914,25 +5988,25 @@ func (options *CreateSharedDatasetOptions) SetHeaders(param map[string]string) *
 // CreateWorkspaceDeletionJobOptions : The CreateWorkspaceDeletionJob options.
 type CreateWorkspaceDeletionJobOptions struct {
 	// The IAM refresh token associated with the IBM Cloud account.
-	RefreshToken *string `json:"refresh_token" validate:"required"`
+	RefreshToken *string `validate:"required"`
 
 	// True to delete workspace.
-	NewDeleteWorkspaces *bool `json:"new_delete_workspaces,omitempty"`
+	NewDeleteWorkspaces *bool
 
 	// True to destroy the resources managed by this workspace.
-	NewDestroyResources *bool `json:"new_destroy_resources,omitempty"`
+	NewDestroyResources *bool
 
 	// Workspace deletion job name.
-	NewJob *string `json:"new_job,omitempty"`
+	NewJob *string
 
 	// Version.
-	NewVersion *string `json:"new_version,omitempty"`
+	NewVersion *string
 
 	// List of workspaces to be deleted.
-	NewWorkspaces []string `json:"new_workspaces,omitempty"`
+	NewWorkspaces []string
 
 	// true or 1 - to destroy resources before deleting workspace;  If this is true, refresh_token is mandatory.
-	DestroyResources *string `json:"destroy_resources,omitempty"`
+	DestroyResources *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -4996,46 +6070,46 @@ func (options *CreateWorkspaceDeletionJobOptions) SetHeaders(param map[string]st
 // CreateWorkspaceOptions : The CreateWorkspace options.
 type CreateWorkspaceOptions struct {
 	// List of applied shared dataset id.
-	AppliedShareddataIds []string `json:"applied_shareddata_ids,omitempty"`
+	AppliedShareddataIds []string
 
 	// CatalogRef -.
-	CatalogRef *CatalogRef `json:"catalog_ref,omitempty"`
+	CatalogRef *CatalogRef
 
 	// Workspace description.
-	Description *string `json:"description,omitempty"`
+	Description *string
 
 	// Workspace location.
-	Location *string `json:"location,omitempty"`
+	Location *string
 
 	// Workspace name.
-	Name *string `json:"name,omitempty"`
+	Name *string
 
 	// Workspace resource group.
-	ResourceGroup *string `json:"resource_group,omitempty"`
+	ResourceGroup *string
 
 	// SharedTargetData -.
-	SharedData *SharedTargetData `json:"shared_data,omitempty"`
+	SharedData *SharedTargetData
 
 	// Workspace tags.
-	Tags []string `json:"tags,omitempty"`
+	Tags []string
 
 	// TemplateData -.
-	TemplateData []TemplateSourceDataRequest `json:"template_data,omitempty"`
+	TemplateData []TemplateSourceDataRequest
 
 	// Workspace template ref.
-	TemplateRef *string `json:"template_ref,omitempty"`
+	TemplateRef *string
 
 	// TemplateRepoRequest -.
-	TemplateRepo *TemplateRepoRequest `json:"template_repo,omitempty"`
+	TemplateRepo *TemplateRepoRequest
 
 	// List of Workspace type.
-	Type []string `json:"type,omitempty"`
+	Type []string
 
 	// WorkspaceStatusRequest -.
-	WorkspaceStatus *WorkspaceStatusRequest `json:"workspace_status,omitempty"`
+	WorkspaceStatus *WorkspaceStatusRequest
 
 	// The github token associated with the GIT. Required for cloning of repo.
-	XGithubToken *string `json:"X-Github-token,omitempty"`
+	XGithubToken *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5139,13 +6213,13 @@ func (options *CreateWorkspaceOptions) SetHeaders(param map[string]string) *Crea
 // DeleteActionOptions : The DeleteAction options.
 type DeleteActionOptions struct {
 	// Action Id.  Use GET /actions API to look up the Action Ids in your IBM Cloud account.
-	ActionID *string `json:"action_id" validate:"required,ne="`
+	ActionID *string `validate:"required,ne="`
 
 	// Equivalent to -force options in the command line.
-	Force *bool `json:"force,omitempty"`
+	Force *bool
 
 	// Auto propagate the chaange or deletion to the dependent resources.
-	Propagate *bool `json:"propagate,omitempty"`
+	Propagate *bool
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5182,19 +6256,66 @@ func (options *DeleteActionOptions) SetHeaders(param map[string]string) *DeleteA
 	return options
 }
 
+// DeleteInventoryOptions : The DeleteInventory options.
+type DeleteInventoryOptions struct {
+	// Resource Inventory Id.  Use GET /inventories API to look up the Resource Inventory definition Ids  in your IBM Cloud
+	// account.
+	InventoryID *string `validate:"required,ne="`
+
+	// Equivalent to -force options in the command line.
+	Force *bool
+
+	// Auto propagate the chaange or deletion to the dependent resources.
+	Propagate *bool
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewDeleteInventoryOptions : Instantiate DeleteInventoryOptions
+func (*SchematicsV1) NewDeleteInventoryOptions(inventoryID string) *DeleteInventoryOptions {
+	return &DeleteInventoryOptions{
+		InventoryID: core.StringPtr(inventoryID),
+	}
+}
+
+// SetInventoryID : Allow user to set InventoryID
+func (options *DeleteInventoryOptions) SetInventoryID(inventoryID string) *DeleteInventoryOptions {
+	options.InventoryID = core.StringPtr(inventoryID)
+	return options
+}
+
+// SetForce : Allow user to set Force
+func (options *DeleteInventoryOptions) SetForce(force bool) *DeleteInventoryOptions {
+	options.Force = core.BoolPtr(force)
+	return options
+}
+
+// SetPropagate : Allow user to set Propagate
+func (options *DeleteInventoryOptions) SetPropagate(propagate bool) *DeleteInventoryOptions {
+	options.Propagate = core.BoolPtr(propagate)
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *DeleteInventoryOptions) SetHeaders(param map[string]string) *DeleteInventoryOptions {
+	options.Headers = param
+	return options
+}
+
 // DeleteJobOptions : The DeleteJob options.
 type DeleteJobOptions struct {
 	// Job Id. Use GET /jobs API to look up the Job Ids in your IBM Cloud account.
-	JobID *string `json:"job_id" validate:"required,ne="`
+	JobID *string `validate:"required,ne="`
 
 	// The IAM refresh token associated with the IBM Cloud account.
-	RefreshToken *string `json:"refresh_token" validate:"required"`
+	RefreshToken *string `validate:"required"`
 
 	// Equivalent to -force options in the command line.
-	Force *bool `json:"force,omitempty"`
+	Force *bool
 
 	// Auto propagate the chaange or deletion to the dependent resources.
-	Propagate *bool `json:"propagate,omitempty"`
+	Propagate *bool
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5238,10 +6359,57 @@ func (options *DeleteJobOptions) SetHeaders(param map[string]string) *DeleteJobO
 	return options
 }
 
+// DeleteResourcesQueryOptions : The DeleteResourcesQuery options.
+type DeleteResourcesQueryOptions struct {
+	// Resource query Id.  Use GET /resource_query API to look up the Resource query definition Ids  in your IBM Cloud
+	// account.
+	QueryID *string `validate:"required,ne="`
+
+	// Equivalent to -force options in the command line.
+	Force *bool
+
+	// Auto propagate the chaange or deletion to the dependent resources.
+	Propagate *bool
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewDeleteResourcesQueryOptions : Instantiate DeleteResourcesQueryOptions
+func (*SchematicsV1) NewDeleteResourcesQueryOptions(queryID string) *DeleteResourcesQueryOptions {
+	return &DeleteResourcesQueryOptions{
+		QueryID: core.StringPtr(queryID),
+	}
+}
+
+// SetQueryID : Allow user to set QueryID
+func (options *DeleteResourcesQueryOptions) SetQueryID(queryID string) *DeleteResourcesQueryOptions {
+	options.QueryID = core.StringPtr(queryID)
+	return options
+}
+
+// SetForce : Allow user to set Force
+func (options *DeleteResourcesQueryOptions) SetForce(force bool) *DeleteResourcesQueryOptions {
+	options.Force = core.BoolPtr(force)
+	return options
+}
+
+// SetPropagate : Allow user to set Propagate
+func (options *DeleteResourcesQueryOptions) SetPropagate(propagate bool) *DeleteResourcesQueryOptions {
+	options.Propagate = core.BoolPtr(propagate)
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *DeleteResourcesQueryOptions) SetHeaders(param map[string]string) *DeleteResourcesQueryOptions {
+	options.Headers = param
+	return options
+}
+
 // DeleteSharedDatasetOptions : The DeleteSharedDataset options.
 type DeleteSharedDatasetOptions struct {
 	// The shared dataset ID Use the GET /shared_datasets to look up the shared dataset IDs  in your IBM Cloud account.
-	SdID *string `json:"sd_id" validate:"required,ne="`
+	SdID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5270,10 +6438,10 @@ func (options *DeleteSharedDatasetOptions) SetHeaders(param map[string]string) *
 type DeleteWorkspaceActivityOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The activity ID that you want to see additional details.
-	ActivityID *string `json:"activity_id" validate:"required,ne="`
+	ActivityID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5309,13 +6477,13 @@ func (options *DeleteWorkspaceActivityOptions) SetHeaders(param map[string]strin
 type DeleteWorkspaceOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The IAM refresh token associated with the IBM Cloud account.
-	RefreshToken *string `json:"refresh_token" validate:"required"`
+	RefreshToken *string `validate:"required"`
 
 	// true or 1 - to destroy resources before deleting workspace;  If this is true, refresh_token is mandatory.
-	DestroyResources *string `json:"destroy_resources,omitempty"`
+	DestroyResources *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5357,13 +6525,13 @@ func (options *DeleteWorkspaceOptions) SetHeaders(param map[string]string) *Dele
 type DestroyWorkspaceCommandOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The IAM refresh token associated with the IBM Cloud account.
-	RefreshToken *string `json:"refresh_token" validate:"required"`
+	RefreshToken *string `validate:"required"`
 
-	// Action Options Template ...
-	ActionOptions *WorkspaceActivityOptionsTemplate `json:"action_options,omitempty"`
+	// Workspace Activity Options Template.
+	ActionOptions *WorkspaceActivityOptionsTemplate
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5437,6 +6605,35 @@ func UnmarshalEnvVariableResponse(m map[string]json.RawMessage, result interface
 	}
 	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
 	return
+}
+
+// ExecuteResourceQueryOptions : The ExecuteResourceQuery options.
+type ExecuteResourceQueryOptions struct {
+	// Resource query Id.  Use GET /resource_query API to look up the Resource query definition Ids  in your IBM Cloud
+	// account.
+	QueryID *string `validate:"required,ne="`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewExecuteResourceQueryOptions : Instantiate ExecuteResourceQueryOptions
+func (*SchematicsV1) NewExecuteResourceQueryOptions(queryID string) *ExecuteResourceQueryOptions {
+	return &ExecuteResourceQueryOptions{
+		QueryID: core.StringPtr(queryID),
+	}
+}
+
+// SetQueryID : Allow user to set QueryID
+func (options *ExecuteResourceQueryOptions) SetQueryID(queryID string) *ExecuteResourceQueryOptions {
+	options.QueryID = core.StringPtr(queryID)
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *ExecuteResourceQueryOptions) SetHeaders(param map[string]string) *ExecuteResourceQueryOptions {
+	options.Headers = param
+	return options
 }
 
 // ExternalSource : Source of templates, playbooks, or controls.
@@ -5532,10 +6729,10 @@ func UnmarshalExternalSourceGit(m map[string]json.RawMessage, result interface{}
 // GetActionOptions : The GetAction options.
 type GetActionOptions struct {
 	// Action Id.  Use GET /actions API to look up the Action Ids in your IBM Cloud account.
-	ActionID *string `json:"action_id" validate:"required,ne="`
+	ActionID *string `validate:"required,ne="`
 
 	// Level of details returned by the get method.
-	Profile *string `json:"profile,omitempty"`
+	Profile *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5577,7 +6774,7 @@ func (options *GetActionOptions) SetHeaders(param map[string]string) *GetActionO
 type GetAllWorkspaceInputsOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5605,21 +6802,21 @@ func (options *GetAllWorkspaceInputsOptions) SetHeaders(param map[string]string)
 // GetDiscoveredKmsInstancesOptions : The GetDiscoveredKmsInstances options.
 type GetDiscoveredKmsInstancesOptions struct {
 	// The encryption scheme to be used.
-	EncryptionScheme *string `json:"encryption_scheme" validate:"required"`
+	EncryptionScheme *string `validate:"required"`
 
 	// The location of the Resource.
-	Location *string `json:"location" validate:"required"`
+	Location *string `validate:"required"`
 
 	// The resource group (by default, fetch from all resource groups).
-	ResourceGroup *string `json:"resource_group,omitempty"`
+	ResourceGroup *string
 
 	// The numbers of items to return.
-	Limit *int64 `json:"limit,omitempty"`
+	Limit *int64
 
 	// Name of the field to sort-by;  Use the '.' character to delineate sub-resources and sub-fields (eg.
 	// owner.last_name). Prepend the field with '+' or '-', indicating 'ascending' or 'descending' (default is ascending)
 	// Ignore unrecognized or unsupported sort field.
-	Sort *string `json:"sort,omitempty"`
+	Sort *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5669,13 +6866,81 @@ func (options *GetDiscoveredKmsInstancesOptions) SetHeaders(param map[string]str
 	return options
 }
 
+// GetInventoryOptions : The GetInventory options.
+type GetInventoryOptions struct {
+	// Resource Inventory Id.  Use GET /inventories API to look up the Resource Inventory definition Ids  in your IBM Cloud
+	// account.
+	InventoryID *string `validate:"required,ne="`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewGetInventoryOptions : Instantiate GetInventoryOptions
+func (*SchematicsV1) NewGetInventoryOptions(inventoryID string) *GetInventoryOptions {
+	return &GetInventoryOptions{
+		InventoryID: core.StringPtr(inventoryID),
+	}
+}
+
+// SetInventoryID : Allow user to set InventoryID
+func (options *GetInventoryOptions) SetInventoryID(inventoryID string) *GetInventoryOptions {
+	options.InventoryID = core.StringPtr(inventoryID)
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *GetInventoryOptions) SetHeaders(param map[string]string) *GetInventoryOptions {
+	options.Headers = param
+	return options
+}
+
+// GetInventoryValueOptions : The GetInventoryValue options.
+type GetInventoryValueOptions struct {
+	// Resource Inventory Id.  Use GET /inventories API to look up the Resource Inventory definition Ids  in your IBM Cloud
+	// account.
+	InventoryID *string `validate:"required,ne="`
+
+	// Name of the variable.
+	VarName *string `validate:"required,ne="`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewGetInventoryValueOptions : Instantiate GetInventoryValueOptions
+func (*SchematicsV1) NewGetInventoryValueOptions(inventoryID string, varName string) *GetInventoryValueOptions {
+	return &GetInventoryValueOptions{
+		InventoryID: core.StringPtr(inventoryID),
+		VarName:     core.StringPtr(varName),
+	}
+}
+
+// SetInventoryID : Allow user to set InventoryID
+func (options *GetInventoryValueOptions) SetInventoryID(inventoryID string) *GetInventoryValueOptions {
+	options.InventoryID = core.StringPtr(inventoryID)
+	return options
+}
+
+// SetVarName : Allow user to set VarName
+func (options *GetInventoryValueOptions) SetVarName(varName string) *GetInventoryValueOptions {
+	options.VarName = core.StringPtr(varName)
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *GetInventoryValueOptions) SetHeaders(param map[string]string) *GetInventoryValueOptions {
+	options.Headers = param
+	return options
+}
+
 // GetJobOptions : The GetJob options.
 type GetJobOptions struct {
 	// Job Id. Use GET /jobs API to look up the Job Ids in your IBM Cloud account.
-	JobID *string `json:"job_id" validate:"required,ne="`
+	JobID *string `validate:"required,ne="`
 
 	// Level of details returned by the get method.
-	Profile *string `json:"profile,omitempty"`
+	Profile *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5716,7 +6981,7 @@ func (options *GetJobOptions) SetHeaders(param map[string]string) *GetJobOptions
 // GetKmsSettingsOptions : The GetKmsSettings options.
 type GetKmsSettingsOptions struct {
 	// The location of the Resource.
-	Location *string `json:"location" validate:"required"`
+	Location *string `validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5737,6 +7002,35 @@ func (options *GetKmsSettingsOptions) SetLocation(location string) *GetKmsSettin
 
 // SetHeaders : Allow user to set Headers
 func (options *GetKmsSettingsOptions) SetHeaders(param map[string]string) *GetKmsSettingsOptions {
+	options.Headers = param
+	return options
+}
+
+// GetResourcesQueryOptions : The GetResourcesQuery options.
+type GetResourcesQueryOptions struct {
+	// Resource query Id.  Use GET /resource_query API to look up the Resource query definition Ids  in your IBM Cloud
+	// account.
+	QueryID *string `validate:"required,ne="`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewGetResourcesQueryOptions : Instantiate GetResourcesQueryOptions
+func (*SchematicsV1) NewGetResourcesQueryOptions(queryID string) *GetResourcesQueryOptions {
+	return &GetResourcesQueryOptions{
+		QueryID: core.StringPtr(queryID),
+	}
+}
+
+// SetQueryID : Allow user to set QueryID
+func (options *GetResourcesQueryOptions) SetQueryID(queryID string) *GetResourcesQueryOptions {
+	options.QueryID = core.StringPtr(queryID)
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *GetResourcesQueryOptions) SetHeaders(param map[string]string) *GetResourcesQueryOptions {
 	options.Headers = param
 	return options
 }
@@ -5762,7 +7056,7 @@ func (options *GetSchematicsVersionOptions) SetHeaders(param map[string]string) 
 // GetSharedDatasetOptions : The GetSharedDataset options.
 type GetSharedDatasetOptions struct {
 	// The shared dataset ID Use the GET /shared_datasets to look up the shared dataset IDs  in your IBM Cloud account.
-	SdID *string `json:"sd_id" validate:"required,ne="`
+	SdID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5791,26 +7085,26 @@ func (options *GetSharedDatasetOptions) SetHeaders(param map[string]string) *Get
 type GetTemplateActivityLogOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The Template ID for which you want to get the values.  Use the GET /workspaces to look up the workspace IDs  or
 	// template IDs in your IBM Cloud account.
-	TID *string `json:"t_id" validate:"required,ne="`
+	TID *string `validate:"required,ne="`
 
 	// The activity ID that you want to see additional details.
-	ActivityID *string `json:"activity_id" validate:"required,ne="`
+	ActivityID *string `validate:"required,ne="`
 
 	// `false` will hide the terraform command header in the logs.
-	LogTfCmd *bool `json:"log_tf_cmd,omitempty"`
+	LogTfCmd *bool
 
 	// `false` will hide all the terraform command prefix in the log statements.
-	LogTfPrefix *bool `json:"log_tf_prefix,omitempty"`
+	LogTfPrefix *bool
 
 	// `false` will hide all the null resource prefix in the log statements.
-	LogTfNullResource *bool `json:"log_tf_null_resource,omitempty"`
+	LogTfNullResource *bool
 
 	// `true` will format all logs to withhold the original format  of ansible output in the log statements.
-	LogTfAnsible *bool `json:"log_tf_ansible,omitempty"`
+	LogTfAnsible *bool
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5877,23 +7171,23 @@ func (options *GetTemplateActivityLogOptions) SetHeaders(param map[string]string
 type GetTemplateLogsOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The Template ID for which you want to get the values.  Use the GET /workspaces to look up the workspace IDs  or
 	// template IDs in your IBM Cloud account.
-	TID *string `json:"t_id" validate:"required,ne="`
+	TID *string `validate:"required,ne="`
 
 	// `false` will hide the terraform command header in the logs.
-	LogTfCmd *bool `json:"log_tf_cmd,omitempty"`
+	LogTfCmd *bool
 
 	// `false` will hide all the terraform command prefix in the log statements.
-	LogTfPrefix *bool `json:"log_tf_prefix,omitempty"`
+	LogTfPrefix *bool
 
 	// `false` will hide all the null resource prefix in the log statements.
-	LogTfNullResource *bool `json:"log_tf_null_resource,omitempty"`
+	LogTfNullResource *bool
 
 	// `true` will format all logs to withhold the original format  of ansible output in the log statements.
-	LogTfAnsible *bool `json:"log_tf_ansible,omitempty"`
+	LogTfAnsible *bool
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5953,10 +7247,10 @@ func (options *GetTemplateLogsOptions) SetHeaders(param map[string]string) *GetT
 type GetWorkspaceActivityLogsOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The activity ID that you want to see additional details.
-	ActivityID *string `json:"activity_id" validate:"required,ne="`
+	ActivityID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5992,10 +7286,10 @@ func (options *GetWorkspaceActivityLogsOptions) SetHeaders(param map[string]stri
 type GetWorkspaceActivityOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The activity ID that you want to see additional details.
-	ActivityID *string `json:"activity_id" validate:"required,ne="`
+	ActivityID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -6030,7 +7324,7 @@ func (options *GetWorkspaceActivityOptions) SetHeaders(param map[string]string) 
 // GetWorkspaceDeletionJobStatusOptions : The GetWorkspaceDeletionJobStatus options.
 type GetWorkspaceDeletionJobStatusOptions struct {
 	// The workspace job deletion ID.
-	WjID *string `json:"wj_id" validate:"required,ne="`
+	WjID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -6059,11 +7353,11 @@ func (options *GetWorkspaceDeletionJobStatusOptions) SetHeaders(param map[string
 type GetWorkspaceInputMetadataOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The Template ID for which you want to get the values.  Use the GET /workspaces to look up the workspace IDs  or
 	// template IDs in your IBM Cloud account.
-	TID *string `json:"t_id" validate:"required,ne="`
+	TID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -6099,11 +7393,11 @@ func (options *GetWorkspaceInputMetadataOptions) SetHeaders(param map[string]str
 type GetWorkspaceInputsOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The Template ID for which you want to get the values.  Use the GET /workspaces to look up the workspace IDs  or
 	// template IDs in your IBM Cloud account.
-	TID *string `json:"t_id" validate:"required,ne="`
+	TID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -6139,7 +7433,7 @@ func (options *GetWorkspaceInputsOptions) SetHeaders(param map[string]string) *G
 type GetWorkspaceLogUrlsOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -6168,7 +7462,7 @@ func (options *GetWorkspaceLogUrlsOptions) SetHeaders(param map[string]string) *
 type GetWorkspaceOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -6197,7 +7491,7 @@ func (options *GetWorkspaceOptions) SetHeaders(param map[string]string) *GetWork
 type GetWorkspaceOutputsOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -6226,13 +7520,13 @@ func (options *GetWorkspaceOutputsOptions) SetHeaders(param map[string]string) *
 type GetWorkspaceReadmeOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The name of the commit/branch/tag.  Default, the repository’s default branch (usually master).
-	Ref *string `json:"ref,omitempty"`
+	Ref *string
 
 	// The format of the readme file.  Value ''markdown'' will give markdown, otherwise html.
-	Formatted *string `json:"formatted,omitempty"`
+	Formatted *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -6280,7 +7574,7 @@ func (options *GetWorkspaceReadmeOptions) SetHeaders(param map[string]string) *G
 type GetWorkspaceResourcesOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -6309,7 +7603,7 @@ func (options *GetWorkspaceResourcesOptions) SetHeaders(param map[string]string)
 type GetWorkspaceStateOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -6338,11 +7632,11 @@ func (options *GetWorkspaceStateOptions) SetHeaders(param map[string]string) *Ge
 type GetWorkspaceTemplateStateOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The Template ID for which you want to get the values.  Use the GET /workspaces to look up the workspace IDs  or
 	// template IDs in your IBM Cloud account.
-	TID *string `json:"t_id" validate:"required,ne="`
+	TID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -6374,12 +7668,148 @@ func (options *GetWorkspaceTemplateStateOptions) SetHeaders(param map[string]str
 	return options
 }
 
+// InventoryResourceRecord : Complete inventory resource details with user inputs and system generated data.
+type InventoryResourceRecord struct {
+	// Inventory name.
+	Name *string `json:"name,omitempty"`
+
+	// Inventory id.
+	ID *string `json:"id,omitempty"`
+
+	// Inventory description.
+	Description *string `json:"description,omitempty"`
+
+	// List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of
+	// the resources provisioned using Schematics.
+	Location *string `json:"location,omitempty"`
+
+	// Resource-group name for the Inventory definition.  By default, Action will be created in Default Resource Group.
+	ResourceGroup *string `json:"resource_group,omitempty"`
+
+	// Inventory creation time.
+	CreatedAt *strfmt.DateTime `json:"created_at,omitempty"`
+
+	// Email address of user who created the Inventory.
+	CreatedBy *string `json:"created_by,omitempty"`
+
+	// Inventory updation time.
+	UpdatedAt *strfmt.DateTime `json:"updated_at,omitempty"`
+
+	// Email address of user who updated the Inventory.
+	UpdatedBy *string `json:"updated_by,omitempty"`
+
+	// Input inventory of host and host group for the playbook,  in the .ini file format.
+	InventoriesIni *string `json:"inventories_ini,omitempty"`
+
+	// Input resource queries that is used to dynamically generate  the inventory of host and host group for the playbook.
+	ResourceQueries []string `json:"resource_queries,omitempty"`
+}
+
+// Constants associated with the InventoryResourceRecord.Location property.
+// List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of the
+// resources provisioned using Schematics.
+const (
+	InventoryResourceRecord_Location_EuDe    = "eu-de"
+	InventoryResourceRecord_Location_EuGb    = "eu-gb"
+	InventoryResourceRecord_Location_UsEast  = "us-east"
+	InventoryResourceRecord_Location_UsSouth = "us-south"
+)
+
+// UnmarshalInventoryResourceRecord unmarshals an instance of InventoryResourceRecord from the specified map of raw messages.
+func UnmarshalInventoryResourceRecord(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(InventoryResourceRecord)
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "description", &obj.Description)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "location", &obj.Location)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "resource_group", &obj.ResourceGroup)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "created_at", &obj.CreatedAt)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "created_by", &obj.CreatedBy)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "updated_at", &obj.UpdatedAt)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "updated_by", &obj.UpdatedBy)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "inventories_ini", &obj.InventoriesIni)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "resource_queries", &obj.ResourceQueries)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// InventoryResourceRecordList : List of Inventory resource records.
+type InventoryResourceRecordList struct {
+	// Total number of records.
+	TotalCount *int64 `json:"total_count,omitempty"`
+
+	// Number of records returned.
+	Limit *int64 `json:"limit" validate:"required"`
+
+	// Skipped number of records.
+	Offset *int64 `json:"offset" validate:"required"`
+
+	// List of inventory resource records.
+	Inventories []InventoryResourceRecord `json:"inventories,omitempty"`
+}
+
+// UnmarshalInventoryResourceRecordList unmarshals an instance of InventoryResourceRecordList from the specified map of raw messages.
+func UnmarshalInventoryResourceRecordList(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(InventoryResourceRecordList)
+	err = core.UnmarshalPrimitive(m, "total_count", &obj.TotalCount)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "limit", &obj.Limit)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "offset", &obj.Offset)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "inventories", &obj.Inventories, UnmarshalInventoryResourceRecord)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // Job : Complete Job with user inputs and system generated data.
 type Job struct {
 	// Name of the Schematics automation resource.
 	CommandObject *string `json:"command_object,omitempty"`
 
-	// Job command object id (workspace-id, action-id or control-id).
+	// Job command object id (workspace-id, action-id).
 	CommandObjectID *string `json:"command_object_id,omitempty"`
 
 	// Schematics job command name.
@@ -6437,11 +7867,8 @@ type Job struct {
 	// Job data.
 	Data *JobData `json:"data,omitempty"`
 
-	// Inventory of host and host group for the playbook, in .ini file format.
-	TargetsIni *string `json:"targets_ini,omitempty"`
-
-	// Complete Target details with user inputs and system generated data.
-	Bastion *TargetResourceset `json:"bastion,omitempty"`
+	// Describes a bastion resource.
+	Bastion *BastionResourceDefinition `json:"bastion,omitempty"`
 
 	// Job log summary record.
 	LogSummary *JobLogSummary `json:"log_summary,omitempty"`
@@ -6463,6 +7890,7 @@ type Job struct {
 // Name of the Schematics automation resource.
 const (
 	Job_CommandObject_Action    = "action"
+	Job_CommandObject_System    = "system"
 	Job_CommandObject_Workspace = "workspace"
 )
 
@@ -6471,34 +7899,21 @@ const (
 const (
 	Job_CommandName_AnsiblePlaybookCheck = "ansible_playbook_check"
 	Job_CommandName_AnsiblePlaybookRun   = "ansible_playbook_run"
-	Job_CommandName_HelmInstall          = "helm_install"
-	Job_CommandName_HelmList             = "helm_list"
-	Job_CommandName_HelmShow             = "helm_show"
-	Job_CommandName_OpaEvaluate          = "opa_evaluate"
-	Job_CommandName_TerraformInit        = "terraform_init"
-	Job_CommandName_TerrformApply        = "terrform_apply"
-	Job_CommandName_TerrformDestroy      = "terrform_destroy"
-	Job_CommandName_TerrformPlan         = "terrform_plan"
-	Job_CommandName_TerrformRefresh      = "terrform_refresh"
-	Job_CommandName_TerrformShow         = "terrform_show"
-	Job_CommandName_TerrformTaint        = "terrform_taint"
-	Job_CommandName_WorkspaceApplyFlow   = "workspace_apply_flow"
-	Job_CommandName_WorkspaceCustomFlow  = "workspace_custom_flow"
-	Job_CommandName_WorkspaceDestroyFlow = "workspace_destroy_flow"
-	Job_CommandName_WorkspaceInitFlow    = "workspace_init_flow"
-	Job_CommandName_WorkspacePlanFlow    = "workspace_plan_flow"
-	Job_CommandName_WorkspaceRefreshFlow = "workspace_refresh_flow"
-	Job_CommandName_WorkspaceShowFlow    = "workspace_show_flow"
+	Job_CommandName_SystemKeyDisable     = "system_key_disable"
+	Job_CommandName_SystemKeyEnable      = "system_key_enable"
+	Job_CommandName_SystemKeyRestore     = "system_key_restore"
+	Job_CommandName_SystemKeyRotate      = "system_key_rotate"
+	Job_CommandName_SytemKeyDelete       = "sytem_key_delete"
 )
 
 // Constants associated with the Job.Location property.
 // List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of the
 // resources provisioned using Schematics.
 const (
-	Job_Location_EuDe    = "eu_de"
-	Job_Location_EuGb    = "eu_gb"
-	Job_Location_UsEast  = "us_east"
-	Job_Location_UsSouth = "us_south"
+	Job_Location_EuDe    = "eu-de"
+	Job_Location_EuGb    = "eu-gb"
+	Job_Location_UsEast  = "us-east"
+	Job_Location_UsSouth = "us-south"
 )
 
 // UnmarshalJob unmarshals an instance of Job from the specified map of raw messages.
@@ -6584,11 +7999,7 @@ func UnmarshalJob(m map[string]json.RawMessage, result interface{}) (err error) 
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "targets_ini", &obj.TargetsIni)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "bastion", &obj.Bastion, UnmarshalTargetResourceset)
+	err = core.UnmarshalModel(m, "bastion", &obj.Bastion, UnmarshalBastionResourceDefinition)
 	if err != nil {
 		return
 	}
@@ -6623,6 +8034,9 @@ type JobData struct {
 
 	// Action Job data.
 	ActionJobData *JobDataAction `json:"action_job_data,omitempty"`
+
+	// Controls Job data.
+	SystemJobData *JobDataSystem `json:"system_job_data,omitempty"`
 }
 
 // Constants associated with the JobData.JobType property.
@@ -6630,6 +8044,7 @@ type JobData struct {
 const (
 	JobData_JobType_ActionJob       = "action_job"
 	JobData_JobType_RepoDownloadJob = "repo_download_job"
+	JobData_JobType_SystemJob       = "system_job"
 )
 
 // NewJobData : Instantiate JobData (Generic Model Constructor)
@@ -6649,6 +8064,10 @@ func UnmarshalJobData(m map[string]json.RawMessage, result interface{}) (err err
 		return
 	}
 	err = core.UnmarshalModel(m, "action_job_data", &obj.ActionJobData, UnmarshalJobDataAction)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "system_job_data", &obj.SystemJobData, UnmarshalJobDataSystem)
 	if err != nil {
 		return
 	}
@@ -6672,6 +8091,12 @@ type JobDataAction struct {
 
 	// Job status updation timestamp.
 	UpdatedAt *strfmt.DateTime `json:"updated_at,omitempty"`
+
+	// Complete inventory resource details with user inputs and system generated data.
+	InventoryRecord *InventoryResourceRecord `json:"inventory_record,omitempty"`
+
+	// Materialized inventory details used by the Action Job, in .ini format.
+	MaterializedInventory *string `json:"materialized_inventory,omitempty"`
 }
 
 // UnmarshalJobDataAction unmarshals an instance of JobDataAction from the specified map of raw messages.
@@ -6690,6 +8115,45 @@ func UnmarshalJobDataAction(m map[string]json.RawMessage, result interface{}) (e
 		return
 	}
 	err = core.UnmarshalModel(m, "settings", &obj.Settings, UnmarshalVariableData)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "updated_at", &obj.UpdatedAt)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "inventory_record", &obj.InventoryRecord, UnmarshalInventoryResourceRecord)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "materialized_inventory", &obj.MaterializedInventory)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// JobDataSystem : Controls Job data.
+type JobDataSystem struct {
+	// Key ID for which key event is generated.
+	KeyID *string `json:"key_id,omitempty"`
+
+	// List of the schematics resource id.
+	SchematicsResourceID []string `json:"schematics_resource_id,omitempty"`
+
+	// Job status updation timestamp.
+	UpdatedAt *strfmt.DateTime `json:"updated_at,omitempty"`
+}
+
+// UnmarshalJobDataSystem unmarshals an instance of JobDataSystem from the specified map of raw messages.
+func UnmarshalJobDataSystem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(JobDataSystem)
+	err = core.UnmarshalPrimitive(m, "key_id", &obj.KeyID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "schematics_resource_id", &obj.SchematicsResourceID)
 	if err != nil {
 		return
 	}
@@ -6769,9 +8233,6 @@ type JobLite struct {
 	// Resource-group name derived from the related Action,.
 	ResourceGroup *string `json:"resource_group,omitempty"`
 
-	// Inventory of host and host group for the playbook, in .ini file format.
-	TargetsIni *string `json:"targets_ini,omitempty"`
-
 	// Job submission time.
 	SubmittedAt *strfmt.DateTime `json:"submitted_at,omitempty"`
 
@@ -6801,6 +8262,7 @@ type JobLite struct {
 // Name of the Schematics automation resource.
 const (
 	JobLite_CommandObject_Action    = "action"
+	JobLite_CommandObject_System    = "system"
 	JobLite_CommandObject_Workspace = "workspace"
 )
 
@@ -6809,34 +8271,21 @@ const (
 const (
 	JobLite_CommandName_AnsiblePlaybookCheck = "ansible_playbook_check"
 	JobLite_CommandName_AnsiblePlaybookRun   = "ansible_playbook_run"
-	JobLite_CommandName_HelmInstall          = "helm_install"
-	JobLite_CommandName_HelmList             = "helm_list"
-	JobLite_CommandName_HelmShow             = "helm_show"
-	JobLite_CommandName_OpaEvaluate          = "opa_evaluate"
-	JobLite_CommandName_TerraformInit        = "terraform_init"
-	JobLite_CommandName_TerrformApply        = "terrform_apply"
-	JobLite_CommandName_TerrformDestroy      = "terrform_destroy"
-	JobLite_CommandName_TerrformPlan         = "terrform_plan"
-	JobLite_CommandName_TerrformRefresh      = "terrform_refresh"
-	JobLite_CommandName_TerrformShow         = "terrform_show"
-	JobLite_CommandName_TerrformTaint        = "terrform_taint"
-	JobLite_CommandName_WorkspaceApplyFlow   = "workspace_apply_flow"
-	JobLite_CommandName_WorkspaceCustomFlow  = "workspace_custom_flow"
-	JobLite_CommandName_WorkspaceDestroyFlow = "workspace_destroy_flow"
-	JobLite_CommandName_WorkspaceInitFlow    = "workspace_init_flow"
-	JobLite_CommandName_WorkspacePlanFlow    = "workspace_plan_flow"
-	JobLite_CommandName_WorkspaceRefreshFlow = "workspace_refresh_flow"
-	JobLite_CommandName_WorkspaceShowFlow    = "workspace_show_flow"
+	JobLite_CommandName_SystemKeyDisable     = "system_key_disable"
+	JobLite_CommandName_SystemKeyEnable      = "system_key_enable"
+	JobLite_CommandName_SystemKeyRestore     = "system_key_restore"
+	JobLite_CommandName_SystemKeyRotate      = "system_key_rotate"
+	JobLite_CommandName_SytemKeyDelete       = "sytem_key_delete"
 )
 
 // Constants associated with the JobLite.Location property.
 // List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of the
 // resources provisioned using Schematics.
 const (
-	JobLite_Location_EuDe    = "eu_de"
-	JobLite_Location_EuGb    = "eu_gb"
-	JobLite_Location_UsEast  = "us_east"
-	JobLite_Location_UsSouth = "us_south"
+	JobLite_Location_EuDe    = "eu-de"
+	JobLite_Location_EuGb    = "eu-gb"
+	JobLite_Location_UsEast  = "us-east"
+	JobLite_Location_UsSouth = "us-south"
 )
 
 // UnmarshalJobLite unmarshals an instance of JobLite from the specified map of raw messages.
@@ -6875,10 +8324,6 @@ func UnmarshalJobLite(m map[string]json.RawMessage, result interface{}) (err err
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "resource_group", &obj.ResourceGroup)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "targets_ini", &obj.TargetsIni)
 	if err != nil {
 		return
 	}
@@ -7002,17 +8447,19 @@ type JobLogSummary struct {
 	// Repo download Job log summary.
 	RepoDownloadJob *JobLogSummaryRepoDownloadJob `json:"repo_download_job,omitempty"`
 
-	// Flow Job log summary.
+	// Action Job.
 	ActionJob *JobLogSummaryActionJob `json:"action_job,omitempty"`
+
+	// System Job log summary.
+	SystemJob *JobLogSummarySystemJob `json:"system_job,omitempty"`
 }
 
 // Constants associated with the JobLogSummary.JobType property.
 // Type of Job.
 const (
 	JobLogSummary_JobType_ActionJob       = "action_job"
-	JobLogSummary_JobType_CapsuleJob      = "capsule_job"
-	JobLogSummary_JobType_ControlsJob     = "controls_job"
 	JobLogSummary_JobType_RepoDownloadJob = "repo_download_job"
+	JobLogSummary_JobType_SystemJob       = "system_job"
 	JobLogSummary_JobType_WorkspaceJob    = "workspace_job"
 )
 
@@ -7051,14 +8498,18 @@ func UnmarshalJobLogSummary(m map[string]json.RawMessage, result interface{}) (e
 	if err != nil {
 		return
 	}
+	err = core.UnmarshalModel(m, "system_job", &obj.SystemJob, UnmarshalJobLogSummarySystemJob)
+	if err != nil {
+		return
+	}
 	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
 	return
 }
 
-// JobLogSummaryActionJob : Flow Job log summary.
+// JobLogSummaryActionJob : Action Job.
 type JobLogSummaryActionJob struct {
-	// number of targets or hosts.
-	TargetCount *float64 `json:"target_count,omitempty"`
+	// number of hosts.
+	HostCount *float64 `json:"host_count,omitempty"`
 
 	// number of tasks in playbook.
 	TaskCount *float64 `json:"task_count,omitempty"`
@@ -7073,7 +8524,7 @@ type JobLogSummaryActionJob struct {
 // UnmarshalJobLogSummaryActionJob unmarshals an instance of JobLogSummaryActionJob from the specified map of raw messages.
 func UnmarshalJobLogSummaryActionJob(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(JobLogSummaryActionJob)
-	err = core.UnmarshalPrimitive(m, "target_count", &obj.TargetCount)
+	err = core.UnmarshalPrimitive(m, "host_count", &obj.HostCount)
 	if err != nil {
 		return
 	}
@@ -7095,8 +8546,8 @@ func UnmarshalJobLogSummaryActionJob(m map[string]json.RawMessage, result interf
 
 // JobLogSummaryActionJobRecap : Recap records.
 type JobLogSummaryActionJobRecap struct {
-	// List of target or host name.
-	Target []string `json:"target,omitempty"`
+	// List of host name.
+	Hosts []string `json:"hosts,omitempty"`
 
 	// Number of OK.
 	Ok *float64 `json:"ok,omitempty"`
@@ -7117,7 +8568,7 @@ type JobLogSummaryActionJobRecap struct {
 // UnmarshalJobLogSummaryActionJobRecap unmarshals an instance of JobLogSummaryActionJobRecap from the specified map of raw messages.
 func UnmarshalJobLogSummaryActionJobRecap(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(JobLogSummaryActionJobRecap)
-	err = core.UnmarshalPrimitive(m, "target", &obj.Target)
+	err = core.UnmarshalPrimitive(m, "hosts", &obj.Hosts)
 	if err != nil {
 		return
 	}
@@ -7221,89 +8672,30 @@ func UnmarshalJobLogSummaryRepoDownloadJob(m map[string]json.RawMessage, result 
 	return
 }
 
-// JobStateData : Workspace Job state-file.
-type JobStateData struct {
-	// Job Id.
-	JobID *string `json:"job_id,omitempty"`
+// JobLogSummarySystemJob : System Job log summary.
+type JobLogSummarySystemJob struct {
+	// number of targets or hosts.
+	TargetCount *float64 `json:"target_count,omitempty"`
 
-	// Job name, uniquely derived from the related Action.
-	JobName *string `json:"job_name,omitempty"`
+	// Number of passed.
+	Success *float64 `json:"success,omitempty"`
 
-	// Job state summary.
-	Summary []JobStateDataSummaryItem `json:"summary,omitempty"`
-
-	// Format of the State data (eg. tfstate).
-	Format *string `json:"format,omitempty"`
-
-	// State data file.
-	Details *[]byte `json:"details,omitempty"`
-
-	// Job status updation timestamp.
-	UpdatedAt *strfmt.DateTime `json:"updated_at,omitempty"`
+	// Number of failed.
+	Failed *float64 `json:"failed,omitempty"`
 }
 
-// UnmarshalJobStateData unmarshals an instance of JobStateData from the specified map of raw messages.
-func UnmarshalJobStateData(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(JobStateData)
-	err = core.UnmarshalPrimitive(m, "job_id", &obj.JobID)
+// UnmarshalJobLogSummarySystemJob unmarshals an instance of JobLogSummarySystemJob from the specified map of raw messages.
+func UnmarshalJobLogSummarySystemJob(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(JobLogSummarySystemJob)
+	err = core.UnmarshalPrimitive(m, "target_count", &obj.TargetCount)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "job_name", &obj.JobName)
+	err = core.UnmarshalPrimitive(m, "success", &obj.Success)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "summary", &obj.Summary, UnmarshalJobStateDataSummaryItem)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "format", &obj.Format)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "details", &obj.Details)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "updated_at", &obj.UpdatedAt)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// JobStateDataSummaryItem : JobStateDataSummaryItem struct
-type JobStateDataSummaryItem struct {
-	// State summary feature name.
-	Name *string `json:"name,omitempty"`
-
-	// State summary feature type.
-	Type *string `json:"type,omitempty"`
-
-	// State summary feature value.
-	Value *string `json:"value,omitempty"`
-}
-
-// Constants associated with the JobStateDataSummaryItem.Type property.
-// State summary feature type.
-const (
-	JobStateDataSummaryItem_Type_Number = "number"
-	JobStateDataSummaryItem_Type_String = "string"
-)
-
-// UnmarshalJobStateDataSummaryItem unmarshals an instance of JobStateDataSummaryItem from the specified map of raw messages.
-func UnmarshalJobStateDataSummaryItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(JobStateDataSummaryItem)
-	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "value", &obj.Value)
+	err = core.UnmarshalPrimitive(m, "failed", &obj.Failed)
 	if err != nil {
 		return
 	}
@@ -7315,12 +8707,19 @@ func UnmarshalJobStateDataSummaryItem(m map[string]json.RawMessage, result inter
 type JobStatus struct {
 	// Action Job Status.
 	ActionJobStatus *JobStatusAction `json:"action_job_status,omitempty"`
+
+	// System Job Status.
+	SystemJobStatus *JobStatusSystem `json:"system_job_status,omitempty"`
 }
 
 // UnmarshalJobStatus unmarshals an instance of JobStatus from the specified map of raw messages.
 func UnmarshalJobStatus(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(JobStatus)
 	err = core.UnmarshalModel(m, "action_job_status", &obj.ActionJobStatus, UnmarshalJobStatusAction)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "system_job_status", &obj.SystemJobStatus, UnmarshalJobStatusSystem)
 	if err != nil {
 		return
 	}
@@ -7346,10 +8745,10 @@ type JobStatusAction struct {
 	BastionStatusMessage *string `json:"bastion_status_message,omitempty"`
 
 	// Status of Resources.
-	TargetsStatusCode *string `json:"targets_status_code,omitempty"`
+	InventoryStatusCode *string `json:"inventory_status_code,omitempty"`
 
-	// Aggregated status message for all target resources,  to be displayed along with the targets_status_code;.
-	TargetsStatusMessage *string `json:"targets_status_message,omitempty"`
+	// Aggregated status message for all inventory resources,  to be displayed along with the inventory_status_code;.
+	InventoryStatusMessage *string `json:"inventory_status_message,omitempty"`
 
 	// Job status updation timestamp.
 	UpdatedAt *strfmt.DateTime `json:"updated_at,omitempty"`
@@ -7374,13 +8773,13 @@ const (
 	JobStatusAction_BastionStatusCode_Ready      = "ready"
 )
 
-// Constants associated with the JobStatusAction.TargetsStatusCode property.
+// Constants associated with the JobStatusAction.InventoryStatusCode property.
 // Status of Resources.
 const (
-	JobStatusAction_TargetsStatusCode_Error      = "error"
-	JobStatusAction_TargetsStatusCode_None       = "none"
-	JobStatusAction_TargetsStatusCode_Processing = "processing"
-	JobStatusAction_TargetsStatusCode_Ready      = "ready"
+	JobStatusAction_InventoryStatusCode_Error      = "error"
+	JobStatusAction_InventoryStatusCode_None       = "none"
+	JobStatusAction_InventoryStatusCode_Processing = "processing"
+	JobStatusAction_InventoryStatusCode_Ready      = "ready"
 )
 
 // UnmarshalJobStatusAction unmarshals an instance of JobStatusAction from the specified map of raw messages.
@@ -7406,11 +8805,107 @@ func UnmarshalJobStatusAction(m map[string]json.RawMessage, result interface{}) 
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "targets_status_code", &obj.TargetsStatusCode)
+	err = core.UnmarshalPrimitive(m, "inventory_status_code", &obj.InventoryStatusCode)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "targets_status_message", &obj.TargetsStatusMessage)
+	err = core.UnmarshalPrimitive(m, "inventory_status_message", &obj.InventoryStatusMessage)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "updated_at", &obj.UpdatedAt)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// JobStatusSchematicsResources : schematics Resources Job Status.
+type JobStatusSchematicsResources struct {
+	// Status of Jobs.
+	StatusCode *string `json:"status_code,omitempty"`
+
+	// system job status message.
+	StatusMessage *string `json:"status_message,omitempty"`
+
+	// id for each resource which is targeted as a part of system job.
+	SchematicsResourceID *string `json:"schematics_resource_id,omitempty"`
+
+	// Job status updation timestamp.
+	UpdatedAt *strfmt.DateTime `json:"updated_at,omitempty"`
+}
+
+// Constants associated with the JobStatusSchematicsResources.StatusCode property.
+// Status of Jobs.
+const (
+	JobStatusSchematicsResources_StatusCode_IobFinished   = "iob_finished"
+	JobStatusSchematicsResources_StatusCode_JobCancelled  = "job_cancelled"
+	JobStatusSchematicsResources_StatusCode_JobFailed     = "job_failed"
+	JobStatusSchematicsResources_StatusCode_JobInProgress = "job_in_progress"
+	JobStatusSchematicsResources_StatusCode_JobPending    = "job_pending"
+)
+
+// UnmarshalJobStatusSchematicsResources unmarshals an instance of JobStatusSchematicsResources from the specified map of raw messages.
+func UnmarshalJobStatusSchematicsResources(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(JobStatusSchematicsResources)
+	err = core.UnmarshalPrimitive(m, "status_code", &obj.StatusCode)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "status_message", &obj.StatusMessage)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "schematics_resource_id", &obj.SchematicsResourceID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "updated_at", &obj.UpdatedAt)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// JobStatusSystem : System Job Status.
+type JobStatusSystem struct {
+	// System job message.
+	SystemStatusMessage *string `json:"system_status_message,omitempty"`
+
+	// Status of Jobs.
+	SystemStatusCode *string `json:"system_status_code,omitempty"`
+
+	// job staus for each schematics resource.
+	SchematicsResourceStatus []JobStatusSchematicsResources `json:"schematics_resource_status,omitempty"`
+
+	// Job status updation timestamp urces'.
+	UpdatedAt *strfmt.DateTime `json:"updated_at,omitempty"`
+}
+
+// Constants associated with the JobStatusSystem.SystemStatusCode property.
+// Status of Jobs.
+const (
+	JobStatusSystem_SystemStatusCode_IobFinished   = "iob_finished"
+	JobStatusSystem_SystemStatusCode_JobCancelled  = "job_cancelled"
+	JobStatusSystem_SystemStatusCode_JobFailed     = "job_failed"
+	JobStatusSystem_SystemStatusCode_JobInProgress = "job_in_progress"
+	JobStatusSystem_SystemStatusCode_JobPending    = "job_pending"
+)
+
+// UnmarshalJobStatusSystem unmarshals an instance of JobStatusSystem from the specified map of raw messages.
+func UnmarshalJobStatusSystem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(JobStatusSystem)
+	err = core.UnmarshalPrimitive(m, "system_status_message", &obj.SystemStatusMessage)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "system_status_code", &obj.SystemStatusCode)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "schematics_resource_status", &obj.SchematicsResourceStatus, UnmarshalJobStatusSchematicsResources)
 	if err != nil {
 		return
 	}
@@ -7705,18 +9200,18 @@ func UnmarshalKMSSettingsSecondaryCrk(m map[string]json.RawMessage, result inter
 // ListActionsOptions : The ListActions options.
 type ListActionsOptions struct {
 	// The number of items to skip before starting to collect the result set.
-	Offset *int64 `json:"offset,omitempty"`
+	Offset *int64
 
 	// The numbers of items to return.
-	Limit *int64 `json:"limit,omitempty"`
+	Limit *int64
 
 	// Name of the field to sort-by;  Use the '.' character to delineate sub-resources and sub-fields (eg.
 	// owner.last_name). Prepend the field with '+' or '-', indicating 'ascending' or 'descending' (default is ascending)
 	// Ignore unrecognized or unsupported sort field.
-	Sort *string `json:"sort,omitempty"`
+	Sort *string
 
 	// Level of details returned by the get method.
-	Profile *string `json:"profile,omitempty"`
+	Profile *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -7764,10 +9259,101 @@ func (options *ListActionsOptions) SetHeaders(param map[string]string) *ListActi
 	return options
 }
 
+// ListInventoriesOptions : The ListInventories options.
+type ListInventoriesOptions struct {
+	// The number of items to skip before starting to collect the result set.
+	Offset *int64
+
+	// The numbers of items to return.
+	Limit *int64
+
+	// Name of the field to sort-by;  Use the '.' character to delineate sub-resources and sub-fields (eg.
+	// owner.last_name). Prepend the field with '+' or '-', indicating 'ascending' or 'descending' (default is ascending)
+	// Ignore unrecognized or unsupported sort field.
+	Sort *string
+
+	// Level of details returned by the get method.
+	Profile *string
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// Constants associated with the ListInventoriesOptions.Profile property.
+// Level of details returned by the get method.
+const (
+	ListInventoriesOptions_Profile_Ids     = "ids"
+	ListInventoriesOptions_Profile_Summary = "summary"
+)
+
+// NewListInventoriesOptions : Instantiate ListInventoriesOptions
+func (*SchematicsV1) NewListInventoriesOptions() *ListInventoriesOptions {
+	return &ListInventoriesOptions{}
+}
+
+// SetOffset : Allow user to set Offset
+func (options *ListInventoriesOptions) SetOffset(offset int64) *ListInventoriesOptions {
+	options.Offset = core.Int64Ptr(offset)
+	return options
+}
+
+// SetLimit : Allow user to set Limit
+func (options *ListInventoriesOptions) SetLimit(limit int64) *ListInventoriesOptions {
+	options.Limit = core.Int64Ptr(limit)
+	return options
+}
+
+// SetSort : Allow user to set Sort
+func (options *ListInventoriesOptions) SetSort(sort string) *ListInventoriesOptions {
+	options.Sort = core.StringPtr(sort)
+	return options
+}
+
+// SetProfile : Allow user to set Profile
+func (options *ListInventoriesOptions) SetProfile(profile string) *ListInventoriesOptions {
+	options.Profile = core.StringPtr(profile)
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *ListInventoriesOptions) SetHeaders(param map[string]string) *ListInventoriesOptions {
+	options.Headers = param
+	return options
+}
+
+// ListInventoryValuesOptions : The ListInventoryValues options.
+type ListInventoryValuesOptions struct {
+	// Resource Inventory Id.  Use GET /inventories API to look up the Resource Inventory definition Ids  in your IBM Cloud
+	// account.
+	InventoryID *string `validate:"required,ne="`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewListInventoryValuesOptions : Instantiate ListInventoryValuesOptions
+func (*SchematicsV1) NewListInventoryValuesOptions(inventoryID string) *ListInventoryValuesOptions {
+	return &ListInventoryValuesOptions{
+		InventoryID: core.StringPtr(inventoryID),
+	}
+}
+
+// SetInventoryID : Allow user to set InventoryID
+func (options *ListInventoryValuesOptions) SetInventoryID(inventoryID string) *ListInventoryValuesOptions {
+	options.InventoryID = core.StringPtr(inventoryID)
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *ListInventoryValuesOptions) SetHeaders(param map[string]string) *ListInventoryValuesOptions {
+	options.Headers = param
+	return options
+}
+
 // ListJobLogsOptions : The ListJobLogs options.
 type ListJobLogsOptions struct {
 	// Job Id. Use GET /jobs API to look up the Job Ids in your IBM Cloud account.
-	JobID *string `json:"job_id" validate:"required,ne="`
+	JobID *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -7792,58 +9378,30 @@ func (options *ListJobLogsOptions) SetHeaders(param map[string]string) *ListJobL
 	return options
 }
 
-// ListJobStatesOptions : The ListJobStates options.
-type ListJobStatesOptions struct {
-	// Job Id. Use GET /jobs API to look up the Job Ids in your IBM Cloud account.
-	JobID *string `json:"job_id" validate:"required,ne="`
-
-	// Allows users to set headers on API requests
-	Headers map[string]string
-}
-
-// NewListJobStatesOptions : Instantiate ListJobStatesOptions
-func (*SchematicsV1) NewListJobStatesOptions(jobID string) *ListJobStatesOptions {
-	return &ListJobStatesOptions{
-		JobID: core.StringPtr(jobID),
-	}
-}
-
-// SetJobID : Allow user to set JobID
-func (options *ListJobStatesOptions) SetJobID(jobID string) *ListJobStatesOptions {
-	options.JobID = core.StringPtr(jobID)
-	return options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *ListJobStatesOptions) SetHeaders(param map[string]string) *ListJobStatesOptions {
-	options.Headers = param
-	return options
-}
-
 // ListJobsOptions : The ListJobs options.
 type ListJobsOptions struct {
 	// The number of items to skip before starting to collect the result set.
-	Offset *int64 `json:"offset,omitempty"`
+	Offset *int64
 
 	// The numbers of items to return.
-	Limit *int64 `json:"limit,omitempty"`
+	Limit *int64
 
 	// Name of the field to sort-by;  Use the '.' character to delineate sub-resources and sub-fields (eg.
 	// owner.last_name). Prepend the field with '+' or '-', indicating 'ascending' or 'descending' (default is ascending)
 	// Ignore unrecognized or unsupported sort field.
-	Sort *string `json:"sort,omitempty"`
+	Sort *string
 
 	// Level of details returned by the get method.
-	Profile *string `json:"profile,omitempty"`
+	Profile *string
 
 	// Name of the resource (workspace, actions or controls).
-	Resource *string `json:"resource,omitempty"`
+	Resource *string
 
 	// Action Id.
-	ActionID *string `json:"action_id,omitempty"`
+	ActionID *string
 
 	// list jobs.
-	List *string `json:"list,omitempty"`
+	List *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -7859,9 +9417,8 @@ const (
 // Constants associated with the ListJobsOptions.Resource property.
 // Name of the resource (workspace, actions or controls).
 const (
-	ListJobsOptions_Resource_Actions    = "actions"
-	ListJobsOptions_Resource_Controls   = "controls"
-	ListJobsOptions_Resource_Workspaces = "workspaces"
+	ListJobsOptions_Resource_Action    = "action"
+	ListJobsOptions_Resource_Workspace = "workspace"
 )
 
 // Constants associated with the ListJobsOptions.List property.
@@ -7941,6 +9498,68 @@ func (options *ListResourceGroupOptions) SetHeaders(param map[string]string) *Li
 	return options
 }
 
+// ListResourceQueryOptions : The ListResourceQuery options.
+type ListResourceQueryOptions struct {
+	// The number of items to skip before starting to collect the result set.
+	Offset *int64
+
+	// The numbers of items to return.
+	Limit *int64
+
+	// Name of the field to sort-by;  Use the '.' character to delineate sub-resources and sub-fields (eg.
+	// owner.last_name). Prepend the field with '+' or '-', indicating 'ascending' or 'descending' (default is ascending)
+	// Ignore unrecognized or unsupported sort field.
+	Sort *string
+
+	// Level of details returned by the get method.
+	Profile *string
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// Constants associated with the ListResourceQueryOptions.Profile property.
+// Level of details returned by the get method.
+const (
+	ListResourceQueryOptions_Profile_Ids     = "ids"
+	ListResourceQueryOptions_Profile_Summary = "summary"
+)
+
+// NewListResourceQueryOptions : Instantiate ListResourceQueryOptions
+func (*SchematicsV1) NewListResourceQueryOptions() *ListResourceQueryOptions {
+	return &ListResourceQueryOptions{}
+}
+
+// SetOffset : Allow user to set Offset
+func (options *ListResourceQueryOptions) SetOffset(offset int64) *ListResourceQueryOptions {
+	options.Offset = core.Int64Ptr(offset)
+	return options
+}
+
+// SetLimit : Allow user to set Limit
+func (options *ListResourceQueryOptions) SetLimit(limit int64) *ListResourceQueryOptions {
+	options.Limit = core.Int64Ptr(limit)
+	return options
+}
+
+// SetSort : Allow user to set Sort
+func (options *ListResourceQueryOptions) SetSort(sort string) *ListResourceQueryOptions {
+	options.Sort = core.StringPtr(sort)
+	return options
+}
+
+// SetProfile : Allow user to set Profile
+func (options *ListResourceQueryOptions) SetProfile(profile string) *ListResourceQueryOptions {
+	options.Profile = core.StringPtr(profile)
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *ListResourceQueryOptions) SetHeaders(param map[string]string) *ListResourceQueryOptions {
+	options.Headers = param
+	return options
+}
+
 // ListSchematicsLocationOptions : The ListSchematicsLocation options.
 type ListSchematicsLocationOptions struct {
 
@@ -7981,13 +9600,13 @@ func (options *ListSharedDatasetsOptions) SetHeaders(param map[string]string) *L
 type ListWorkspaceActivitiesOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The number of items to skip before starting to collect the result set.
-	Offset *int64 `json:"offset,omitempty"`
+	Offset *int64
 
 	// The numbers of items to return.
-	Limit *int64 `json:"limit,omitempty"`
+	Limit *int64
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -8027,10 +9646,10 @@ func (options *ListWorkspaceActivitiesOptions) SetHeaders(param map[string]strin
 // ListWorkspacesOptions : The ListWorkspaces options.
 type ListWorkspacesOptions struct {
 	// The number of items to skip before starting to collect the result set.
-	Offset *int64 `json:"offset,omitempty"`
+	Offset *int64
 
 	// The numbers of items to return.
-	Limit *int64 `json:"limit,omitempty"`
+	Limit *int64
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -8236,10 +9855,10 @@ func UnmarshalOutputValuesItem(m map[string]json.RawMessage, result interface{})
 type PlanWorkspaceCommandOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The IAM refresh token associated with the IBM Cloud account.
-	RefreshToken *string `json:"refresh_token" validate:"required"`
+	RefreshToken *string `validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -8275,10 +9894,10 @@ func (options *PlanWorkspaceCommandOptions) SetHeaders(param map[string]string) 
 type RefreshWorkspaceCommandOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The IAM refresh token associated with the IBM Cloud account.
-	RefreshToken *string `json:"refresh_token" validate:"required"`
+	RefreshToken *string `validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -8310,53 +9929,147 @@ func (options *RefreshWorkspaceCommandOptions) SetHeaders(param map[string]strin
 	return options
 }
 
-// ReplaceJobOptions : The ReplaceJob options.
-type ReplaceJobOptions struct {
-	// Job Id. Use GET /jobs API to look up the Job Ids in your IBM Cloud account.
-	JobID *string `json:"job_id" validate:"required,ne="`
+// ReplaceInventoryOptions : The ReplaceInventory options.
+type ReplaceInventoryOptions struct {
+	// Resource Inventory Id.  Use GET /inventories API to look up the Resource Inventory definition Ids  in your IBM Cloud
+	// account.
+	InventoryID *string `validate:"required,ne="`
 
-	// The IAM refresh token associated with the IBM Cloud account.
-	RefreshToken *string `json:"refresh_token" validate:"required"`
+	// Inventory name.
+	Name *string
 
-	// Name of the Schematics automation resource.
-	CommandObject *string `json:"command_object,omitempty"`
-
-	// Job command object id (workspace-id, action-id or control-id).
-	CommandObjectID *string `json:"command_object_id,omitempty"`
-
-	// Schematics job command name.
-	CommandName *string `json:"command_name,omitempty"`
-
-	// Schematics job command parameter (playbook-name, capsule-name or flow-name).
-	CommandParameter *string `json:"command_parameter,omitempty"`
-
-	// Command line options for the command.
-	CommandOptions []string `json:"command_options,omitempty"`
-
-	// Job inputs used by Action.
-	Inputs []VariableData `json:"inputs,omitempty"`
-
-	// Environment variables used by the Job while performing Action.
-	Settings []VariableData `json:"settings,omitempty"`
-
-	// User defined tags, while running the job.
-	Tags []string `json:"tags,omitempty"`
+	// Inventory description.
+	Description *string
 
 	// List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of
 	// the resources provisioned using Schematics.
-	Location *string `json:"location,omitempty"`
+	Location *string
+
+	// Resource-group name for the Inventory definition.  By default, Action will be created in Default Resource Group.
+	ResourceGroup *string
+
+	// Input inventory of host and host group for the playbook,  in the .ini file format.
+	InventoriesIni *string
+
+	// Input resource queries that is used to dynamically generate  the inventory of host and host group for the playbook.
+	ResourceQueries []string
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// Constants associated with the ReplaceInventoryOptions.Location property.
+// List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of the
+// resources provisioned using Schematics.
+const (
+	ReplaceInventoryOptions_Location_EuDe    = "eu-de"
+	ReplaceInventoryOptions_Location_EuGb    = "eu-gb"
+	ReplaceInventoryOptions_Location_UsEast  = "us-east"
+	ReplaceInventoryOptions_Location_UsSouth = "us-south"
+)
+
+// NewReplaceInventoryOptions : Instantiate ReplaceInventoryOptions
+func (*SchematicsV1) NewReplaceInventoryOptions(inventoryID string) *ReplaceInventoryOptions {
+	return &ReplaceInventoryOptions{
+		InventoryID: core.StringPtr(inventoryID),
+	}
+}
+
+// SetInventoryID : Allow user to set InventoryID
+func (options *ReplaceInventoryOptions) SetInventoryID(inventoryID string) *ReplaceInventoryOptions {
+	options.InventoryID = core.StringPtr(inventoryID)
+	return options
+}
+
+// SetName : Allow user to set Name
+func (options *ReplaceInventoryOptions) SetName(name string) *ReplaceInventoryOptions {
+	options.Name = core.StringPtr(name)
+	return options
+}
+
+// SetDescription : Allow user to set Description
+func (options *ReplaceInventoryOptions) SetDescription(description string) *ReplaceInventoryOptions {
+	options.Description = core.StringPtr(description)
+	return options
+}
+
+// SetLocation : Allow user to set Location
+func (options *ReplaceInventoryOptions) SetLocation(location string) *ReplaceInventoryOptions {
+	options.Location = core.StringPtr(location)
+	return options
+}
+
+// SetResourceGroup : Allow user to set ResourceGroup
+func (options *ReplaceInventoryOptions) SetResourceGroup(resourceGroup string) *ReplaceInventoryOptions {
+	options.ResourceGroup = core.StringPtr(resourceGroup)
+	return options
+}
+
+// SetInventoriesIni : Allow user to set InventoriesIni
+func (options *ReplaceInventoryOptions) SetInventoriesIni(inventoriesIni string) *ReplaceInventoryOptions {
+	options.InventoriesIni = core.StringPtr(inventoriesIni)
+	return options
+}
+
+// SetResourceQueries : Allow user to set ResourceQueries
+func (options *ReplaceInventoryOptions) SetResourceQueries(resourceQueries []string) *ReplaceInventoryOptions {
+	options.ResourceQueries = resourceQueries
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *ReplaceInventoryOptions) SetHeaders(param map[string]string) *ReplaceInventoryOptions {
+	options.Headers = param
+	return options
+}
+
+// ReplaceJobOptions : The ReplaceJob options.
+type ReplaceJobOptions struct {
+	// Job Id. Use GET /jobs API to look up the Job Ids in your IBM Cloud account.
+	JobID *string `validate:"required,ne="`
+
+	// The IAM refresh token associated with the IBM Cloud account.
+	RefreshToken *string `validate:"required"`
+
+	// Name of the Schematics automation resource.
+	CommandObject *string
+
+	// Job command object id (workspace-id, action-id).
+	CommandObjectID *string
+
+	// Schematics job command name.
+	CommandName *string
+
+	// Schematics job command parameter (playbook-name, capsule-name or flow-name).
+	CommandParameter *string
+
+	// Command line options for the command.
+	CommandOptions []string
+
+	// Job inputs used by Action.
+	Inputs []VariableData
+
+	// Environment variables used by the Job while performing Action.
+	Settings []VariableData
+
+	// User defined tags, while running the job.
+	Tags []string
+
+	// List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of
+	// the resources provisioned using Schematics.
+	Location *string
 
 	// Job Status.
-	Status *JobStatus `json:"status,omitempty"`
+	Status *JobStatus
 
 	// Job data.
-	Data *JobData `json:"data,omitempty"`
+	Data *JobData
 
-	// Complete Target details with user inputs and system generated data.
-	Bastion *TargetResourceset `json:"bastion,omitempty"`
+	// Describes a bastion resource.
+	Bastion *BastionResourceDefinition
 
 	// Job log summary record.
-	LogSummary *JobLogSummary `json:"log_summary,omitempty"`
+	LogSummary *JobLogSummary
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -8366,6 +10079,7 @@ type ReplaceJobOptions struct {
 // Name of the Schematics automation resource.
 const (
 	ReplaceJobOptions_CommandObject_Action    = "action"
+	ReplaceJobOptions_CommandObject_System    = "system"
 	ReplaceJobOptions_CommandObject_Workspace = "workspace"
 )
 
@@ -8374,34 +10088,21 @@ const (
 const (
 	ReplaceJobOptions_CommandName_AnsiblePlaybookCheck = "ansible_playbook_check"
 	ReplaceJobOptions_CommandName_AnsiblePlaybookRun   = "ansible_playbook_run"
-	ReplaceJobOptions_CommandName_HelmInstall          = "helm_install"
-	ReplaceJobOptions_CommandName_HelmList             = "helm_list"
-	ReplaceJobOptions_CommandName_HelmShow             = "helm_show"
-	ReplaceJobOptions_CommandName_OpaEvaluate          = "opa_evaluate"
-	ReplaceJobOptions_CommandName_TerraformInit        = "terraform_init"
-	ReplaceJobOptions_CommandName_TerrformApply        = "terrform_apply"
-	ReplaceJobOptions_CommandName_TerrformDestroy      = "terrform_destroy"
-	ReplaceJobOptions_CommandName_TerrformPlan         = "terrform_plan"
-	ReplaceJobOptions_CommandName_TerrformRefresh      = "terrform_refresh"
-	ReplaceJobOptions_CommandName_TerrformShow         = "terrform_show"
-	ReplaceJobOptions_CommandName_TerrformTaint        = "terrform_taint"
-	ReplaceJobOptions_CommandName_WorkspaceApplyFlow   = "workspace_apply_flow"
-	ReplaceJobOptions_CommandName_WorkspaceCustomFlow  = "workspace_custom_flow"
-	ReplaceJobOptions_CommandName_WorkspaceDestroyFlow = "workspace_destroy_flow"
-	ReplaceJobOptions_CommandName_WorkspaceInitFlow    = "workspace_init_flow"
-	ReplaceJobOptions_CommandName_WorkspacePlanFlow    = "workspace_plan_flow"
-	ReplaceJobOptions_CommandName_WorkspaceRefreshFlow = "workspace_refresh_flow"
-	ReplaceJobOptions_CommandName_WorkspaceShowFlow    = "workspace_show_flow"
+	ReplaceJobOptions_CommandName_SystemKeyDisable     = "system_key_disable"
+	ReplaceJobOptions_CommandName_SystemKeyEnable      = "system_key_enable"
+	ReplaceJobOptions_CommandName_SystemKeyRestore     = "system_key_restore"
+	ReplaceJobOptions_CommandName_SystemKeyRotate      = "system_key_rotate"
+	ReplaceJobOptions_CommandName_SytemKeyDelete       = "sytem_key_delete"
 )
 
 // Constants associated with the ReplaceJobOptions.Location property.
 // List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of the
 // resources provisioned using Schematics.
 const (
-	ReplaceJobOptions_Location_EuDe    = "eu_de"
-	ReplaceJobOptions_Location_EuGb    = "eu_gb"
-	ReplaceJobOptions_Location_UsEast  = "us_east"
-	ReplaceJobOptions_Location_UsSouth = "us_south"
+	ReplaceJobOptions_Location_EuDe    = "eu-de"
+	ReplaceJobOptions_Location_EuGb    = "eu-gb"
+	ReplaceJobOptions_Location_UsEast  = "us-east"
+	ReplaceJobOptions_Location_UsSouth = "us-south"
 )
 
 // NewReplaceJobOptions : Instantiate ReplaceJobOptions
@@ -8491,7 +10192,7 @@ func (options *ReplaceJobOptions) SetData(data *JobData) *ReplaceJobOptions {
 }
 
 // SetBastion : Allow user to set Bastion
-func (options *ReplaceJobOptions) SetBastion(bastion *TargetResourceset) *ReplaceJobOptions {
+func (options *ReplaceJobOptions) SetBastion(bastion *BastionResourceDefinition) *ReplaceJobOptions {
 	options.Bastion = bastion
 	return options
 }
@@ -8511,19 +10212,19 @@ func (options *ReplaceJobOptions) SetHeaders(param map[string]string) *ReplaceJo
 // ReplaceKmsSettingsOptions : The ReplaceKmsSettings options.
 type ReplaceKmsSettingsOptions struct {
 	// Location.
-	Location *string `json:"location,omitempty"`
+	Location *string
 
 	// Encryption scheme.
-	EncryptionScheme *string `json:"encryption_scheme,omitempty"`
+	EncryptionScheme *string
 
 	// Resource group.
-	ResourceGroup *string `json:"resource_group,omitempty"`
+	ResourceGroup *string
 
 	// Primary CRK details.
-	PrimaryCrk *KMSSettingsPrimaryCrk `json:"primary_crk,omitempty"`
+	PrimaryCrk *KMSSettingsPrimaryCrk
 
 	// Secondary CRK details.
-	SecondaryCrk *KMSSettingsSecondaryCrk `json:"secondary_crk,omitempty"`
+	SecondaryCrk *KMSSettingsSecondaryCrk
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -8570,40 +10271,101 @@ func (options *ReplaceKmsSettingsOptions) SetHeaders(param map[string]string) *R
 	return options
 }
 
+// ReplaceResourcesQueryOptions : The ReplaceResourcesQuery options.
+type ReplaceResourcesQueryOptions struct {
+	// Resource query Id.  Use GET /resource_query API to look up the Resource query definition Ids  in your IBM Cloud
+	// account.
+	QueryID *string `validate:"required,ne="`
+
+	// Resource type (cluster, vsi, icd, vpc).
+	Type *string
+
+	// Resource query name.
+	Name *string
+
+	Queries []ResourceQuery
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// Constants associated with the ReplaceResourcesQueryOptions.Type property.
+// Resource type (cluster, vsi, icd, vpc).
+const (
+	ReplaceResourcesQueryOptions_Type_Vsi = "vsi"
+)
+
+// NewReplaceResourcesQueryOptions : Instantiate ReplaceResourcesQueryOptions
+func (*SchematicsV1) NewReplaceResourcesQueryOptions(queryID string) *ReplaceResourcesQueryOptions {
+	return &ReplaceResourcesQueryOptions{
+		QueryID: core.StringPtr(queryID),
+	}
+}
+
+// SetQueryID : Allow user to set QueryID
+func (options *ReplaceResourcesQueryOptions) SetQueryID(queryID string) *ReplaceResourcesQueryOptions {
+	options.QueryID = core.StringPtr(queryID)
+	return options
+}
+
+// SetType : Allow user to set Type
+func (options *ReplaceResourcesQueryOptions) SetType(typeVar string) *ReplaceResourcesQueryOptions {
+	options.Type = core.StringPtr(typeVar)
+	return options
+}
+
+// SetName : Allow user to set Name
+func (options *ReplaceResourcesQueryOptions) SetName(name string) *ReplaceResourcesQueryOptions {
+	options.Name = core.StringPtr(name)
+	return options
+}
+
+// SetQueries : Allow user to set Queries
+func (options *ReplaceResourcesQueryOptions) SetQueries(queries []ResourceQuery) *ReplaceResourcesQueryOptions {
+	options.Queries = queries
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *ReplaceResourcesQueryOptions) SetHeaders(param map[string]string) *ReplaceResourcesQueryOptions {
+	options.Headers = param
+	return options
+}
+
 // ReplaceSharedDatasetOptions : The ReplaceSharedDataset options.
 type ReplaceSharedDatasetOptions struct {
 	// The shared dataset ID Use the GET /shared_datasets to look up the shared dataset IDs  in your IBM Cloud account.
-	SdID *string `json:"sd_id" validate:"required,ne="`
+	SdID *string `validate:"required,ne="`
 
 	// Automatically propagate changes to consumers.
-	AutoPropagateChange *bool `json:"auto_propagate_change,omitempty"`
+	AutoPropagateChange *bool
 
 	// Dataset description.
-	Description *string `json:"description,omitempty"`
+	Description *string
 
 	// Affected workspaces.
-	EffectedWorkspaceIds []string `json:"effected_workspace_ids,omitempty"`
+	EffectedWorkspaceIds []string
 
 	// Resource group name.
-	ResourceGroup *string `json:"resource_group,omitempty"`
+	ResourceGroup *string
 
 	// Shared dataset data.
-	SharedDatasetData []SharedDatasetData `json:"shared_dataset_data,omitempty"`
+	SharedDatasetData []SharedDatasetData
 
 	// Shared dataset name.
-	SharedDatasetName *string `json:"shared_dataset_name,omitempty"`
+	SharedDatasetName *string
 
 	// Shared dataset source name.
-	SharedDatasetSourceName *string `json:"shared_dataset_source_name,omitempty"`
+	SharedDatasetSourceName *string
 
 	// Shared dataset type.
-	SharedDatasetType []string `json:"shared_dataset_type,omitempty"`
+	SharedDatasetType []string
 
 	// Shared dataset tags.
-	Tags []string `json:"tags,omitempty"`
+	Tags []string
 
 	// Shared dataset version.
-	Version *string `json:"version,omitempty"`
+	Version *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -8692,20 +10454,20 @@ func (options *ReplaceSharedDatasetOptions) SetHeaders(param map[string]string) 
 type ReplaceWorkspaceInputsOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The Template ID for which you want to get the values.  Use the GET /workspaces to look up the workspace IDs  or
 	// template IDs in your IBM Cloud account.
-	TID *string `json:"t_id" validate:"required,ne="`
+	TID *string `validate:"required,ne="`
 
 	// EnvVariableRequest ..
-	EnvValues []interface{} `json:"env_values,omitempty"`
+	EnvValues []interface{}
 
 	// User values.
-	Values *string `json:"values,omitempty"`
+	Values *string
 
 	// VariablesRequest -.
-	Variablestore []WorkspaceVariableRequest `json:"variablestore,omitempty"`
+	Variablestore []WorkspaceVariableRequest
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -8759,37 +10521,37 @@ func (options *ReplaceWorkspaceInputsOptions) SetHeaders(param map[string]string
 type ReplaceWorkspaceOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// CatalogRef -.
-	CatalogRef *CatalogRef `json:"catalog_ref,omitempty"`
+	CatalogRef *CatalogRef
 
 	// Workspace description.
-	Description *string `json:"description,omitempty"`
+	Description *string
 
 	// Workspace name.
-	Name *string `json:"name,omitempty"`
+	Name *string
 
 	// SharedTargetData -.
-	SharedData *SharedTargetData `json:"shared_data,omitempty"`
+	SharedData *SharedTargetData
 
 	// Tags -.
-	Tags []string `json:"tags,omitempty"`
+	Tags []string
 
 	// TemplateData -.
-	TemplateData []TemplateSourceDataRequest `json:"template_data,omitempty"`
+	TemplateData []TemplateSourceDataRequest
 
 	// TemplateRepoUpdateRequest -.
-	TemplateRepo *TemplateRepoUpdateRequest `json:"template_repo,omitempty"`
+	TemplateRepo *TemplateRepoUpdateRequest
 
 	// List of Workspace type.
-	Type []string `json:"type,omitempty"`
+	Type []string
 
 	// WorkspaceStatusUpdateRequest -.
-	WorkspaceStatus *WorkspaceStatusUpdateRequest `json:"workspace_status,omitempty"`
+	WorkspaceStatus *WorkspaceStatusUpdateRequest
 
 	// WorkspaceStatusMessage -.
-	WorkspaceStatusMsg *WorkspaceStatusMessage `json:"workspace_status_msg,omitempty"`
+	WorkspaceStatusMsg *WorkspaceStatusMessage
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -8926,23 +10688,281 @@ func UnmarshalResourceGroupResponse(m map[string]json.RawMessage, result interfa
 	return
 }
 
+// ResourceQuery : Describe resource query.
+type ResourceQuery struct {
+	// Type of the query(workspaces).
+	QueryType *string `json:"query_type,omitempty"`
+
+	QueryCondition []ResourceQueryParam `json:"query_condition,omitempty"`
+
+	// List of query selection parameters.
+	QuerySelect []string `json:"query_select,omitempty"`
+}
+
+// Constants associated with the ResourceQuery.QueryType property.
+// Type of the query(workspaces).
+const (
+	ResourceQuery_QueryType_Workspaces = "workspaces"
+)
+
+// UnmarshalResourceQuery unmarshals an instance of ResourceQuery from the specified map of raw messages.
+func UnmarshalResourceQuery(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ResourceQuery)
+	err = core.UnmarshalPrimitive(m, "query_type", &obj.QueryType)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "query_condition", &obj.QueryCondition, UnmarshalResourceQueryParam)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "query_select", &obj.QuerySelect)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ResourceQueryParam : Describe resource query param.
+type ResourceQueryParam struct {
+	// Name of the resource query param.
+	Name *string `json:"name,omitempty"`
+
+	// Value of the resource query param.
+	Value *string `json:"value,omitempty"`
+
+	// Description of resource query param variable.
+	Description *string `json:"description,omitempty"`
+}
+
+// UnmarshalResourceQueryParam unmarshals an instance of ResourceQueryParam from the specified map of raw messages.
+func UnmarshalResourceQueryParam(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ResourceQueryParam)
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "value", &obj.Value)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "description", &obj.Description)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ResourceQueryRecord : Describe resource query record.
+type ResourceQueryRecord struct {
+	// Resource type (cluster, vsi, icd, vpc).
+	Type *string `json:"type,omitempty"`
+
+	// Resource query name.
+	Name *string `json:"name,omitempty"`
+
+	// Resource Query id.
+	ID *string `json:"id,omitempty"`
+
+	// Resource query creation time.
+	CreatedAt *strfmt.DateTime `json:"created_at,omitempty"`
+
+	// Email address of user who created the Resource query.
+	CreatedBy *string `json:"created_by,omitempty"`
+
+	// Resource query updation time.
+	UpdatedAt *strfmt.DateTime `json:"updated_at,omitempty"`
+
+	// Email address of user who updated the Resource query.
+	UpdatedBy *string `json:"updated_by,omitempty"`
+
+	Queries []ResourceQuery `json:"queries,omitempty"`
+}
+
+// Constants associated with the ResourceQueryRecord.Type property.
+// Resource type (cluster, vsi, icd, vpc).
+const (
+	ResourceQueryRecord_Type_Vsi = "vsi"
+)
+
+// UnmarshalResourceQueryRecord unmarshals an instance of ResourceQueryRecord from the specified map of raw messages.
+func UnmarshalResourceQueryRecord(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ResourceQueryRecord)
+	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "created_at", &obj.CreatedAt)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "created_by", &obj.CreatedBy)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "updated_at", &obj.UpdatedAt)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "updated_by", &obj.UpdatedBy)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "queries", &obj.Queries, UnmarshalResourceQuery)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ResourceQueryRecordList : List of Resource query records.
+type ResourceQueryRecordList struct {
+	// Total number of records.
+	TotalCount *int64 `json:"total_count,omitempty"`
+
+	// Number of records returned.
+	Limit *int64 `json:"limit" validate:"required"`
+
+	// Skipped number of records.
+	Offset *int64 `json:"offset" validate:"required"`
+
+	// List of resource query records.
+	ResourceQueries []ResourceQueryRecord `json:"ResourceQueries,omitempty"`
+}
+
+// UnmarshalResourceQueryRecordList unmarshals an instance of ResourceQueryRecordList from the specified map of raw messages.
+func UnmarshalResourceQueryRecordList(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ResourceQueryRecordList)
+	err = core.UnmarshalPrimitive(m, "total_count", &obj.TotalCount)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "limit", &obj.Limit)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "offset", &obj.Offset)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "ResourceQueries", &obj.ResourceQueries, UnmarshalResourceQueryRecord)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ResourceQueryResponseRecord : Describe resource query.
+type ResourceQueryResponseRecord struct {
+	Response []ResourceQueryResponseRecordResponseItem `json:"response,omitempty"`
+}
+
+// UnmarshalResourceQueryResponseRecord unmarshals an instance of ResourceQueryResponseRecord from the specified map of raw messages.
+func UnmarshalResourceQueryResponseRecord(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ResourceQueryResponseRecord)
+	err = core.UnmarshalModel(m, "response", &obj.Response, UnmarshalResourceQueryResponseRecordResponseItem)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ResourceQueryResponseRecordResponseItem : ResourceQueryResponseRecordResponseItem struct
+type ResourceQueryResponseRecordResponseItem struct {
+	// Type of the query(workspaces).
+	QueryType *string `json:"query_type,omitempty"`
+
+	QueryCondition []ResourceQueryParam `json:"query_condition,omitempty"`
+
+	// List of query selection parameters.
+	QuerySelect []string `json:"query_select,omitempty"`
+
+	QueryOutput []ResourceQueryResponseRecordResponseItemQueryOutputItem `json:"query_output,omitempty"`
+}
+
+// Constants associated with the ResourceQueryResponseRecordResponseItem.QueryType property.
+// Type of the query(workspaces).
+const (
+	ResourceQueryResponseRecordResponseItem_QueryType_Workspaces = "workspaces"
+)
+
+// UnmarshalResourceQueryResponseRecordResponseItem unmarshals an instance of ResourceQueryResponseRecordResponseItem from the specified map of raw messages.
+func UnmarshalResourceQueryResponseRecordResponseItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ResourceQueryResponseRecordResponseItem)
+	err = core.UnmarshalPrimitive(m, "query_type", &obj.QueryType)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "query_condition", &obj.QueryCondition, UnmarshalResourceQueryParam)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "query_select", &obj.QuerySelect)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "query_output", &obj.QueryOutput, UnmarshalResourceQueryResponseRecordResponseItemQueryOutputItem)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ResourceQueryResponseRecordResponseItemQueryOutputItem : List of query output values.
+type ResourceQueryResponseRecordResponseItemQueryOutputItem struct {
+	// Name of the output param.
+	Name *string `json:"name,omitempty"`
+
+	// value of the output param.
+	Value *string `json:"value,omitempty"`
+}
+
+// UnmarshalResourceQueryResponseRecordResponseItemQueryOutputItem unmarshals an instance of ResourceQueryResponseRecordResponseItemQueryOutputItem from the specified map of raw messages.
+func UnmarshalResourceQueryResponseRecordResponseItemQueryOutputItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ResourceQueryResponseRecordResponseItemQueryOutputItem)
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "value", &obj.Value)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // RunWorkspaceCommandsOptions : The RunWorkspaceCommands options.
 type RunWorkspaceCommandsOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The IAM refresh token associated with the IBM Cloud account.
-	RefreshToken *string `json:"refresh_token" validate:"required"`
+	RefreshToken *string `validate:"required"`
 
 	// List of commands.
-	Commands []TerraformCommand `json:"commands,omitempty"`
+	Commands []TerraformCommand
 
 	// Command name.
-	OperationName *string `json:"operation_name,omitempty"`
+	OperationName *string
 
 	// Command description.
-	Description *string `json:"description,omitempty"`
+	Description *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -9523,100 +11543,6 @@ func UnmarshalSystemLock(m map[string]json.RawMessage, result interface{}) (err 
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "sys_locked_at", &obj.SysLockedAt)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// TargetResourceset : Complete Target details with user inputs and system generated data.
-type TargetResourceset struct {
-	// Target name.
-	Name *string `json:"name,omitempty"`
-
-	// Target type (cluster, vsi, icd, vpc).
-	Type *string `json:"type,omitempty"`
-
-	// Target description.
-	Description *string `json:"description,omitempty"`
-
-	// Resource selection query string.
-	ResourceQuery *string `json:"resource_query,omitempty"`
-
-	// Override credential for each resource.  Reference to credentials values, used by all resources.
-	CredentialRef *string `json:"credential_ref,omitempty"`
-
-	// Target id.
-	ID *string `json:"id,omitempty"`
-
-	// Targets creation time.
-	CreatedAt *strfmt.DateTime `json:"created_at,omitempty"`
-
-	// Email address of user who created the Targets.
-	CreatedBy *string `json:"created_by,omitempty"`
-
-	// Targets updation time.
-	UpdatedAt *strfmt.DateTime `json:"updated_at,omitempty"`
-
-	// Email address of user who updated the Targets.
-	UpdatedBy *string `json:"updated_by,omitempty"`
-
-	// System lock status.
-	SysLock *SystemLock `json:"sys_lock,omitempty"`
-
-	// Array of resource ids.
-	ResourceIds []string `json:"resource_ids,omitempty"`
-}
-
-// UnmarshalTargetResourceset unmarshals an instance of TargetResourceset from the specified map of raw messages.
-func UnmarshalTargetResourceset(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(TargetResourceset)
-	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "description", &obj.Description)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "resource_query", &obj.ResourceQuery)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "credential_ref", &obj.CredentialRef)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "created_at", &obj.CreatedAt)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "created_by", &obj.CreatedBy)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "updated_at", &obj.UpdatedAt)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "updated_by", &obj.UpdatedBy)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "sys_lock", &obj.SysLock, UnmarshalSystemLock)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "resource_ids", &obj.ResourceIds)
 	if err != nil {
 		return
 	}
@@ -10210,68 +12136,68 @@ func UnmarshalTerraformCommand(m map[string]json.RawMessage, result interface{})
 // UpdateActionOptions : The UpdateAction options.
 type UpdateActionOptions struct {
 	// Action Id.  Use GET /actions API to look up the Action Ids in your IBM Cloud account.
-	ActionID *string `json:"action_id" validate:"required,ne="`
+	ActionID *string `validate:"required,ne="`
 
 	// Action name (unique for an account).
-	Name *string `json:"name,omitempty"`
+	Name *string
 
 	// Action description.
-	Description *string `json:"description,omitempty"`
+	Description *string
 
 	// List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of
 	// the resources provisioned using Schematics.
-	Location *string `json:"location,omitempty"`
+	Location *string
 
 	// Resource-group name for the Action.  By default, Action will be created in Default Resource Group.
-	ResourceGroup *string `json:"resource_group,omitempty"`
+	ResourceGroup *string
 
 	// Action tags.
-	Tags []string `json:"tags,omitempty"`
+	Tags []string
 
 	// User defined status of the Schematics object.
-	UserState *UserState `json:"user_state,omitempty"`
+	UserState *UserState
 
 	// URL of the README file, for the source.
-	SourceReadmeURL *string `json:"source_readme_url,omitempty"`
+	SourceReadmeURL *string
 
 	// Source of templates, playbooks, or controls.
-	Source *ExternalSource `json:"source,omitempty"`
+	Source *ExternalSource
 
 	// Type of source for the Template.
-	SourceType *string `json:"source_type,omitempty"`
+	SourceType *string
 
-	// Schematics job command parameter (playbook-name, capsule-name or flow-name).
-	CommandParameter *string `json:"command_parameter,omitempty"`
+	// Schematics job command parameter (playbook-name).
+	CommandParameter *string
 
-	// Complete Target details with user inputs and system generated data.
-	Bastion *TargetResourceset `json:"bastion,omitempty"`
+	// Describes a bastion resource.
+	Bastion *BastionResourceDefinition
 
-	// Inventory of host and host group for the playbook, in .ini file format.
-	TargetsIni *string `json:"targets_ini,omitempty"`
+	// Inventory ID.
+	Inventory *string
+
+	// User editable variable data & system generated reference to value.
+	BastionCredential *VariableData
 
 	// credentials of the Action.
-	Credentials []VariableData `json:"credentials,omitempty"`
+	Credentials []VariableData
 
 	// Input variables for the Action.
-	Inputs []VariableData `json:"inputs,omitempty"`
+	Inputs []VariableData
 
 	// Output variables for the Action.
-	Outputs []VariableData `json:"outputs,omitempty"`
+	Outputs []VariableData
 
 	// Environment variables for the Action.
-	Settings []VariableData `json:"settings,omitempty"`
-
-	// Id to the Trigger.
-	TriggerRecordID *string `json:"trigger_record_id,omitempty"`
+	Settings []VariableData
 
 	// Computed state of the Action.
-	State *ActionState `json:"state,omitempty"`
+	State *ActionState
 
 	// System lock status.
-	SysLock *SystemLock `json:"sys_lock,omitempty"`
+	SysLock *SystemLock
 
 	// The github token associated with the GIT. Required for cloning of repo.
-	XGithubToken *string `json:"X-Github-token,omitempty"`
+	XGithubToken *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -10281,10 +12207,10 @@ type UpdateActionOptions struct {
 // List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of the
 // resources provisioned using Schematics.
 const (
-	UpdateActionOptions_Location_EuDe    = "eu_de"
-	UpdateActionOptions_Location_EuGb    = "eu_gb"
-	UpdateActionOptions_Location_UsEast  = "us_east"
-	UpdateActionOptions_Location_UsSouth = "us_south"
+	UpdateActionOptions_Location_EuDe    = "eu-de"
+	UpdateActionOptions_Location_EuGb    = "eu-gb"
+	UpdateActionOptions_Location_UsEast  = "us-east"
+	UpdateActionOptions_Location_UsSouth = "us-south"
 )
 
 // Constants associated with the UpdateActionOptions.SourceType property.
@@ -10373,14 +12299,20 @@ func (options *UpdateActionOptions) SetCommandParameter(commandParameter string)
 }
 
 // SetBastion : Allow user to set Bastion
-func (options *UpdateActionOptions) SetBastion(bastion *TargetResourceset) *UpdateActionOptions {
+func (options *UpdateActionOptions) SetBastion(bastion *BastionResourceDefinition) *UpdateActionOptions {
 	options.Bastion = bastion
 	return options
 }
 
-// SetTargetsIni : Allow user to set TargetsIni
-func (options *UpdateActionOptions) SetTargetsIni(targetsIni string) *UpdateActionOptions {
-	options.TargetsIni = core.StringPtr(targetsIni)
+// SetInventory : Allow user to set Inventory
+func (options *UpdateActionOptions) SetInventory(inventory string) *UpdateActionOptions {
+	options.Inventory = core.StringPtr(inventory)
+	return options
+}
+
+// SetBastionCredential : Allow user to set BastionCredential
+func (options *UpdateActionOptions) SetBastionCredential(bastionCredential *VariableData) *UpdateActionOptions {
+	options.BastionCredential = bastionCredential
 	return options
 }
 
@@ -10408,12 +12340,6 @@ func (options *UpdateActionOptions) SetSettings(settings []VariableData) *Update
 	return options
 }
 
-// SetTriggerRecordID : Allow user to set TriggerRecordID
-func (options *UpdateActionOptions) SetTriggerRecordID(triggerRecordID string) *UpdateActionOptions {
-	options.TriggerRecordID = core.StringPtr(triggerRecordID)
-	return options
-}
-
 // SetState : Allow user to set State
 func (options *UpdateActionOptions) SetState(state *ActionState) *UpdateActionOptions {
 	options.State = state
@@ -10438,41 +12364,135 @@ func (options *UpdateActionOptions) SetHeaders(param map[string]string) *UpdateA
 	return options
 }
 
+// UpdateInventoryOptions : The UpdateInventory options.
+type UpdateInventoryOptions struct {
+	// Resource Inventory Id.  Use GET /inventories API to look up the Resource Inventory definition Ids  in your IBM Cloud
+	// account.
+	InventoryID *string `validate:"required,ne="`
+
+	// Inventory name.
+	Name *string
+
+	// Inventory description.
+	Description *string
+
+	// List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of
+	// the resources provisioned using Schematics.
+	Location *string
+
+	// Resource-group name for the Inventory definition.  By default, Action will be created in Default Resource Group.
+	ResourceGroup *string
+
+	// Input inventory of host and host group for the playbook,  in the .ini file format.
+	InventoriesIni *string
+
+	// Input resource queries that is used to dynamically generate  the inventory of host and host group for the playbook.
+	ResourceQueries []string
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// Constants associated with the UpdateInventoryOptions.Location property.
+// List of workspace locations supported by IBM Cloud Schematics service.  Note, this does not limit the location of the
+// resources provisioned using Schematics.
+const (
+	UpdateInventoryOptions_Location_EuDe    = "eu-de"
+	UpdateInventoryOptions_Location_EuGb    = "eu-gb"
+	UpdateInventoryOptions_Location_UsEast  = "us-east"
+	UpdateInventoryOptions_Location_UsSouth = "us-south"
+)
+
+// NewUpdateInventoryOptions : Instantiate UpdateInventoryOptions
+func (*SchematicsV1) NewUpdateInventoryOptions(inventoryID string) *UpdateInventoryOptions {
+	return &UpdateInventoryOptions{
+		InventoryID: core.StringPtr(inventoryID),
+	}
+}
+
+// SetInventoryID : Allow user to set InventoryID
+func (options *UpdateInventoryOptions) SetInventoryID(inventoryID string) *UpdateInventoryOptions {
+	options.InventoryID = core.StringPtr(inventoryID)
+	return options
+}
+
+// SetName : Allow user to set Name
+func (options *UpdateInventoryOptions) SetName(name string) *UpdateInventoryOptions {
+	options.Name = core.StringPtr(name)
+	return options
+}
+
+// SetDescription : Allow user to set Description
+func (options *UpdateInventoryOptions) SetDescription(description string) *UpdateInventoryOptions {
+	options.Description = core.StringPtr(description)
+	return options
+}
+
+// SetLocation : Allow user to set Location
+func (options *UpdateInventoryOptions) SetLocation(location string) *UpdateInventoryOptions {
+	options.Location = core.StringPtr(location)
+	return options
+}
+
+// SetResourceGroup : Allow user to set ResourceGroup
+func (options *UpdateInventoryOptions) SetResourceGroup(resourceGroup string) *UpdateInventoryOptions {
+	options.ResourceGroup = core.StringPtr(resourceGroup)
+	return options
+}
+
+// SetInventoriesIni : Allow user to set InventoriesIni
+func (options *UpdateInventoryOptions) SetInventoriesIni(inventoriesIni string) *UpdateInventoryOptions {
+	options.InventoriesIni = core.StringPtr(inventoriesIni)
+	return options
+}
+
+// SetResourceQueries : Allow user to set ResourceQueries
+func (options *UpdateInventoryOptions) SetResourceQueries(resourceQueries []string) *UpdateInventoryOptions {
+	options.ResourceQueries = resourceQueries
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *UpdateInventoryOptions) SetHeaders(param map[string]string) *UpdateInventoryOptions {
+	options.Headers = param
+	return options
+}
+
 // UpdateWorkspaceOptions : The UpdateWorkspace options.
 type UpdateWorkspaceOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// CatalogRef -.
-	CatalogRef *CatalogRef `json:"catalog_ref,omitempty"`
+	CatalogRef *CatalogRef
 
 	// Workspace description.
-	Description *string `json:"description,omitempty"`
+	Description *string
 
 	// Workspace name.
-	Name *string `json:"name,omitempty"`
+	Name *string
 
 	// SharedTargetData -.
-	SharedData *SharedTargetData `json:"shared_data,omitempty"`
+	SharedData *SharedTargetData
 
 	// Tags -.
-	Tags []string `json:"tags,omitempty"`
+	Tags []string
 
 	// TemplateData -.
-	TemplateData []TemplateSourceDataRequest `json:"template_data,omitempty"`
+	TemplateData []TemplateSourceDataRequest
 
 	// TemplateRepoUpdateRequest -.
-	TemplateRepo *TemplateRepoUpdateRequest `json:"template_repo,omitempty"`
+	TemplateRepo *TemplateRepoUpdateRequest
 
 	// List of Workspace type.
-	Type []string `json:"type,omitempty"`
+	Type []string
 
 	// WorkspaceStatusUpdateRequest -.
-	WorkspaceStatus *WorkspaceStatusUpdateRequest `json:"workspace_status,omitempty"`
+	WorkspaceStatus *WorkspaceStatusUpdateRequest
 
 	// WorkspaceStatusMessage -.
-	WorkspaceStatusMsg *WorkspaceStatusMessage `json:"workspace_status_msg,omitempty"`
+	WorkspaceStatusMsg *WorkspaceStatusMessage
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -10557,21 +12577,67 @@ func (options *UpdateWorkspaceOptions) SetHeaders(param map[string]string) *Upda
 	return options
 }
 
+// UploadTemplateTarActionOptions : The UploadTemplateTarAction options.
+type UploadTemplateTarActionOptions struct {
+	// Action Id.  Use GET /actions API to look up the Action Ids in your IBM Cloud account.
+	ActionID *string `validate:"required,ne="`
+
+	// Template tar file.
+	File io.ReadCloser
+
+	// The content type of file.
+	FileContentType *string
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewUploadTemplateTarActionOptions : Instantiate UploadTemplateTarActionOptions
+func (*SchematicsV1) NewUploadTemplateTarActionOptions(actionID string) *UploadTemplateTarActionOptions {
+	return &UploadTemplateTarActionOptions{
+		ActionID: core.StringPtr(actionID),
+	}
+}
+
+// SetActionID : Allow user to set ActionID
+func (options *UploadTemplateTarActionOptions) SetActionID(actionID string) *UploadTemplateTarActionOptions {
+	options.ActionID = core.StringPtr(actionID)
+	return options
+}
+
+// SetFile : Allow user to set File
+func (options *UploadTemplateTarActionOptions) SetFile(file io.ReadCloser) *UploadTemplateTarActionOptions {
+	options.File = file
+	return options
+}
+
+// SetFileContentType : Allow user to set FileContentType
+func (options *UploadTemplateTarActionOptions) SetFileContentType(fileContentType string) *UploadTemplateTarActionOptions {
+	options.FileContentType = core.StringPtr(fileContentType)
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *UploadTemplateTarActionOptions) SetHeaders(param map[string]string) *UploadTemplateTarActionOptions {
+	options.Headers = param
+	return options
+}
+
 // UploadTemplateTarOptions : The UploadTemplateTar options.
 type UploadTemplateTarOptions struct {
 	// The workspace ID for the workspace that you want to query.  You can run the GET /workspaces call if you need to look
 	// up the  workspace IDs in your IBM Cloud account.
-	WID *string `json:"w_id" validate:"required,ne="`
+	WID *string `validate:"required,ne="`
 
 	// The Template ID for which you want to get the values.  Use the GET /workspaces to look up the workspace IDs  or
 	// template IDs in your IBM Cloud account.
-	TID *string `json:"t_id" validate:"required,ne="`
+	TID *string `validate:"required,ne="`
 
 	// Template tar file.
-	File io.ReadCloser `json:"file,omitempty"`
+	File io.ReadCloser
 
 	// The content type of file.
-	FileContentType *string `json:"file_content_type,omitempty"`
+	FileContentType *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -11106,12 +13172,12 @@ func UnmarshalWorkspaceActivityLogs(m map[string]json.RawMessage, result interfa
 	return
 }
 
-// WorkspaceActivityOptionsTemplate : Action Options Template ...
+// WorkspaceActivityOptionsTemplate : Workspace Activity Options Template.
 type WorkspaceActivityOptionsTemplate struct {
-	// Action targets.
+	// Workspace Activity targets.
 	Target []string `json:"target,omitempty"`
 
-	// Action tfvars.
+	// Workspace Activity tfvars.
 	TfVars []string `json:"tf_vars,omitempty"`
 }
 

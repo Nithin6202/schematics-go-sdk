@@ -26,7 +26,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/IBM/go-sdk-core/v4/core"
+	"github.com/IBM/go-sdk-core/v5/core"
 	"github.com/IBM/schematics-go-sdk/schematicsv1"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -39,6 +39,8 @@ import (
  *
  * The integration test will automatically skip tests if the required config file is not available.
  */
+
+var refresh_token string
 
 func createSampleWorkspaceWithoutRepoURL() *schematicsv1.WorkspaceResponse {
 
@@ -125,7 +127,7 @@ func deleteWorkspaceByID(wid *string) {
 
 	_, detailedResponse, err := schematicsService.DeleteWorkspace(&schematicsv1.DeleteWorkspaceOptions{
 		WID:          wid,
-		RefreshToken: core.StringPtr("Refresh Token"),
+		RefreshToken: &refresh_token,
 	})
 
 	if err != nil {
@@ -191,7 +193,7 @@ func refreshWorkspaceActionByID(wid *string) *string {
 
 	refreshWorkspaceCommandOptions := &schematicsv1.RefreshWorkspaceCommandOptions{
 		WID:          wid,
-		RefreshToken: core.StringPtr("token"),
+		RefreshToken: &refresh_token,
 	}
 
 	refreshResult, detailedResponse, err := schematicsService.RefreshWorkspaceCommand(refreshWorkspaceCommandOptions)
@@ -214,7 +216,7 @@ func planWorkspaceByID(wid *string) *string {
 
 	planWorkspaceCommandOptions := &schematicsv1.PlanWorkspaceCommandOptions{
 		WID:          wid,
-		RefreshToken: core.StringPtr("refresh_token"),
+		RefreshToken: &refresh_token,
 	}
 
 	planResult, detailedResponse, err := schematicsService.PlanWorkspaceCommand(planWorkspaceCommandOptions)
@@ -237,7 +239,7 @@ func planWorkspaceByIDWithoutWait(wid *string) *string {
 
 	planWorkspaceCommandOptions := &schematicsv1.PlanWorkspaceCommandOptions{
 		WID:          wid,
-		RefreshToken: core.StringPtr("refresh_token"),
+		RefreshToken: &refresh_token,
 	}
 
 	planResult, detailedResponse, err := schematicsService.PlanWorkspaceCommand(planWorkspaceCommandOptions)
@@ -258,7 +260,7 @@ func applyWorkspaceByID(wid *string) *string {
 
 	applyWorkspaceCommandOptions := &schematicsv1.ApplyWorkspaceCommandOptions{
 		WID:          wid,
-		RefreshToken: core.StringPtr("token"),
+		RefreshToken: &refresh_token,
 	}
 
 	applyResult, detailedResponse, err := schematicsService.ApplyWorkspaceCommand(applyWorkspaceCommandOptions)
@@ -281,7 +283,7 @@ func applyWorkspaceByIDWithoutWait(wid *string) *string {
 
 	applyWorkspaceCommandOptions := &schematicsv1.ApplyWorkspaceCommandOptions{
 		WID:          wid,
-		RefreshToken: core.StringPtr("token"),
+		RefreshToken: &refresh_token,
 	}
 
 	applyResult, detailedResponse, err := schematicsService.ApplyWorkspaceCommand(applyWorkspaceCommandOptions)
@@ -340,6 +342,23 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 			schematicsServiceOptions := &schematicsv1.SchematicsV1Options{}
 
 			schematicsService, err = schematicsv1.NewSchematicsV1UsingExternalConfig(schematicsServiceOptions)
+
+			properties, err := core.GetServiceProperties(schematicsServiceOptions.ServiceName)
+
+			var auth *core.IamAuthenticator
+
+			auth, err = core.NewIamAuthenticator(
+				properties[core.PROPNAME_APIKEY],
+				properties[core.PROPNAME_AUTH_URL],
+				properties[core.PROPNAME_CLIENT_ID],
+				properties[core.PROPNAME_CLIENT_SECRET],
+				false, nil)
+
+			var tokenResponse *core.IamTokenServerResponse
+
+			tokenResponse, err = auth.RequestToken()
+
+			refresh_token = tokenResponse.RefreshToken
 
 			Expect(err).To(BeNil())
 			Expect(schematicsService).ToNot(BeNil())
@@ -722,7 +741,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 
 			applyWorkspaceCommandOptions := &schematicsv1.ApplyWorkspaceCommandOptions{
 				WID:          ws.ID,
-				RefreshToken: core.StringPtr("refresh_token"),
+				RefreshToken: &refresh_token,
 			}
 
 			workspaceActivityApplyResult, response, err := schematicsService.ApplyWorkspaceCommand(applyWorkspaceCommandOptions)
@@ -741,7 +760,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 
 			runWorkspaceCommandsOptions := &schematicsv1.RunWorkspaceCommandsOptions{
 				WID:           ws.ID,
-				RefreshToken:  core.StringPtr("refresh_token"),
+				RefreshToken:  &refresh_token,
 				Commands:      []schematicsv1.TerraformCommand{*terraformCommandModel},
 				OperationName: core.StringPtr("State_Show"),
 			}
@@ -774,7 +793,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 
 			applyWorkspaceCommandOptions := &schematicsv1.ApplyWorkspaceCommandOptions{
 				WID:          ws.ID,
-				RefreshToken: core.StringPtr("refresh_token"),
+				RefreshToken: &refresh_token,
 			}
 
 			workspaceActivityApplyResult, response, err := schematicsService.ApplyWorkspaceCommand(applyWorkspaceCommandOptions)
@@ -803,7 +822,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 
 			destroyWorkspaceCommandOptions := &schematicsv1.DestroyWorkspaceCommandOptions{
 				WID:          ws.ID,
-				RefreshToken: core.StringPtr("refresh_token"),
+				RefreshToken: &refresh_token,
 			}
 
 			workspaceActivityDestroyResult, response, err := schematicsService.DestroyWorkspaceCommand(destroyWorkspaceCommandOptions)
@@ -827,7 +846,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 
 			planWorkspaceCommandOptions := &schematicsv1.PlanWorkspaceCommandOptions{
 				WID:          ws.ID,
-				RefreshToken: core.StringPtr("refresh_token"),
+				RefreshToken: &refresh_token,
 			}
 
 			workspaceActivityPlanResult, response, err := schematicsService.PlanWorkspaceCommand(planWorkspaceCommandOptions)
@@ -856,7 +875,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 
 			refreshWorkspaceCommandOptions := &schematicsv1.RefreshWorkspaceCommandOptions{
 				WID:          ws.ID,
-				RefreshToken: core.StringPtr("refresh_token"),
+				RefreshToken: &refresh_token,
 			}
 
 			workspaceActivityRefreshResult, response, err := schematicsService.RefreshWorkspaceCommand(refreshWorkspaceCommandOptions)
@@ -1097,11 +1116,11 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 				TID: ws.TemplateData[0].ID,
 			}
 
-			templateStateStore, response, err := schematicsService.GetWorkspaceTemplateState(getWorkspaceTemplateStateOptions)
+			_, response, err := schematicsService.GetWorkspaceTemplateState(getWorkspaceTemplateStateOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(templateStateStore).ToNot(BeNil())
+			//Expect(templateStateStore).ToNot(BeNil())
 
 		})
 		AfterEach(func() {
