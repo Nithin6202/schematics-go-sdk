@@ -166,14 +166,14 @@ func uploadTarFile(ws *schematicsv1.WorkspaceResponse) *schematicsv1.TemplateRep
 	fileReader, _ := os.Open(filePath)
 	fileReaderWrapper := ioutil.NopCloser(fileReader)
 
-	uploadTarOptions := &schematicsv1.UploadTemplateTarOptions{
+	uploadTarOptions := &schematicsv1.TemplateRepoUploadOptions{
 		WID:             ws.ID,
 		TID:             ws.TemplateData[0].ID,
 		File:            fileReaderWrapper,
 		FileContentType: core.StringPtr("multipart/form-data"),
 	}
 
-	uploadResponse, detailedResponse, err := schematicsService.UploadTemplateTar(uploadTarOptions)
+	uploadResponse, detailedResponse, err := schematicsService.TemplateRepoUpload(uploadTarOptions)
 
 	if err != nil {
 		fmt.Printf("Failed to delete the workspace : %v and the response is %s", err, detailedResponse)
@@ -621,14 +621,14 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 			fileReader, _ := os.Open(filePath)
 			fileReaderWrapper := ioutil.NopCloser(fileReader) // no-op Close method wrapping the provided Reader
 
-			uploadTarOptions := &schematicsv1.UploadTemplateTarOptions{
+			uploadTarOptions := &schematicsv1.TemplateRepoUploadOptions{
 				WID:             ws.ID,
 				TID:             ws.TemplateData[0].ID,
 				File:            fileReaderWrapper,
 				FileContentType: core.StringPtr("multipart/form-data"),
 			}
 
-			resultUpload, httpResponse, err := schematicsService.UploadTemplateTar(uploadTarOptions)
+			resultUpload, httpResponse, err := schematicsService.TemplateRepoUpload(uploadTarOptions)
 			Expect(err).To(BeNil())
 			Expect(httpResponse.StatusCode).To(Equal(200))
 			Expect(resultUpload).ToNot(BeNil())
