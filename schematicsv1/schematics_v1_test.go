@@ -5480,52 +5480,6 @@ import (
 			 })
 		 })
 	 })
-	 Describe(`GetWorkspaceTemplateState(getWorkspaceTemplateStateOptions *GetWorkspaceTemplateStateOptions) - Operation response error`, func() {
-		 getWorkspaceTemplateStatePath := "/v1/workspaces/testString/runtime_data/testString/state_store"
-		 Context(`Using mock server endpoint with invalid JSON response`, func() {
-			 BeforeEach(func() {
-				 testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					 defer GinkgoRecover()
- 
-					 // Verify the contents of the request
-					 Expect(req.URL.EscapedPath()).To(Equal(getWorkspaceTemplateStatePath))
-					 Expect(req.Method).To(Equal("GET"))
-					 res.Header().Set("Content-type", "application/json")
-					 res.WriteHeader(200)
-					 fmt.Fprintf(res, `} this is not valid json {`)
-				 }))
-			 })
-			 It(`Invoke GetWorkspaceTemplateState with error: Operation response processing error`, func() {
-				 schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					 URL:           testServer.URL,
-					 Authenticator: &core.NoAuthAuthenticator{},
-				 })
-				 Expect(serviceErr).To(BeNil())
-				 Expect(schematicsService).ToNot(BeNil())
- 
-				 // Construct an instance of the GetWorkspaceTemplateStateOptions model
-				 getWorkspaceTemplateStateOptionsModel := new(schematicsv1.GetWorkspaceTemplateStateOptions)
-				 getWorkspaceTemplateStateOptionsModel.WID = core.StringPtr("testString")
-				 getWorkspaceTemplateStateOptionsModel.TID = core.StringPtr("testString")
-				 getWorkspaceTemplateStateOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				 // Expect response parsing to fail since we are receiving a text/plain response
-				 result, response, operationErr := schematicsService.GetWorkspaceTemplateState(getWorkspaceTemplateStateOptionsModel)
-				 Expect(operationErr).ToNot(BeNil())
-				 Expect(response).ToNot(BeNil())
-				 Expect(result).To(BeNil())
- 
-				 // Enable retries and test again
-				 schematicsService.EnableRetries(0, 0)
-				 result, response, operationErr = schematicsService.GetWorkspaceTemplateState(getWorkspaceTemplateStateOptionsModel)
-				 Expect(operationErr).ToNot(BeNil())
-				 Expect(response).ToNot(BeNil())
-				 Expect(result).To(BeNil())
-			 })
-			 AfterEach(func() {
-				 testServer.Close()
-			 })
-		 })
-	 })
 	 Describe(`GetWorkspaceTemplateState(getWorkspaceTemplateStateOptions *GetWorkspaceTemplateStateOptions)`, func() {
 		 getWorkspaceTemplateStatePath := "/v1/workspaces/testString/runtime_data/testString/state_store"
 		 Context(`Using mock server endpoint with timeout`, func() {
@@ -5543,7 +5497,7 @@ import (
 					 // Set mock response
 					 res.Header().Set("Content-type", "application/json")
 					 res.WriteHeader(200)
-					 fmt.Fprintf(res, "%s", `{"version": 7, "terraform_version": "TerraformVersion", "serial": 6, "lineage": "Lineage", "modules": [{"anyKey": "anyValue"}]}`)
+					 fmt.Fprintf(res, "%s", `[{"anyKey": "anyValue"}]`)
 				 }))
 			 })
 			 It(`Invoke GetWorkspaceTemplateState successfully with retries`, func() {
@@ -5598,7 +5552,7 @@ import (
 					 // Set mock response
 					 res.Header().Set("Content-type", "application/json")
 					 res.WriteHeader(200)
-					 fmt.Fprintf(res, "%s", `{"version": 7, "terraform_version": "TerraformVersion", "serial": 6, "lineage": "Lineage", "modules": [{"anyKey": "anyValue"}]}`)
+					 fmt.Fprintf(res, "%s", `[{"anyKey": "anyValue"}]`)
 				 }))
 			 })
 			 It(`Invoke GetWorkspaceTemplateState successfully`, func() {

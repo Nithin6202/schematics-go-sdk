@@ -1543,12 +1543,12 @@ func (schematics *SchematicsV1) GetWorkspaceStateWithContext(ctx context.Context
 // applied in IBM Cloud. The statefile holds detailed information about the IBM Cloud resources that were created by IBM
 // Cloud Schematics and Schematics uses the file to determine future create, modify, or delete actions for your
 // resources.
-func (schematics *SchematicsV1) GetWorkspaceTemplateState(getWorkspaceTemplateStateOptions *GetWorkspaceTemplateStateOptions) (result *TemplateStateStore, response *core.DetailedResponse, err error) {
+func (schematics *SchematicsV1) GetWorkspaceTemplateState(getWorkspaceTemplateStateOptions *GetWorkspaceTemplateStateOptions) (result []interface{}, response *core.DetailedResponse, err error) {
 	return schematics.GetWorkspaceTemplateStateWithContext(context.Background(), getWorkspaceTemplateStateOptions)
 }
 
 // GetWorkspaceTemplateStateWithContext is an alternate form of the GetWorkspaceTemplateState method which supports a Context parameter
-func (schematics *SchematicsV1) GetWorkspaceTemplateStateWithContext(ctx context.Context, getWorkspaceTemplateStateOptions *GetWorkspaceTemplateStateOptions) (result *TemplateStateStore, response *core.DetailedResponse, err error) {
+func (schematics *SchematicsV1) GetWorkspaceTemplateStateWithContext(ctx context.Context, getWorkspaceTemplateStateOptions *GetWorkspaceTemplateStateOptions) (result []interface{}, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getWorkspaceTemplateStateOptions, "getWorkspaceTemplateStateOptions cannot be nil")
 	if err != nil {
 		return
@@ -1586,18 +1586,7 @@ func (schematics *SchematicsV1) GetWorkspaceTemplateStateWithContext(ctx context
 		return
 	}
 
-	var rawResponse map[string]json.RawMessage
-	response, err = schematics.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	if rawResponse != nil {
-		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalTemplateStateStore)
-		if err != nil {
-			return
-		}
-		response.Result = result
-	}
+	response, err = schematics.Service.Request(request, &result)
 
 	return
 }
@@ -12688,46 +12677,6 @@ func UnmarshalTemplateSourceDataResponse(m map[string]json.RawMessage, result in
 		return
 	}
 	err = core.UnmarshalModel(m, "variablestore", &obj.Variablestore, UnmarshalWorkspaceVariableResponse)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// TemplateStateStore : The content of the Terraform statefile (`terraform.tfstate`).
-type TemplateStateStore struct {
-	Version *float64 `json:"version,omitempty"`
-
-	TerraformVersion *string `json:"terraform_version,omitempty"`
-
-	Serial *float64 `json:"serial,omitempty"`
-
-	Lineage *string `json:"lineage,omitempty"`
-
-	Modules []interface{} `json:"modules,omitempty"`
-}
-
-// UnmarshalTemplateStateStore unmarshals an instance of TemplateStateStore from the specified map of raw messages.
-func UnmarshalTemplateStateStore(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(TemplateStateStore)
-	err = core.UnmarshalPrimitive(m, "version", &obj.Version)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "terraform_version", &obj.TerraformVersion)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "serial", &obj.Serial)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "lineage", &obj.Lineage)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "modules", &obj.Modules)
 	if err != nil {
 		return
 	}
