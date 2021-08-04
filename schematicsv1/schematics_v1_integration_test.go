@@ -148,7 +148,10 @@ func waitForWorkspaceStatus(wid *string, status string) {
 func waitForWorkspaceActivityStatus(wid *string, activityid *string, status string) {
 	var activitystatus string
 	for strings.Compare(activitystatus, status) != 0 {
-		activitystatus = *getWorkspaceActivityByID(wid, activityid).Status
+		status := getWorkspaceActivityByID(wid, activityid)
+		if status != nil {
+			activitystatus = *status.Status
+		}
 		//fmt.Println(activitystatus)
 		time.Sleep(2 * time.Second)
 	}
