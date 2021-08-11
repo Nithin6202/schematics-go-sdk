@@ -218,6 +218,58 @@ func (schematics *SchematicsV1) ListSchematicsLocationWithContext(ctx context.Co
 	return
 }
 
+// ListLocations : List supported schematics locations
+// Retrieve a list of IBM Cloud locations where you can work with Schematics objects.
+func (schematics *SchematicsV1) ListLocations(listLocationsOptions *ListLocationsOptions) (result *SchematicsLocationsList, response *core.DetailedResponse, err error) {
+	return schematics.ListLocationsWithContext(context.Background(), listLocationsOptions)
+}
+
+// ListLocationsWithContext is an alternate form of the ListLocations method which supports a Context parameter
+func (schematics *SchematicsV1) ListLocationsWithContext(ctx context.Context, listLocationsOptions *ListLocationsOptions) (result *SchematicsLocationsList, response *core.DetailedResponse, err error) {
+	err = core.ValidateStruct(listLocationsOptions, "listLocationsOptions")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.GET)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/locations`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range listLocationsOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "ListLocations")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = schematics.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSchematicsLocationsList)
+		if err != nil {
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
+
 // ListResourceGroup : List resource groups
 // Retrieve a list of IBM Cloud resource groups that your account has access to.
 func (schematics *SchematicsV1) ListResourceGroup(listResourceGroupOptions *ListResourceGroupOptions) (result []ResourceGroupResponse, response *core.DetailedResponse, err error) {
@@ -327,58 +379,6 @@ func (schematics *SchematicsV1) GetSchematicsVersionWithContext(ctx context.Cont
 	return
 }
 
-// ListLocations : List supported schematics locations
-// Retrieve a list of IBM Cloud locations where you can work with Schematics objects.
-func (schematics *SchematicsV1) ListLocations(listLocationsOptions *ListLocationsOptions) (result *SchematicsLocationsList, response *core.DetailedResponse, err error) {
-	return schematics.ListLocationsWithContext(context.Background(), listLocationsOptions)
-}
-
-// ListLocationsWithContext is an alternate form of the ListLocations method which supports a Context parameter
-func (schematics *SchematicsV1) ListLocationsWithContext(ctx context.Context, listLocationsOptions *ListLocationsOptions) (result *SchematicsLocationsList, response *core.DetailedResponse, err error) {
-	err = core.ValidateStruct(listLocationsOptions, "listLocationsOptions")
-	if err != nil {
-		return
-	}
-
-	builder := core.NewRequestBuilder(core.GET)
-	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/locations`, nil)
-	if err != nil {
-		return
-	}
-
-	for headerName, headerValue := range listLocationsOptions.Headers {
-		builder.AddHeader(headerName, headerValue)
-	}
-
-	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "ListLocations")
-	for headerName, headerValue := range sdkHeaders {
-		builder.AddHeader(headerName, headerValue)
-	}
-	builder.AddHeader("Accept", "application/json")
-
-	request, err := builder.Build()
-	if err != nil {
-		return
-	}
-
-	var rawResponse map[string]json.RawMessage
-	response, err = schematics.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	if rawResponse != nil {
-		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSchematicsLocationsList)
-		if err != nil {
-			return
-		}
-		response.Result = result
-	}
-
-	return
-}
-
 // ProcessTemplateMetaData : Create metadata by  processing the template
 // Create a Template metadata definition.
 func (schematics *SchematicsV1) ProcessTemplateMetaData(processTemplateMetaDataOptions *ProcessTemplateMetaDataOptions) (result *TemplateMetaDataResponse, response *core.DetailedResponse, err error) {
@@ -464,7 +464,8 @@ func (schematics *SchematicsV1) ProcessTemplateMetaDataWithContext(ctx context.C
 // about supported API endpoints, see [API endpoints](/apidocs/schematics#api-endpoints).
 // <h3>Authorization</h3> Schematics support generic authorization such as service access or platform access to the
 // workspace ID and the resource group. For more information, about Schematics access and permissions, see [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+// service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) ListWorkspaces(listWorkspacesOptions *ListWorkspacesOptions) (result *WorkspaceResponseList, response *core.DetailedResponse, err error) {
 	return schematics.ListWorkspacesWithContext(context.Background(), listWorkspacesOptions)
 }
@@ -555,9 +556,11 @@ func (schematics *SchematicsV1) ListWorkspacesWithContext(ctx context.Context, l
 //
 //  <h3>Authorization</h3>
 //
-//  Schematics support generic authorization such as service access or platform access to the workspace ID and the
-// resource group. For more information, about Schematics access and permissions, see [Schematics service access roles
-// and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+//  Schematics support generic authorization such as service access or platform access
+//  to the workspace ID and the resource group.
+//  For more information, about Schematics access and permissions,
+//  see [Schematics service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) CreateWorkspace(createWorkspaceOptions *CreateWorkspaceOptions) (result *WorkspaceResponse, response *core.DetailedResponse, err error) {
 	return schematics.CreateWorkspaceWithContext(context.Background(), createWorkspaceOptions)
 }
@@ -669,7 +672,7 @@ func (schematics *SchematicsV1) CreateWorkspaceWithContext(ctx context.Context, 
 //  Schematics support generic authorization such as service access or platform
 //  access to the workspace ID and the resource group. For more information,
 //  about Schematics access and permissions, see [Schematics service access
-//  roles and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+//  roles and required permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) GetWorkspace(getWorkspaceOptions *GetWorkspaceOptions) (result *WorkspaceResponse, response *core.DetailedResponse, err error) {
 	return schematics.GetWorkspaceWithContext(context.Background(), getWorkspaceOptions)
 }
@@ -741,7 +744,7 @@ func (schematics *SchematicsV1) GetWorkspaceWithContext(ctx context.Context, get
 //  platform access to the workspace ID and the resource group.
 //  For more information, about Schematics access and permissions,
 //  see [Schematics service access roles and required
-// permissions](/docs/schematics?topic=schematics-access#access-roles).
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) ReplaceWorkspace(replaceWorkspaceOptions *ReplaceWorkspaceOptions) (result *WorkspaceResponse, response *core.DetailedResponse, err error) {
 	return schematics.ReplaceWorkspaceWithContext(context.Background(), replaceWorkspaceOptions)
 }
@@ -840,16 +843,19 @@ func (schematics *SchematicsV1) ReplaceWorkspaceWithContext(ctx context.Context,
 // DeleteWorkspace : Delete a workspace
 // Deletes a workspace from IBM Cloud Schematics. Deleting a workspace does not automatically remove the IBM Cloud
 // resources that the workspace manages. To remove all resources that are associated with the workspace, use the `DELETE
-// /v1/workspaces/{id}?destroyResources=true` API.
+// /v1/workspaces/{id}?destroy_resources=true` API.
 //
-//  **Note**: If you delete a workspace without deleting the resources, you must manage your resources with the resource
-// dashboard or CLI afterwards. You cannot use IBM Cloud Schematics anymore to manage your resources.
+//  **Note**: If you delete a workspace without deleting the resources,
+//  you must manage your resources with the resource dashboard or CLI afterwards.
+//  You cannot use IBM Cloud Schematics anymore to manage your resources.
 //
 //  <h3>Authorization</h3>
 //
-//  Schematics support generic authorization such as service access or platform access to the workspace ID and the
-// resource group. For more information, about Schematics access and permissions, see [Schematics service access roles
-// and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+//  Schematics support generic authorization such as service access or platform access
+//  to the workspace ID and the resource group.
+//  For more information, about Schematics access and permissions,
+//  see [Schematics service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) DeleteWorkspace(deleteWorkspaceOptions *DeleteWorkspaceOptions) (result *string, response *core.DetailedResponse, err error) {
 	return schematics.DeleteWorkspaceWithContext(context.Background(), deleteWorkspaceOptions)
 }
@@ -925,7 +931,7 @@ func (schematics *SchematicsV1) DeleteWorkspaceWithContext(ctx context.Context, 
 //  platform access to the workspace ID and the resource group.
 //  For more information, about Schematics access and permissions,
 //  see [Schematics service access roles and required
-// permissions](/docs/schematics?topic=schematics-access#access-roles).
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) UpdateWorkspace(updateWorkspaceOptions *UpdateWorkspaceOptions) (result *WorkspaceResponse, response *core.DetailedResponse, err error) {
 	return schematics.UpdateWorkspaceWithContext(context.Background(), updateWorkspaceOptions)
 }
@@ -1096,7 +1102,7 @@ func (schematics *SchematicsV1) GetWorkspaceReadmeWithContext(ctx context.Contex
 //
 //  Schematics support generic authorization such as service access or platform access to the workspace ID and the
 // resource group. For more information, about Schematics access and permissions, see [Schematics service access roles
-// and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+// and required permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) TemplateRepoUpload(templateRepoUploadOptions *TemplateRepoUploadOptions) (result *TemplateRepoTarUploadResponse, response *core.DetailedResponse, err error) {
 	return schematics.TemplateRepoUploadWithContext(context.Background(), templateRepoUploadOptions)
 }
@@ -1170,9 +1176,11 @@ func (schematics *SchematicsV1) TemplateRepoUploadWithContext(ctx context.Contex
 //
 //  <h3>Authorization</h3>
 //
-//  Schematics support generic authorization such as service access or platform access to the workspace ID and the
-// resource group. For more information, about Schematics access and permissions, see [Schematics service access roles
-// and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+//  Schematics support generic authorization such as service access or
+//  platform access to the workspace ID and the resource group.
+//  For more information, about Schematics access and permissions,
+//  see [Schematics service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) GetWorkspaceInputs(getWorkspaceInputsOptions *GetWorkspaceInputsOptions) (result *TemplateValues, response *core.DetailedResponse, err error) {
 	return schematics.GetWorkspaceInputsWithContext(context.Background(), getWorkspaceInputsOptions)
 }
@@ -1314,9 +1322,11 @@ func (schematics *SchematicsV1) ReplaceWorkspaceInputsWithContext(ctx context.Co
 //
 //  <h3>Authorization</h3>
 //
-//  Schematics support generic authorization such as service access or platform access to the workspace ID and the
-// resource group. For more information, about Schematics access and permissions, see [Schematics service access roles
-// and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+//  Schematics support generic authorization such as service access or platform
+//  access to the workspace ID and the resource group.
+//  For more information, about Schematics access and permissions,
+//  see [Schematics service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) GetAllWorkspaceInputs(getAllWorkspaceInputsOptions *GetAllWorkspaceInputsOptions) (result *WorkspaceTemplateValuesResponse, response *core.DetailedResponse, err error) {
 	return schematics.GetAllWorkspaceInputsWithContext(context.Background(), getAllWorkspaceInputsOptions)
 }
@@ -1556,9 +1566,11 @@ func (schematics *SchematicsV1) GetWorkspaceResourcesWithContext(ctx context.Con
 //
 //  <h3>Authorization</h3>
 //
-//  Schematics support generic authorization such as service access or platform access to the workspace ID and the
-// resource group. For more information, about Schematics access and permissions, see [Schematics service access roles
-// and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+//  Schematics support generic authorization such as service access or platform access
+//  to the workspace ID and the resource group.
+//  For more information, about Schematics access and permissions,
+//  see [Schematics service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) GetWorkspaceState(getWorkspaceStateOptions *GetWorkspaceStateOptions) (result *StateStoreResponseList, response *core.DetailedResponse, err error) {
 	return schematics.GetWorkspaceStateWithContext(context.Background(), getWorkspaceStateOptions)
 }
@@ -1676,9 +1688,11 @@ func (schematics *SchematicsV1) GetWorkspaceTemplateStateWithContext(ctx context
 //
 //  <h3>Authorization</h3>
 //
-//  Schematics support generic authorization such as service access or platform access to the workspace ID and the
-// resource group. For more information, about Schematics access and permissions, see [Schematics service access roles
-// and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+//  Schematics support generic authorization such as service access or platform access
+//  to the workspace ID and the resource group.
+//  For more information, about Schematics access and permissions,
+//  see [Schematics service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) GetWorkspaceActivityLogs(getWorkspaceActivityLogsOptions *GetWorkspaceActivityLogsOptions) (result *WorkspaceActivityLogs, response *core.DetailedResponse, err error) {
 	return schematics.GetWorkspaceActivityLogsWithContext(context.Background(), getWorkspaceActivityLogsOptions)
 }
@@ -1806,7 +1820,7 @@ func (schematics *SchematicsV1) GetWorkspaceLogUrlsWithContext(ctx context.Conte
 //
 //  Schematics support generic authorization such as service access or platform access to the workspace ID and the
 // resource group. For more information, about Schematics access and permissions, see [Schematics service access roles
-// and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+// and required permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) GetTemplateLogs(getTemplateLogsOptions *GetTemplateLogsOptions) (result *string, response *core.DetailedResponse, err error) {
 	return schematics.GetTemplateLogsWithContext(context.Background(), getTemplateLogsOptions)
 }
@@ -1946,7 +1960,7 @@ func (schematics *SchematicsV1) GetTemplateActivityLogWithContext(ctx context.Co
 //  platform access to an action ID and the resource group.
 //  For more information, about Schematics access and permissions, see
 //  [Schematics service access roles and required
-// permissions](/docs/schematics?topic=schematics-access#action-permissions.
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) ListActions(listActionsOptions *ListActionsOptions) (result *ActionList, response *core.DetailedResponse, err error) {
 	return schematics.ListActionsWithContext(context.Background(), listActionsOptions)
 }
@@ -2019,9 +2033,10 @@ func (schematics *SchematicsV1) ListActionsWithContext(ctx context.Context, list
 //
 //  For more information, about the Schematics create action,
 //  see [ibmcloud schematics action
-// create](/docs/schematics?topic=schematics-schematics-cli-reference#schematics-create-action).
+// create](https://cloud.ibm.com/docs/schematics?topic=schematics-schematics-cli-reference#schematics-create-action).
 //  **Note** you cannot update the location and region once an action is created.
-//  Also, make sure your IP addresses are in the [allowlist](/docs/schematics?topic=schematics-allowed-ipaddresses).
+//  Also, make sure your IP addresses are in the
+// [allowlist](https://cloud.ibm.com/docs/schematics?topic=schematics-allowed-ipaddresses).
 //
 //  <h3>Authorization</h3>
 //
@@ -2029,7 +2044,7 @@ func (schematics *SchematicsV1) ListActionsWithContext(ctx context.Context, list
 //  platform access to an action ID and the resource group.
 //  For more information, about Schematics access and permissions, see
 //  [Schematics service access roles and required
-// permissions](/docs/schematics?topic=schematics-access#action-permissions.
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#action-permissions.
 func (schematics *SchematicsV1) CreateAction(createActionOptions *CreateActionOptions) (result *Action, response *core.DetailedResponse, err error) {
 	return schematics.CreateActionWithContext(context.Background(), createActionOptions)
 }
@@ -2156,7 +2171,7 @@ func (schematics *SchematicsV1) CreateActionWithContext(ctx context.Context, cre
 
 // GetAction : Get action details
 // Retrieve the detailed information of an actions from your IBM Cloud account.  This API returns a URL to the log file
-// that you can retrieve by using  the\_ `GET /v2/actions/{action_id}/logs` API.
+// that you can retrieve by using  the `GET /v2/actions/{action_id}/logs` API.
 //
 //  <h3>Authorization</h3>
 //
@@ -2164,7 +2179,7 @@ func (schematics *SchematicsV1) CreateActionWithContext(ctx context.Context, cre
 //  platform access to an action ID and the resource group.
 //  For more information, about Schematics access and permissions, see
 //  [Schematics service access roles and required
-// permissions](/docs/schematics?topic=schematics-access#action-permissions.
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#action-permissions).
 func (schematics *SchematicsV1) GetAction(getActionOptions *GetActionOptions) (result *Action, response *core.DetailedResponse, err error) {
 	return schematics.GetActionWithContext(context.Background(), getActionOptions)
 }
@@ -2231,8 +2246,8 @@ func (schematics *SchematicsV1) GetActionWithContext(ctx context.Context, getAct
 // Delete a Schematics action and specify the Ansible playbook that you want to run against your IBM Cloud resources.
 // **Note** you cannot delete or stop the job activity from an ongoing execution of an action defined in the playbook.
 // You can repeat the execution of same job, whenever you patch the actions. For more information, about the Schematics
-// action state, see [Schematics action state
-// diagram](/docs/schematics?topic=schematics-action-setup#action-state-diagram).
+// action state, see  [Schematics action state
+// diagram](https://cloud.ibm.com/docs/schematics?topic=schematics-action-setup#action-state-diagram).
 //
 //  <h3>Authorization</h3>
 //
@@ -2240,7 +2255,7 @@ func (schematics *SchematicsV1) GetActionWithContext(ctx context.Context, getAct
 //  platform access to an action ID and the resource group.
 //  For more information, about Schematics access and permissions, see
 //  [Schematics service access roles and required
-// permissions](/docs/schematics?topic=schematics-access#action-permissions.
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#action-permissions.
 func (schematics *SchematicsV1) DeleteAction(deleteActionOptions *DeleteActionOptions) (response *core.DetailedResponse, err error) {
 	return schematics.DeleteActionWithContext(context.Background(), deleteActionOptions)
 }
@@ -2296,10 +2311,12 @@ func (schematics *SchematicsV1) DeleteActionWithContext(ctx context.Context, del
 // UpdateAction : Update an action
 // Update or replace an action to change the action state from the critical state to normal state, or pending state to
 // the normal state for a successful execution.  For more information, about the Schematics action state, see
-// [Schematics action state diagram](/docs/schematics?topic=schematics-action-setup#action-state-diagram).
+// [Schematics action state
+// diagram](https://cloud.ibm.com/docs/schematics?topic=schematics-action-setup#action-state-diagram).
 //
 //  **Note** you cannot update the location and region once an action is created.
-//  Also, make sure your IP addresses are in the [allowlist](/docs/schematics?topic=schematics-allowed-ipaddresses].
+//  Also, make sure your IP addresses are in the
+// [allowlist](https://cloud.ibm.com/docs/schematics?topic=schematics-allowed-ipaddresses].
 //
 //  <h3>Authorization</h3>
 //
@@ -2307,7 +2324,7 @@ func (schematics *SchematicsV1) DeleteActionWithContext(ctx context.Context, del
 //  platform access to an action ID and the resource group.
 //  For more information, about Schematics access and permissions, see
 //  [Schematics service access roles and required
-// permissions](/docs/schematics?topic=schematics-access#action-permissions.
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#action-permissions.
 func (schematics *SchematicsV1) UpdateAction(updateActionOptions *UpdateActionOptions) (result *Action, response *core.DetailedResponse, err error) {
 	return schematics.UpdateActionWithContext(context.Background(), updateActionOptions)
 }
@@ -2436,14 +2453,14 @@ func (schematics *SchematicsV1) UpdateActionWithContext(ctx context.Context, upd
 	return
 }
 
-// UploadTemplateTarAction : Replace a TAR file to an action
-// Replace your template by uploading tape archive file (.tar) file from  your local machine. Before you use this API,
-// you must create an action  without a link to a GitHub or GitLab repository with the\_POST /v2/actions\_API.
+// UploadTemplateTarAction : Upload a TAR file to an action
+// Update your template by uploading tape archive file (.tar) file from  your local machine. Before you use this API,
+// you must create an action  without a link to a GitHub or GitLab repository with the `POST /v2/actions` API.
 //
 // <h3>Authorization</h3>
 //   Schematics support generic authorization such as service access or  platform access to an action ID and the
 // resource group.  For more information, about Schematics access and permissions, see  [Schematics service access roles
-// and required permissions](/docs/schematics?topic=schematics-access#action-permissions.
+// and required permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#action-permissions.
 func (schematics *SchematicsV1) UploadTemplateTarAction(uploadTemplateTarActionOptions *UploadTemplateTarActionOptions) (result *TemplateRepoTarUploadResponse, response *core.DetailedResponse, err error) {
 	return schematics.UploadTemplateTarActionWithContext(context.Background(), uploadTemplateTarActionOptions)
 }
@@ -2649,7 +2666,8 @@ func (schematics *SchematicsV1) GetWorkspaceActivityWithContext(ctx context.Cont
 // are included in your Terraform template file are ignored.
 // <h3>Authorization</h3>  Schematics supports generic authorization such as service access or platform access  to the
 // workspace ID and the resource group. For more information, about Schematics  access and permissions, see [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+// service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) DeleteWorkspaceActivity(deleteWorkspaceActivityOptions *DeleteWorkspaceActivityOptions) (result *WorkspaceActivityApplyResult, response *core.DetailedResponse, err error) {
 	return schematics.DeleteWorkspaceActivityWithContext(context.Background(), deleteWorkspaceActivityOptions)
 }
@@ -2718,7 +2736,7 @@ func (schematics *SchematicsV1) DeleteWorkspaceActivityWithContext(ctx context.C
 //  to the workspace ID and the resource group. For more information, about Schematics
 //  access and permissions,
 //  see [Schematics service access roles and required
-// permissions](/docs/schematics?topic=schematics-access#access-roles).
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) RunWorkspaceCommands(runWorkspaceCommandsOptions *RunWorkspaceCommandsOptions) (result *WorkspaceActivityCommandResult, response *core.DetailedResponse, err error) {
 	return schematics.RunWorkspaceCommandsWithContext(context.Background(), runWorkspaceCommandsOptions)
 }
@@ -2801,29 +2819,33 @@ func (schematics *SchematicsV1) RunWorkspaceCommandsWithContext(ctx context.Cont
 // resources that you described in the Terraform template that your workspace points to. Depending on the type and
 // number of resources that you want to provision or modify, this process might take a few minutes, or even up to hours
 // to complete. During this time, you cannot make changes to your workspace. After all updates are applied, the state of
-// the files is [persisted](/docs/schematics?topic=schematics-persist-files) to determine what resources exist in your
-// IBM Cloud account.
+// the files is [persisted](https://cloud.ibm.com/docs/schematics?topic=schematics-persist-files) to determine what
+// resources exist in your IBM Cloud account.
 //
 //
-//  **Important**: Your workspace must be in an `Inactive`, `Active`, `Failed`, or `Stopped` state to perform a
-// Schematics `apply` job. After all updates are applied, the state of the files is
-// [persisted](/docs/schematics?topic=schematics-persist-files) to determine what resources exist in your IBM Cloud
-// account.
+//  **Important**: Your workspace must be in an `Inactive`, `Active`, `Failed`, or
+//  `Stopped` state to perform a Schematics `apply` job. After all updates are applied,
+//  the state of the files is [persisted](https://cloud.ibm.com/docs/schematics?topic=schematics-persist-files)
+//  to determine what resources exist in your IBM Cloud account.
 //
 //
-//  **Note**: This API returns an activity or job ID that you use to retrieve the log URL with the `GET
-// /v1/workspaces/{id}/actions/{action_id}/logs` API.
+//  **Note**: This API returns an activity or job ID that you use to retrieve the
+//  log URL with the `GET /v1/workspaces/{id}/actions/{action_id}/logs` API.
 //
 //
-//  **Important:** Applying a template might incur costs. Make sure to review the pricing information for the resources
-// that you specified in your templates before you apply the template in IBM Cloud. To find a summary of job that
-// Schematics is about to perform, create a Terraform execution plan with the `POST /v1/workspaces/{id}/plan` API.
+//  **Important:** Applying a template might incur costs. Make sure to review
+//  the pricing information for the resources that you specified in your
+//  templates before you apply the template in IBM Cloud.
+//  To find a summary of job that Schematics is about to perform,
+//  create a Terraform execution plan with the `POST /v1/workspaces/{id}/plan` API.
 //
 //  <h3>Authorization</h3>
 //
-//  Schematics support generic authorization such as service access or platform access to the workspace ID and the
-// resource group. For more information, about Schematics access and permissions, see [Schematics service access roles
-// and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+//  Schematics support generic authorization such as service access or
+//  platform access to the workspace ID and the resource group.
+//  For more information, about Schematics access and permissions,
+//  see [Schematics service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) ApplyWorkspaceCommand(applyWorkspaceCommandOptions *ApplyWorkspaceCommandOptions) (result *WorkspaceActivityApplyResult, response *core.DetailedResponse, err error) {
 	return schematics.ApplyWorkspaceCommandWithContext(context.Background(), applyWorkspaceCommandOptions)
 }
@@ -2914,9 +2936,11 @@ func (schematics *SchematicsV1) ApplyWorkspaceCommandWithContext(ctx context.Con
 //
 //  <h3>Authorization</h3>
 //
-//  Schematics support generic authorization such as service access or platform access to the workspace ID and the
-// resource group. For more information, about Schematics access and permissions, see [Schematics service access roles
-// and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+//  Schematics support generic authorization such as service access or platform access
+//   to the workspace ID and the resource group.
+//   For more information, about Schematics access and permissions,
+//   see [Schematics service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) DestroyWorkspaceCommand(destroyWorkspaceCommandOptions *DestroyWorkspaceCommandOptions) (result *WorkspaceActivityDestroyResult, response *core.DetailedResponse, err error) {
 	return schematics.DestroyWorkspaceCommandWithContext(context.Background(), destroyWorkspaceCommandOptions)
 }
@@ -3007,9 +3031,11 @@ func (schematics *SchematicsV1) DestroyWorkspaceCommandWithContext(ctx context.C
 //
 //  <h3>Authorization</h3>
 //
-//  Schematics support generic authorization such as service access or platform access to the workspace ID and the
-// resource group. For more information, about Schematics access and permissions, see [Schematics service access roles
-// and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+//  Schematics support generic authorization such as service access or platform access
+//  to the workspace ID and the resource group.
+//  For more information, about Schematics access and permissions,
+//  see [Schematics service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) PlanWorkspaceCommand(planWorkspaceCommandOptions *PlanWorkspaceCommandOptions) (result *WorkspaceActivityPlanResult, response *core.DetailedResponse, err error) {
 	return schematics.PlanWorkspaceCommandWithContext(context.Background(), planWorkspaceCommandOptions)
 }
@@ -3082,9 +3108,11 @@ func (schematics *SchematicsV1) PlanWorkspaceCommandWithContext(ctx context.Cont
 //
 //  <h3>Authorization</h3>
 //
-//  Schematics support generic authorization such as service access or platform access to the workspace ID and the
-// resource group. For more information, about Schematics access and permissions, see [Schematics service access roles
-// and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+//  Schematics support generic authorization such as service access or platform access
+//  to the workspace ID and the resource group.
+//  For more information, about Schematics access and permissions,
+//  see [Schematics service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) RefreshWorkspaceCommand(refreshWorkspaceCommandOptions *RefreshWorkspaceCommandOptions) (result *WorkspaceActivityRefreshResult, response *core.DetailedResponse, err error) {
 	return schematics.RefreshWorkspaceCommandWithContext(context.Background(), refreshWorkspaceCommandOptions)
 }
@@ -3150,15 +3178,16 @@ func (schematics *SchematicsV1) RefreshWorkspaceCommandWithContext(ctx context.C
 }
 
 // ListJobs : List jobs
-// Retrieve a list of all Schematics jobs.  The job displays a list of jobs with the status as `in_progess`,  `success`,
-// or `failed`. Jobs are generated when you use the  `POST /v2/jobs`, `PUT /v2/jobs/{job_id}`, or `DELETE
+// Retrieve a list of all Schematics jobs.  The job displays a list of jobs with the status as `pending`, `in_progess`,
+// `success`, or `failed`. Jobs are generated when you use the  `POST /v2/jobs`, `PUT /v2/jobs/{job_id}`, or `DELETE
 // /v2/jobs/{job_id}`.
 //
 //  <h3>Authorization</h3>
 //  Schematics support generic authorization such as service access or
 //  platform access to the job ID and the resource group.
 //  For more information, about Schematics access and permissions, see
-//  [Schematics service access roles and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+//  [Schematics service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) ListJobs(listJobsOptions *ListJobsOptions) (result *JobList, response *core.DetailedResponse, err error) {
 	return schematics.ListJobsWithContext(context.Background(), listJobsOptions)
 }
@@ -3235,7 +3264,8 @@ func (schematics *SchematicsV1) ListJobsWithContext(ctx context.Context, listJob
 }
 
 // CreateJob : Create a job
-// Create a job and launch the job.
+// Create & launch the Schematics job. It can be used to launch an Ansible playbook against a target hosts.  The job
+// displays a list of jobs with the status as `pending`, `in_progess`, `success`, or `failed`.
 func (schematics *SchematicsV1) CreateJob(createJobOptions *CreateJobOptions) (result *Job, response *core.DetailedResponse, err error) {
 	return schematics.CreateJobWithContext(context.Background(), createJobOptions)
 }
@@ -3346,7 +3376,8 @@ func (schematics *SchematicsV1) CreateJobWithContext(ctx context.Context, create
 //  Schematics support generic authorization such as service access or
 //  platform access to the job ID and the resource group.
 //  For more information, about Schematics access and permissions, see
-//  [Schematics service access roles and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+//  [Schematics service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) GetJob(getJobOptions *GetJobOptions) (result *Job, response *core.DetailedResponse, err error) {
 	return schematics.GetJobWithContext(context.Background(), getJobOptions)
 }
@@ -3409,15 +3440,16 @@ func (schematics *SchematicsV1) GetJobWithContext(ctx context.Context, getJobOpt
 	return
 }
 
-// UpdateJob : Clone the Job, and relaunch the Job
-// Update or replace a job creates a copy of the job and relaunches an existing job by updating the information of an
-// existing Schematics job.
+// UpdateJob : Update a job
+// Creates a copy of the Schematics job and relaunches an existing job  by updating the information of an existing
+// Schematics job.
 //
 //  <h3>Authorization</h3>
 //  Schematics support generic authorization such as service access or
 //  platform access to the job ID and the resource group.
 //  For more information, about Schematics access and permissions, see
-//  [Schematics service access roles and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+//  [Schematics service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) UpdateJob(updateJobOptions *UpdateJobOptions) (result *Job, response *core.DetailedResponse, err error) {
 	return schematics.UpdateJobWithContext(context.Background(), updateJobOptions)
 }
@@ -3534,7 +3566,8 @@ func (schematics *SchematicsV1) UpdateJobWithContext(ctx context.Context, update
 //  Schematics support generic authorization such as service access or
 //  platform access to the job ID and the resource group.
 //  For more information, about Schematics access and permissions, see
-//  [Schematics service access roles and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+//  [Schematics service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) DeleteJob(deleteJobOptions *DeleteJobOptions) (response *core.DetailedResponse, err error) {
 	return schematics.DeleteJobWithContext(context.Background(), deleteJobOptions)
 }
@@ -3594,7 +3627,8 @@ func (schematics *SchematicsV1) DeleteJobWithContext(ctx context.Context, delete
 // Retrieve the job logs
 // <h3>Authorization</h3> Schematics support generic authorization such as service access or  platform access to the
 // action ID and the resource group.  For more information, about Schematics access and permissions, see  [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+// service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) ListJobLogs(listJobLogsOptions *ListJobLogsOptions) (result *JobLog, response *core.DetailedResponse, err error) {
 	return schematics.ListJobLogsWithContext(context.Background(), listJobLogsOptions)
 }
@@ -3799,14 +3833,15 @@ func (schematics *SchematicsV1) GetWorkspaceDeletionJobStatusWithContext(ctx con
 	return
 }
 
-// ListInventories : List inventories
+// ListInventories : List all inventory definitions
 // Retrieve a list of all Schematics inventories that depends on the API endpoint that you have access. For example, if
 // you use an API endpoint for a geography, such as North America, only inventories that are created in `us-south` or
-// `us-east` are retrieved. For more information, about supported API endpoints, see [API
-// endpoints](/apidocs/schematics#api-endpoints).
+// `us-east` are retrieved. For more information, about supported API endpoints, see
+// [APIendpoints](/apidocs/schematics#api-endpoints).
 // <h3>Authorization</h3> Schematics support generic authorization such as service access or platform access to an
 // action ID and the resource group. For more information, about Schematics access and permissions, see  [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#action-permissions).
+// service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#action-permissions).
 func (schematics *SchematicsV1) ListInventories(listInventoriesOptions *ListInventoriesOptions) (result *InventoryResourceRecordList, response *core.DetailedResponse, err error) {
 	return schematics.ListInventoriesWithContext(context.Background(), listInventoriesOptions)
 }
@@ -3870,16 +3905,18 @@ func (schematics *SchematicsV1) ListInventoriesWithContext(ctx context.Context, 
 	return
 }
 
-// CreateInventory : Create an inventory
+// CreateInventory : Create an inventory definition
 // Create an IBM Cloud Schematics inventory as a single IBM Cloud resource where you want to run Ansible playbook by
 // using Schematics actions. For more information, about inventory host groups, refer to [creating static and dynamic
-// inventory for Schematics actions](/docs/schematics?topic=schematics-inventories-setup). **Note** you cannot update
-// the location and region, resource group once an action is created.  Also, make sure your IP addresses are in the
-// [allowlist](/docs/schematics?topic=schematics-allowed-ipaddresses).  If your Git repository already contains a host
-// file. Schematics does not  overwrite the host file already present in your Git repository.
+// inventory for Schematics actions](https://cloud.ibm.com/docs/schematics?topic=schematics-inventories-setup). **Note**
+// you cannot update the location and region, resource group once an action is created.  Also, make sure your IP
+// addresses are in the [allowlist](https://cloud.ibm.com/docs/schematics?topic=schematics-allowed-ipaddresses).  If
+// your Git repository already contains a host file. Schematics does not  overwrite the host file already present in
+// your Git repository.
 // <h3>Authorization</h3> Schematics support generic authorization such as service access or platform access to an
 // action ID and the resource group. For more information, about Schematics access and permissions, see  [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#action-permissions).
+// service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#action-permissions).
 func (schematics *SchematicsV1) CreateInventory(createInventoryOptions *CreateInventoryOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
 	return schematics.CreateInventoryWithContext(context.Background(), createInventoryOptions)
 }
@@ -3959,16 +3996,18 @@ func (schematics *SchematicsV1) CreateInventoryWithContext(ctx context.Context, 
 	return
 }
 
-// GetInventory : Get inventory definition resource
+// GetInventory : Get the inventory definition
 // Use this API to retrieve the detailed information for a resource inventory definition used to target an action in
 // your IBM Cloud account. For more information, about inventory get, refer to [ibmcloud schematics inventory
-// get](/docs/schematics?topic=schematics-schematics-cli-reference#schematics-get-inv).
+// get](https://cloud.ibm.com/docs/schematics?topic=schematics-schematics-cli-reference#schematics-get-inv).
 //  **Note** you can fetch only the location and region, resource group from where your inventory is created.
-//  Also, make sure your IP addresses are in the [allowlist](/docs/schematics?topic=schematics-allowed-ipaddresses).
+//  Also, make sure your IP addresses are in the
+// [allowlist](https://cloud.ibm.com/docs/schematics?topic=schematics-allowed-ipaddresses).
 //
 // <h3>Authorization</h3> Schematics support generic authorization such as service access or platform access to an
-// action ID and the resource group. For more information, about Schematics access and permissions, see  [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#action-permissions).
+// action ID and the resource group. For more information, about Schematics access and permissions, see [Schematics
+// service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#action-permissions).
 func (schematics *SchematicsV1) GetInventory(getInventoryOptions *GetInventoryOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
 	return schematics.GetInventoryWithContext(context.Background(), getInventoryOptions)
 }
@@ -4027,16 +4066,18 @@ func (schematics *SchematicsV1) GetInventoryWithContext(ctx context.Context, get
 	return
 }
 
-// ReplaceInventory : Replace an inventory
+// ReplaceInventory : Replace an inventory definition
 // Use this API to update the inventory definition resource used to target an action. For more information, about
 // inventory update, refer to [ibmcloud schematics inventory
-// update](/docs/schematics?topic=schematics-schematics-cli-reference#schematics-update-inv).
+// update](https://cloud.ibm.com/docs/schematics?topic=schematics-schematics-cli-reference#schematics-update-inv).
 //  **Note** you cannot update the location and region, resource group once an action is created.
-//  Also, make sure your IP addresses are in the [allowlist](/docs/schematics?topic=schematics-allowed-ipaddresses).
+//  Also, make sure your IP addresses are in the
+// [allowlist](https://cloud.ibm.com/docs/schematics?topic=schematics-allowed-ipaddresses).
 //
 // <h3>Authorization</h3> Schematics support generic authorization such as service access or platform access to an
 // action ID and the resource group. For more information, about Schematics access and permissions, see  [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#action-permissions).
+// service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#action-permissions).
 func (schematics *SchematicsV1) ReplaceInventory(replaceInventoryOptions *ReplaceInventoryOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
 	return schematics.ReplaceInventoryWithContext(context.Background(), replaceInventoryOptions)
 }
@@ -4120,16 +4161,18 @@ func (schematics *SchematicsV1) ReplaceInventoryWithContext(ctx context.Context,
 	return
 }
 
-// DeleteInventory : Delete inventory definition resource
+// DeleteInventory : Delete inventory definition
 // Use this API to delete the resource inventory definition by using the inventory ID that you want to run against. For
 // more information, about inventory delete, refer to [ibmcloud schematics inventory
-// delete](/docs/schematics?topic=schematics-schematics-cli-reference#schematics-delete-inventory).
+// delete](https://cloud.ibm.com/docs/schematics?topic=schematics-schematics-cli-reference#schematics-delete-inventory).
 //  **Note** you cannot delete the location and region, resource group from where your inventory is created.
-//  Also, make sure your IP addresses are in the [allowlist](/docs/schematics?topic=schematics-allowed-ipaddresses).
+//  Also, make sure your IP addresses are in the
+// [allowlist](https://cloud.ibm.com/docs/schematics?topic=schematics-allowed-ipaddresses).
 //
 // <h3>Authorization</h3> Schematics support generic authorization such as service access or platform access to an
 // action ID and the resource group. For more information, about Schematics access and permissions, see  [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#action-permissions).
+// service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#action-permissions).
 func (schematics *SchematicsV1) DeleteInventory(deleteInventoryOptions *DeleteInventoryOptions) (response *core.DetailedResponse, err error) {
 	return schematics.DeleteInventoryWithContext(context.Background(), deleteInventoryOptions)
 }
@@ -4182,7 +4225,7 @@ func (schematics *SchematicsV1) DeleteInventoryWithContext(ctx context.Context, 
 	return
 }
 
-// UpdateInventory : Update the inventory definition resource
+// UpdateInventory : Update the inventory definition
 // Update the resource inventory definition.
 func (schematics *SchematicsV1) UpdateInventory(updateInventoryOptions *UpdateInventoryOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
 	return schematics.UpdateInventoryWithContext(context.Background(), updateInventoryOptions)
@@ -4267,127 +4310,6 @@ func (schematics *SchematicsV1) UpdateInventoryWithContext(ctx context.Context, 
 	return
 }
 
-// ListInventoryValues : Get all the inventory resource values
-// Get all the inventory resource values.
-func (schematics *SchematicsV1) ListInventoryValues(listInventoryValuesOptions *ListInventoryValuesOptions) (result *InventoryResourceRecordList, response *core.DetailedResponse, err error) {
-	return schematics.ListInventoryValuesWithContext(context.Background(), listInventoryValuesOptions)
-}
-
-// ListInventoryValuesWithContext is an alternate form of the ListInventoryValues method which supports a Context parameter
-func (schematics *SchematicsV1) ListInventoryValuesWithContext(ctx context.Context, listInventoryValuesOptions *ListInventoryValuesOptions) (result *InventoryResourceRecordList, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(listInventoryValuesOptions, "listInventoryValuesOptions cannot be nil")
-	if err != nil {
-		return
-	}
-	err = core.ValidateStruct(listInventoryValuesOptions, "listInventoryValuesOptions")
-	if err != nil {
-		return
-	}
-
-	pathParamsMap := map[string]string{
-		"inventory_id": *listInventoryValuesOptions.InventoryID,
-	}
-
-	builder := core.NewRequestBuilder(core.GET)
-	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/inventories/{inventory_id}/variables`, pathParamsMap)
-	if err != nil {
-		return
-	}
-
-	for headerName, headerValue := range listInventoryValuesOptions.Headers {
-		builder.AddHeader(headerName, headerValue)
-	}
-
-	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "ListInventoryValues")
-	for headerName, headerValue := range sdkHeaders {
-		builder.AddHeader(headerName, headerValue)
-	}
-	builder.AddHeader("Accept", "application/json")
-
-	request, err := builder.Build()
-	if err != nil {
-		return
-	}
-
-	var rawResponse map[string]json.RawMessage
-	response, err = schematics.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	if rawResponse != nil {
-		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalInventoryResourceRecordList)
-		if err != nil {
-			return
-		}
-		response.Result = result
-	}
-
-	return
-}
-
-// GetInventoryValue : Get the inventory resource value
-// Get the inventory resource value.
-func (schematics *SchematicsV1) GetInventoryValue(getInventoryValueOptions *GetInventoryValueOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
-	return schematics.GetInventoryValueWithContext(context.Background(), getInventoryValueOptions)
-}
-
-// GetInventoryValueWithContext is an alternate form of the GetInventoryValue method which supports a Context parameter
-func (schematics *SchematicsV1) GetInventoryValueWithContext(ctx context.Context, getInventoryValueOptions *GetInventoryValueOptions) (result *InventoryResourceRecord, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(getInventoryValueOptions, "getInventoryValueOptions cannot be nil")
-	if err != nil {
-		return
-	}
-	err = core.ValidateStruct(getInventoryValueOptions, "getInventoryValueOptions")
-	if err != nil {
-		return
-	}
-
-	pathParamsMap := map[string]string{
-		"inventory_id": *getInventoryValueOptions.InventoryID,
-		"var_name":     *getInventoryValueOptions.VarName,
-	}
-
-	builder := core.NewRequestBuilder(core.GET)
-	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = schematics.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(schematics.Service.Options.URL, `/v2/inventories/{inventory_id}/variables/{var_name}`, pathParamsMap)
-	if err != nil {
-		return
-	}
-
-	for headerName, headerValue := range getInventoryValueOptions.Headers {
-		builder.AddHeader(headerName, headerValue)
-	}
-
-	sdkHeaders := common.GetSdkHeaders("schematics", "V1", "GetInventoryValue")
-	for headerName, headerValue := range sdkHeaders {
-		builder.AddHeader(headerName, headerValue)
-	}
-	builder.AddHeader("Accept", "application/json")
-
-	request, err := builder.Build()
-	if err != nil {
-		return
-	}
-
-	var rawResponse map[string]json.RawMessage
-	response, err = schematics.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	if rawResponse != nil {
-		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalInventoryResourceRecord)
-		if err != nil {
-			return
-		}
-		response.Result = result
-	}
-
-	return
-}
-
 // ListResourceQuery : List resource queries
 // Retrieve the list of resource query definitions that you have access to.  The list of resource queries that is
 // returned depends on the API  endpoint that you use. For example, if you use an API endpoint for a geography, such as
@@ -4395,7 +4317,8 @@ func (schematics *SchematicsV1) GetInventoryValueWithContext(ctx context.Context
 // information, about supported API endpoints, see [API endpoints](/apidocs/schematics#api-endpoints).
 // <h3>Authorization</h3> Schematics support generic authorization such as service access or platform access to an
 // action ID and the resource group. For more information, about Schematics access and permissions,  see [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#action-permissions).
+// service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#action-permissions).
 func (schematics *SchematicsV1) ListResourceQuery(listResourceQueryOptions *ListResourceQueryOptions) (result *ResourceQueryRecordList, response *core.DetailedResponse, err error) {
 	return schematics.ListResourceQueryWithContext(context.Background(), listResourceQueryOptions)
 }
@@ -4463,13 +4386,15 @@ func (schematics *SchematicsV1) ListResourceQueryWithContext(ctx context.Context
 // Use this API to create a resource query definition that will be used to select an IBM Cloud resource or a group of
 // resources as the dynamic inventory for the Schematics Actions.  For more information, about resource query commands,
 // refer to  [ibmcloud schematics resource query
-// create](/docs/schematics?topic=schematics-schematics-cli-reference#schematics-create-rq).  **Note** you cannot update
-// the location and region, resource group  once an action is created. Also, make sure your IP addresses are  in the
-// [allowlist](/docs/schematics?topic=schematics-allowed-ipaddresses).  If your Git repository already contains a host
-// file.  Schematics does not overwrite the host file already present in your Git repository.
+// create](https://cloud.ibm.com/docs/schematics?topic=schematics-schematics-cli-reference#schematics-create-rq).
+// **Note** you cannot update the location and region, resource group  once an action is created. Also, make sure your
+// IP addresses are  in the [allowlist](https://cloud.ibm.com/docs/schematics?topic=schematics-allowed-ipaddresses).  If
+// your Git repository already contains a host file.  Schematics does not overwrite the host file already present in
+// your Git repository.
 // <h3>Authorization</h3> Schematics support generic authorization such as service access or platform access to an
 // action ID and the resource group. For more information, about Schematics access and permissions,  see [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#action-permissions).
+// service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#action-permissions).
 func (schematics *SchematicsV1) CreateResourceQuery(createResourceQueryOptions *CreateResourceQueryOptions) (result *ResourceQueryRecord, response *core.DetailedResponse, err error) {
 	return schematics.CreateResourceQueryWithContext(context.Background(), createResourceQueryOptions)
 }
@@ -4543,10 +4468,11 @@ func (schematics *SchematicsV1) CreateResourceQueryWithContext(ctx context.Conte
 // GetResourcesQuery : Get resources query
 // Use this API to retrieve the information resource query by Id.  For more information, about resource query commands,
 // refer to  [ibmcloud schematics resource query
-// get](/docs/schematics?topic=schematics-schematics-cli-reference#schematics-get-rq).
+// get](https://cloud.ibm.com/docs/schematics?topic=schematics-schematics-cli-reference#schematics-get-rq).
 // <h3>Authorization</h3> Schematics support generic authorization such as service access or platform access to an
 // action ID and the resource group. For more information, about Schematics access and permissions,  see [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#action-permissions).
+// service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#action-permissions).
 func (schematics *SchematicsV1) GetResourcesQuery(getResourcesQueryOptions *GetResourcesQueryOptions) (result *ResourceQueryRecord, response *core.DetailedResponse, err error) {
 	return schematics.GetResourcesQueryWithContext(context.Background(), getResourcesQueryOptions)
 }
@@ -4608,12 +4534,14 @@ func (schematics *SchematicsV1) GetResourcesQueryWithContext(ctx context.Context
 // ReplaceResourcesQuery : Replace resources query definition
 // Use this API to replace the resource query definition used to build  the dynamic inventory for the Schematics Action.
 //  For more information, about resource query commands, refer to [ibmcloud schematics resource query
-// update](/docs/schematics?topic=schematics-schematics-cli-reference#schematics-update-rq).
+// update](https://cloud.ibm.com/docs/schematics?topic=schematics-schematics-cli-reference#schematics-update-rq).
 // **Note** you cannot update the location and region, resource group  once a resource query is created. Also, make sure
-// your IP addresses  are in the [allowlist](/docs/schematics?topic=schematics-allowed-ipaddresses).
+// your IP addresses  are in the
+// [allowlist](https://cloud.ibm.com/docs/schematics?topic=schematics-allowed-ipaddresses).
 // <h3>Authorization</h3> Schematics support generic authorization such as service access or platform access to an
 // action ID and the resource group. For more information, about Schematics access and permissions,  see [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#action-permissions).
+// service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#action-permissions).
 func (schematics *SchematicsV1) ReplaceResourcesQuery(replaceResourcesQueryOptions *ReplaceResourcesQueryOptions) (result *ResourceQueryRecord, response *core.DetailedResponse, err error) {
 	return schematics.ReplaceResourcesQueryWithContext(context.Background(), replaceResourcesQueryOptions)
 }
@@ -4751,10 +4679,12 @@ func (schematics *SchematicsV1) ExecuteResourceQueryWithContext(ctx context.Cont
 // DeleteResourcesQuery : Delete resources query
 // Use this API to delete the resource query definition by Id.  For more information, about resource query commands,
 // refer to  [ibmcloud schematics resource query
-// delete](/docs/schematics?topic=schematics-schematics-cli-reference#schematics-delete-resource-query).
+// delete](https://cloud.ibm.com/docs/schematics?topic=schematics-schematics-cli-reference#schematics-delete-resource-query).
+//
 // <h3>Authorization</h3> Schematics support generic authorization such as service access or platform access to an
 // action ID and the resource group. For more information, about Schematics access and permissions,  see [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#action-permissions).
+// service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#action-permissions).
 func (schematics *SchematicsV1) DeleteResourcesQuery(deleteResourcesQueryOptions *DeleteResourcesQueryOptions) (response *core.DetailedResponse, err error) {
 	return schematics.DeleteResourcesQueryWithContext(context.Background(), deleteResourcesQueryOptions)
 }
@@ -4807,12 +4737,15 @@ func (schematics *SchematicsV1) DeleteResourcesQueryWithContext(ctx context.Cont
 	return
 }
 
-// GetKmsSettings : Get the KMS settings
+// GetKmsSettings : Get KMS settings
 // Retrieve the KMS on the API endpoint that you have access. For example, if you use an API endpoint for a geography,
 // such as North America, only Schematics resource that are created in `us-south` or `us-east` are retrieved.
-// <h3>Authorization</h3> Schematics support generic authorization such as service access or platform access to the
-// action ID and the resource group. For more information, about Schematics access and permissions, see  [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+// <h3>Authorization</h3>
+//
+//
+//  Schematics support generic authorization such as service access or platform access to the action ID and the resource
+// group. For more information, about Schematics access and permissions, see [Schematics service access roles and
+// required permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) GetKmsSettings(getKmsSettingsOptions *GetKmsSettingsOptions) (result *KMSSettings, response *core.DetailedResponse, err error) {
 	return schematics.GetKmsSettingsWithContext(context.Background(), getKmsSettingsOptions)
 }
@@ -4869,14 +4802,15 @@ func (schematics *SchematicsV1) GetKmsSettingsWithContext(ctx context.Context, g
 	return
 }
 
-// UpdateKmsSettings : Replace the KMS settings
+// UpdateKmsSettings : Replace KMS settings
 // Replace or Update the KMS setting for your location, by using your private endpoint, `CRN`, primary `CRK`, and
 // secondary `CRK`. **Note** you can update the KMS settings only once. For example, if you use an API endpoint for a
 // geography, such as North America, only Schematics resource that are created in `us-south` or `us-east` are retrieved.
 //
 // <h3>Authorization</h3> Schematics support generic authorization such as service access or platform access to the
 // action ID and the resource group. For more information, about Schematics access and permissions, see  [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+// service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) UpdateKmsSettings(updateKmsSettingsOptions *UpdateKmsSettingsOptions) (result *KMSSettings, response *core.DetailedResponse, err error) {
 	return schematics.UpdateKmsSettingsWithContext(context.Background(), updateKmsSettingsOptions)
 }
@@ -4953,12 +4887,13 @@ func (schematics *SchematicsV1) UpdateKmsSettingsWithContext(ctx context.Context
 	return
 }
 
-// ListKms : Discover the KMS instances
+// ListKms : List KMS instances
 // Lists the KMS instances of your IBM Cloud account to find your Key Protect or Hyper Protect Crypto Services by using
 // the location and encrypted scheme such as KYOK or BYOK.
 // <h3>Authorization</h3> Schematics support generic authorization such as service access or platform access to the
 // action ID and the resource group. For more information, about Schematics access and permissions, see  [Schematics
-// service access roles and required permissions](/docs/schematics?topic=schematics-access#access-roles).
+// service access roles and required
+// permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
 func (schematics *SchematicsV1) ListKms(listKmsOptions *ListKmsOptions) (result *KMSDiscovery, response *core.DetailedResponse, err error) {
 	return schematics.ListKmsWithContext(context.Background(), listKmsOptions)
 }
@@ -5077,7 +5012,7 @@ type Action struct {
 	//  172.22.192.6
 	//  [dbhost]
 	//  172.22.192.5"`. For more information, about an inventory host group syntax, see [Inventory host
-	// groups](/docs/schematics?topic=schematics-schematics-cli-reference#schematics-inventory-host-grps).
+	// groups](https://cloud.ibm.com/docs/schematics?topic=schematics-schematics-cli-reference#schematics-inventory-host-grps).
 	TargetsIni *string `json:"targets_ini,omitempty"`
 
 	// Input variables for the Action.
@@ -5539,32 +5474,30 @@ func UnmarshalActionState(m map[string]json.RawMessage, result interface{}) (err
 
 // ApplyWorkspaceCommandOptions : The ApplyWorkspaceCommand options.
 type ApplyWorkspaceCommandOptions struct {
-	// The ID of the workspace for which you want to run a Schematics `apply` job. To find the workspace ID, use the `GET
+	// The ID of the workspace for which you want to run a Schematics `apply` job.  To find the workspace ID, use the `GET
 	// /workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
-	// The IAM refresh token is required only if you want to delete all the Terraform resources before deleting the
-	// Schematics workspace. If you want to delete the workspace only and keep all your Terraform resources, refresh token
-	// is not required.
+	// The IAM refresh token for the user or service identity.
 	//
-	//  **Retrieving refresh token**:
-	//  * Use `export IBMCLOUD_API_KEY=<ibmcloud_api_key>`, and execute `curl -X POST
+	//   **Retrieving refresh token**:
+	//   * Use `export IBMCLOUD_API_KEY=<ibmcloud_api_key>`, and execute `curl -X POST
 	// "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d
 	// "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=$IBMCLOUD_API_KEY" -u bx:bx`.
-	//  * For more information, about creating IAM access token and API Docs, refer, [IAM access
+	//   * For more information, about creating IAM access token and API Docs, refer, [IAM access
 	// token](/apidocs/iam-identity-token-api#gettoken-password) and [Create API
 	// key](/apidocs/iam-identity-token-api#create-api-key).
 	//
-	//  **Limitation**:
-	//  * If the token is expired, you can use `refresh token` to get a new IAM access token.
-	//  * The `refresh_token` parameter cannot be used to retrieve a new IAM access token.
-	//  * When the IAM access token is about to expire, use the API key to create a new access token.
+	//   **Limitation**:
+	//   * If the token is expired, you can use `refresh token` to get a new IAM access token.
+	//   * The `refresh_token` parameter cannot be used to retrieve a new IAM access token.
+	//   * When the IAM access token is about to expire, use the API key to create a new access token.
 	RefreshToken *string `json:"-" validate:"required"`
 
 	// Workspace job options template.
 	ActionOptions *WorkspaceActivityOptionsTemplate `json:"action_options,omitempty"`
 
-	// The IAM delegated token for your IBM Cloud account. This token is required for requests that are sent via the UI
+	// The IAM delegated token for your IBM Cloud account.  This token is required for requests that are sent via the UI
 	// only.
 	DelegatedToken *string `json:"-"`
 
@@ -5761,7 +5694,7 @@ type CreateActionOptions struct {
 	//  172.22.192.6
 	//  [dbhost]
 	//  172.22.192.5"`. For more information, about an inventory host group syntax, see [Inventory host
-	// groups](/docs/schematics?topic=schematics-schematics-cli-reference#schematics-inventory-host-grps).
+	// groups](https://cloud.ibm.com/docs/schematics?topic=schematics-schematics-cli-reference#schematics-inventory-host-grps).
 	TargetsIni *string `json:"targets_ini,omitempty"`
 
 	// Input variables for the Action.
@@ -5779,7 +5712,8 @@ type CreateActionOptions struct {
 	// System lock status.
 	SysLock *SystemLock `json:"sys_lock,omitempty"`
 
-	// The personal access token associated with your GitHub or GitLab repository, required to clone the repository.
+	// The personal access token to authenticate with your private GitHub or GitLab repository and access your Terraform
+	// template.
 	XGithubToken *string `json:"-"`
 
 	// Allows users to set headers on API requests
@@ -5949,11 +5883,11 @@ func (options *CreateActionOptions) SetHeaders(param map[string]string) *CreateA
 
 // CreateInventoryOptions : The CreateInventory options.
 type CreateInventoryOptions struct {
-	// The unique name of your Inventory resource. The name can be up to 128 characters long and can include alphanumeric
+	// The unique name of your Inventory definition. The name can be up to 128 characters long and can include alphanumeric
 	// characters, spaces, dashes, and underscores.
 	Name *string `json:"name,omitempty"`
 
-	// The description of your Inventory resource. The description can be up to 2048 characters long in size.
+	// The description of your Inventory definition. The description can be up to 2048 characters long in size.
 	Description *string `json:"description,omitempty"`
 
 	// List of locations supported by IBM Cloud Schematics service.  While creating your workspace or action, choose the
@@ -5961,13 +5895,15 @@ type CreateInventoryOptions struct {
 	// provisioned using Schematics.
 	Location *string `json:"location,omitempty"`
 
-	// Resource-group name for the Inventory resource.  By default, Action will be created in Default Resource Group.
+	// Resource-group name for the Inventory definition.   By default, Inventory definition will be created in Default
+	// Resource Group.
 	ResourceGroup *string `json:"resource_group,omitempty"`
 
 	// Input inventory of host and host group for the playbook, in the `.ini` file format.
 	InventoriesIni *string `json:"inventories_ini,omitempty"`
 
-	// Input resource queries that is used to dynamically generate the inventory of host and host group for the playbook.
+	// Input resource query definitions that is used to dynamically generate the inventory of host and host group for the
+	// playbook.
 	ResourceQueries []string `json:"resource_queries,omitempty"`
 
 	// Allows users to set headers on API requests
@@ -6034,7 +5970,20 @@ func (options *CreateInventoryOptions) SetHeaders(param map[string]string) *Crea
 
 // CreateJobOptions : The CreateJob options.
 type CreateJobOptions struct {
-	// The IAM refresh token associated with the IBM Cloud account.
+	// The IAM refresh token for the user or service identity.
+	//
+	//   **Retrieving refresh token**:
+	//   * Use `export IBMCLOUD_API_KEY=<ibmcloud_api_key>`, and execute `curl -X POST
+	// "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d
+	// "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=$IBMCLOUD_API_KEY" -u bx:bx`.
+	//   * For more information, about creating IAM access token and API Docs, refer, [IAM access
+	// token](/apidocs/iam-identity-token-api#gettoken-password) and [Create API
+	// key](/apidocs/iam-identity-token-api#create-api-key).
+	//
+	//   **Limitation**:
+	//   * If the token is expired, you can use `refresh token` to get a new IAM access token.
+	//   * The `refresh_token` parameter cannot be used to retrieve a new IAM access token.
+	//   * When the IAM access token is about to expire, use the API key to create a new access token.
 	RefreshToken *string `json:"-" validate:"required"`
 
 	// Name of the Schematics automation resource.
@@ -6282,7 +6231,20 @@ func (options *CreateResourceQueryOptions) SetHeaders(param map[string]string) *
 
 // CreateWorkspaceDeletionJobOptions : The CreateWorkspaceDeletionJob options.
 type CreateWorkspaceDeletionJobOptions struct {
-	// The IAM refresh token associated with the IBM Cloud account.
+	// The IAM refresh token for the user or service identity.
+	//
+	//   **Retrieving refresh token**:
+	//   * Use `export IBMCLOUD_API_KEY=<ibmcloud_api_key>`, and execute `curl -X POST
+	// "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d
+	// "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=$IBMCLOUD_API_KEY" -u bx:bx`.
+	//   * For more information, about creating IAM access token and API Docs, refer, [IAM access
+	// token](/apidocs/iam-identity-token-api#gettoken-password) and [Create API
+	// key](/apidocs/iam-identity-token-api#create-api-key).
+	//
+	//   **Limitation**:
+	//   * If the token is expired, you can use `refresh token` to get a new IAM access token.
+	//   * The `refresh_token` parameter cannot be used to retrieve a new IAM access token.
+	//   * When the IAM access token is about to expire, use the API key to create a new access token.
 	RefreshToken *string `json:"-" validate:"required"`
 
 	// True to delete workspace.
@@ -6300,7 +6262,9 @@ type CreateWorkspaceDeletionJobOptions struct {
 	// List of workspaces to be deleted.
 	NewWorkspaces []string `json:"workspaces,omitempty"`
 
-	// true or 1 - to destroy resources before deleting workspace;  If this is true, refresh_token is mandatory.
+	// If set to `true`, refresh_token header configuration is required to delete all the Terraform resources, and the
+	// Schematics workspace. If set to `false`, you can remove only the workspace. Your Terraform resources are still
+	// available and must be managed with the resource dashboard or CLI.
 	DestroyResources *string `json:"-"`
 
 	// Allows users to set headers on API requests
@@ -6562,8 +6526,8 @@ func (options *DeleteActionOptions) SetHeaders(param map[string]string) *DeleteA
 
 // DeleteInventoryOptions : The DeleteInventory options.
 type DeleteInventoryOptions struct {
-	// Resource Inventory Id.  Use GET /inventories API to look up the Resource Inventory definition Ids  in your IBM Cloud
-	// account.
+	// Resource Inventory Id.  Use `GET /v2/inventories` API to look up the Resource Inventory definition Ids  in your IBM
+	// Cloud account.
 	InventoryID *string `json:"-" validate:"required,ne="`
 
 	// Equivalent to -force options in the command line.
@@ -6609,10 +6573,23 @@ func (options *DeleteInventoryOptions) SetHeaders(param map[string]string) *Dele
 
 // DeleteJobOptions : The DeleteJob options.
 type DeleteJobOptions struct {
-	// Job Id. Use GET /jobs API to look up the Job Ids in your IBM Cloud account.
+	// Job Id. Use `GET /v2/jobs` API to look up the Job Ids in your IBM Cloud account.
 	JobID *string `json:"-" validate:"required,ne="`
 
-	// The IAM refresh token associated with the IBM Cloud account.
+	// The IAM refresh token for the user or service identity.
+	//
+	//   **Retrieving refresh token**:
+	//   * Use `export IBMCLOUD_API_KEY=<ibmcloud_api_key>`, and execute `curl -X POST
+	// "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d
+	// "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=$IBMCLOUD_API_KEY" -u bx:bx`.
+	//   * For more information, about creating IAM access token and API Docs, refer, [IAM access
+	// token](/apidocs/iam-identity-token-api#gettoken-password) and [Create API
+	// key](/apidocs/iam-identity-token-api#create-api-key).
+	//
+	//   **Limitation**:
+	//   * If the token is expired, you can use `refresh token` to get a new IAM access token.
+	//   * The `refresh_token` parameter cannot be used to retrieve a new IAM access token.
+	//   * When the IAM access token is about to expire, use the API key to create a new access token.
 	RefreshToken *string `json:"-" validate:"required"`
 
 	// Equivalent to -force options in the command line.
@@ -6665,7 +6642,7 @@ func (options *DeleteJobOptions) SetHeaders(param map[string]string) *DeleteJobO
 
 // DeleteResourcesQueryOptions : The DeleteResourcesQuery options.
 type DeleteResourcesQueryOptions struct {
-	// Resource query Id.  Use GET /resource_query API to look up the Resource query definition Ids  in your IBM Cloud
+	// Resource query Id.  Use `GET /v2/resource_query` API to look up the Resource query definition Ids  in your IBM Cloud
 	// account.
 	QueryID *string `json:"-" validate:"required,ne="`
 
@@ -6712,8 +6689,7 @@ func (options *DeleteResourcesQueryOptions) SetHeaders(param map[string]string) 
 
 // DeleteWorkspaceActivityOptions : The DeleteWorkspaceActivity options.
 type DeleteWorkspaceActivityOptions struct {
-	// The ID of the workspace for which you want to retrieve details.  To find the workspace ID, use the `GET /workspaces`
-	// API.
+	// The ID of the workspace.  To find the workspace ID, use the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
 	// The ID of the activity or job, for which you want to retrieve details.  To find the job ID, use the `GET
@@ -6752,41 +6728,48 @@ func (options *DeleteWorkspaceActivityOptions) SetHeaders(param map[string]strin
 
 // DeleteWorkspaceOptions : The DeleteWorkspace options.
 type DeleteWorkspaceOptions struct {
-	// The ID of the workspace that you want to delete. To find the workspace ID, use the `GET /v1/workspaces` API.
-	WID *string `json:"-" validate:"required,ne="`
-
-	// If set to `true`, refresh token header configuration is required to delete all the Terraform resources, and the
-	// Schematics workspace. If set to `false`, you can remove only the workspace. Your Terraform resources are still
-	// available and must be managed with the resource dashboard or CLI.
-	DestroyResources *bool `json:"-"`
-
-	// The IAM refresh token is required only if you want to delete all the Terraform resources before deleting the
-	// Schematics workspace. If you want to delete the workspace only and keep all your Terraform resources, refresh token
-	// is not required.
+	// The IAM refresh token for the user or service identity. The IAM refresh token is required only if you want to
+	// destroy the Terraform resources before deleting the Schematics workspace. If you want to delete the workspace only
+	// and keep all your Terraform resources, refresh token is not required.
 	//
-	//  **Retrieving refresh token**:
-	//  * Use `export IBMCLOUD_API_KEY=<ibmcloud_api_key>`, and execute `curl -X POST
+	//   **Retrieving refresh token**:
+	//   * Use `export IBMCLOUD_API_KEY=<ibmcloud_api_key>`, and execute `curl -X POST
 	// "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d
 	// "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=$IBMCLOUD_API_KEY" -u bx:bx`.
-	//  * For more information, about creating IAM access token and API Docs, refer, [IAM access
+	//   * For more information, about creating IAM access token and API Docs, refer, [IAM access
 	// token](/apidocs/iam-identity-token-api#gettoken-password) and [Create API
 	// key](/apidocs/iam-identity-token-api#create-api-key).
 	//
-	//  **Limitation**:
-	//  * If the token is expired, you can use `refresh token` to get a new IAM access token.
-	//  * The `refresh_token` parameter cannot be used to retrieve a new IAM access token.
-	//  * When the IAM access token is about to expire, use the API key to create a new access token.
-	RefreshToken *string `json:"-"`
+	//   **Limitation**:
+	//   * If the token is expired, you can use `refresh token` to get a new IAM access token.
+	//   * The `refresh_token` parameter cannot be used to retrieve a new IAM access token.
+	//   * When the IAM access token is about to expire, use the API key to create a new access token.
+	RefreshToken *string `json:"-" validate:"required"`
+
+	// The ID of the workspace.  To find the workspace ID, use the `GET /v1/workspaces` API.
+	WID *string `json:"-" validate:"required,ne="`
+
+	// If set to `true`, refresh_token header configuration is required to delete all the Terraform resources, and the
+	// Schematics workspace. If set to `false`, you can remove only the workspace. Your Terraform resources are still
+	// available and must be managed with the resource dashboard or CLI.
+	DestroyResources *string `json:"-"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewDeleteWorkspaceOptions : Instantiate DeleteWorkspaceOptions
-func (*SchematicsV1) NewDeleteWorkspaceOptions(wID string) *DeleteWorkspaceOptions {
+func (*SchematicsV1) NewDeleteWorkspaceOptions(refreshToken string, wID string) *DeleteWorkspaceOptions {
 	return &DeleteWorkspaceOptions{
-		WID: core.StringPtr(wID),
+		RefreshToken: core.StringPtr(refreshToken),
+		WID:          core.StringPtr(wID),
 	}
+}
+
+// SetRefreshToken : Allow user to set RefreshToken
+func (_options *DeleteWorkspaceOptions) SetRefreshToken(refreshToken string) *DeleteWorkspaceOptions {
+	_options.RefreshToken = core.StringPtr(refreshToken)
+	return _options
 }
 
 // SetWID : Allow user to set WID
@@ -6796,14 +6779,8 @@ func (_options *DeleteWorkspaceOptions) SetWID(wID string) *DeleteWorkspaceOptio
 }
 
 // SetDestroyResources : Allow user to set DestroyResources
-func (_options *DeleteWorkspaceOptions) SetDestroyResources(destroyResources bool) *DeleteWorkspaceOptions {
-	_options.DestroyResources = core.BoolPtr(destroyResources)
-	return _options
-}
-
-// SetRefreshToken : Allow user to set RefreshToken
-func (_options *DeleteWorkspaceOptions) SetRefreshToken(refreshToken string) *DeleteWorkspaceOptions {
-	_options.RefreshToken = core.StringPtr(refreshToken)
+func (_options *DeleteWorkspaceOptions) SetDestroyResources(destroyResources string) *DeleteWorkspaceOptions {
+	_options.DestroyResources = core.StringPtr(destroyResources)
 	return _options
 }
 
@@ -6815,32 +6792,30 @@ func (options *DeleteWorkspaceOptions) SetHeaders(param map[string]string) *Dele
 
 // DestroyWorkspaceCommandOptions : The DestroyWorkspaceCommand options.
 type DestroyWorkspaceCommandOptions struct {
-	// The ID of the workspace for which you want to perform a Schematics `destroy` job. To find the workspace ID, use the
+	// The ID of the workspace for which you want to perform a Schematics `destroy` job.  To find the workspace ID, use the
 	// `GET /workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
-	// The IAM refresh token is required only if you want to delete all the Terraform resources before deleting the
-	// Schematics workspace. If you want to delete the workspace only and keep all your Terraform resources, refresh token
-	// is not required.
+	// The IAM refresh token for the user or service identity.
 	//
-	//  **Retrieving refresh token**:
-	//  * Use `export IBMCLOUD_API_KEY=<ibmcloud_api_key>`, and execute `curl -X POST
+	//   **Retrieving refresh token**:
+	//   * Use `export IBMCLOUD_API_KEY=<ibmcloud_api_key>`, and execute `curl -X POST
 	// "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d
 	// "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=$IBMCLOUD_API_KEY" -u bx:bx`.
-	//  * For more information, about creating IAM access token and API Docs, refer, [IAM access
+	//   * For more information, about creating IAM access token and API Docs, refer, [IAM access
 	// token](/apidocs/iam-identity-token-api#gettoken-password) and [Create API
 	// key](/apidocs/iam-identity-token-api#create-api-key).
 	//
-	//  **Limitation**:
-	//  * If the token is expired, you can use `refresh token` to get a new IAM access token.
-	//  * The `refresh_token` parameter cannot be used to retrieve a new IAM access token.
-	//  * When the IAM access token is about to expire, use the API key to create a new access token.
+	//   **Limitation**:
+	//   * If the token is expired, you can use `refresh token` to get a new IAM access token.
+	//   * The `refresh_token` parameter cannot be used to retrieve a new IAM access token.
+	//   * When the IAM access token is about to expire, use the API key to create a new access token.
 	RefreshToken *string `json:"-" validate:"required"`
 
 	// Workspace job options template.
 	ActionOptions *WorkspaceActivityOptionsTemplate `json:"action_options,omitempty"`
 
-	// The IAM delegated token for your IBM Cloud account. This token is required for requests that are sent via the UI
+	// The IAM delegated token for your IBM Cloud account.  This token is required for requests that are sent via the UI
 	// only.
 	DelegatedToken *string `json:"-"`
 
@@ -6926,7 +6901,7 @@ func UnmarshalEnvVariableResponse(m map[string]json.RawMessage, result interface
 
 // ExecuteResourceQueryOptions : The ExecuteResourceQuery options.
 type ExecuteResourceQueryOptions struct {
-	// Resource query Id.  Use GET /resource_query API to look up the Resource query definition Ids  in your IBM Cloud
+	// Resource query Id.  Use `GET /v2/resource_query` API to look up the Resource query definition Ids  in your IBM Cloud
 	// account.
 	QueryID *string `json:"-" validate:"required,ne="`
 
@@ -7187,8 +7162,8 @@ func (options *GetActionOptions) SetHeaders(param map[string]string) *GetActionO
 
 // GetAllWorkspaceInputsOptions : The GetAllWorkspaceInputs options.
 type GetAllWorkspaceInputsOptions struct {
-	// The ID of the workspace for which you want to retrieve information about the associated Terraform template. To find
-	// the workspace ID, use the `GET /v1/workspaces` API.
+	// The ID of the workspace for which you want to retrieve input parameters and  values. To find the workspace ID, use
+	// the `GET /workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
@@ -7216,8 +7191,8 @@ func (options *GetAllWorkspaceInputsOptions) SetHeaders(param map[string]string)
 
 // GetInventoryOptions : The GetInventory options.
 type GetInventoryOptions struct {
-	// Resource Inventory Id.  Use GET /inventories API to look up the Resource Inventory definition Ids  in your IBM Cloud
-	// account.
+	// Resource Inventory Id.  Use `GET /v2/inventories` API to look up the Resource Inventory definition Ids  in your IBM
+	// Cloud account.
 	InventoryID *string `json:"-" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
@@ -7243,48 +7218,9 @@ func (options *GetInventoryOptions) SetHeaders(param map[string]string) *GetInve
 	return options
 }
 
-// GetInventoryValueOptions : The GetInventoryValue options.
-type GetInventoryValueOptions struct {
-	// Resource Inventory Id.  Use GET /inventories API to look up the Resource Inventory definition Ids  in your IBM Cloud
-	// account.
-	InventoryID *string `json:"-" validate:"required,ne="`
-
-	// Name of the variable.
-	VarName *string `json:"-" validate:"required,ne="`
-
-	// Allows users to set headers on API requests
-	Headers map[string]string
-}
-
-// NewGetInventoryValueOptions : Instantiate GetInventoryValueOptions
-func (*SchematicsV1) NewGetInventoryValueOptions(inventoryID string, varName string) *GetInventoryValueOptions {
-	return &GetInventoryValueOptions{
-		InventoryID: core.StringPtr(inventoryID),
-		VarName:     core.StringPtr(varName),
-	}
-}
-
-// SetInventoryID : Allow user to set InventoryID
-func (_options *GetInventoryValueOptions) SetInventoryID(inventoryID string) *GetInventoryValueOptions {
-	_options.InventoryID = core.StringPtr(inventoryID)
-	return _options
-}
-
-// SetVarName : Allow user to set VarName
-func (_options *GetInventoryValueOptions) SetVarName(varName string) *GetInventoryValueOptions {
-	_options.VarName = core.StringPtr(varName)
-	return _options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *GetInventoryValueOptions) SetHeaders(param map[string]string) *GetInventoryValueOptions {
-	options.Headers = param
-	return options
-}
-
 // GetJobOptions : The GetJob options.
 type GetJobOptions struct {
-	// Job Id. Use GET /jobs API to look up the Job Ids in your IBM Cloud account.
+	// Job Id. Use `GET /v2/jobs` API to look up the Job Ids in your IBM Cloud account.
 	JobID *string `json:"-" validate:"required,ne="`
 
 	// Level of details returned by the get method.
@@ -7356,7 +7292,7 @@ func (options *GetKmsSettingsOptions) SetHeaders(param map[string]string) *GetKm
 
 // GetResourcesQueryOptions : The GetResourcesQuery options.
 type GetResourcesQueryOptions struct {
-	// Resource query Id.  Use GET /resource_query API to look up the Resource query definition Ids  in your IBM Cloud
+	// Resource query Id.  Use `GET /v2/resource_query` API to look up the Resource query definition Ids  in your IBM Cloud
 	// account.
 	QueryID *string `json:"-" validate:"required,ne="`
 
@@ -7403,12 +7339,11 @@ func (options *GetSchematicsVersionOptions) SetHeaders(param map[string]string) 
 
 // GetTemplateActivityLogOptions : The GetTemplateActivityLog options.
 type GetTemplateActivityLogOptions struct {
-	// The ID of the workspace for which you want to retrieve details.  To find the workspace ID, use the `GET /workspaces`
-	// API.
+	// The ID of the workspace.  To find the workspace ID, use the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
-	// The ID that was assigned to your Terraform template or IBM Cloud catalog software template.  To find the ID, use the
-	// GET /v1/workspaces API.
+	// The ID of the Terraform template or IBM Cloud catalog software template in the workspace.  Use the `GET
+	// /v1/workspaces` to look up the workspace IDs and template IDs or `template_data.id`.
 	TID *string `json:"-" validate:"required,ne="`
 
 	// The ID of the activity or job, for which you want to retrieve details.  To find the job ID, use the `GET
@@ -7494,12 +7429,11 @@ func (options *GetTemplateActivityLogOptions) SetHeaders(param map[string]string
 
 // GetTemplateLogsOptions : The GetTemplateLogs options.
 type GetTemplateLogsOptions struct {
-	// The ID of the workspace for which you want to retrieve details.  To find the workspace ID, use the `GET /workspaces`
-	// API.
+	// The ID of the workspace.  To find the workspace ID, use the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
-	// The ID that was assigned to your Terraform template or IBM Cloud catalog software template.  To find the ID, use the
-	// GET /v1/workspaces API.
+	// The ID of the Terraform template or IBM Cloud catalog software template in the workspace.  Use the `GET
+	// /v1/workspaces` to look up the workspace IDs and template IDs or `template_data.id`.
 	TID *string `json:"-" validate:"required,ne="`
 
 	// Enter false to replace the first line in each Terraform command section, such as Terraform INIT or Terraform PLAN,
@@ -7574,8 +7508,8 @@ func (options *GetTemplateLogsOptions) SetHeaders(param map[string]string) *GetT
 
 // GetWorkspaceActivityLogsOptions : The GetWorkspaceActivityLogs options.
 type GetWorkspaceActivityLogsOptions struct {
-	// The ID of the workspace for which you want to retrieve the Terraform statefile URL.  To find the workspace ID, use
-	// the GET /v1/workspaces API.
+	// The ID of the workspace for which you want to retrieve the Terraform statefile.  To find the workspace ID, use the
+	// `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
 	// The ID of the activity or job, for which you want to retrieve details.  To find the job ID, use the `GET
@@ -7614,8 +7548,7 @@ func (options *GetWorkspaceActivityLogsOptions) SetHeaders(param map[string]stri
 
 // GetWorkspaceActivityOptions : The GetWorkspaceActivity options.
 type GetWorkspaceActivityOptions struct {
-	// The ID of the workspace for which you want to retrieve details.  To find the workspace ID, use the `GET /workspaces`
-	// API.
+	// The ID of the workspace.  To find the workspace ID, use the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
 	// The ID of the activity or job, for which you want to retrieve details.  To find the job ID, use the `GET
@@ -7723,13 +7656,12 @@ func (options *GetWorkspaceInputMetadataOptions) SetHeaders(param map[string]str
 
 // GetWorkspaceInputsOptions : The GetWorkspaceInputs options.
 type GetWorkspaceInputsOptions struct {
-	// The ID of the workspace for which you want to retrieve the input variables that you declared in your Terraform
-	// template. To find the workspace ID, use the `GET /v1/workspaces` API.
+	// The ID of the workspace.  To find the workspace ID, use the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
-	// The ID of the Terraform template for which you want to retrieve all your input variables. When you create a
-	// workspace, the Terraform template that your workspace points to is assigned a unique ID. To find this ID, use the
-	// `GET /v1/workspaces` API and review the `template_data.id` value.
+	// The ID of the Terraform template in your workspace.  When you create a workspace, the Terraform template that  your
+	// workspace points to is assigned a unique ID. Use the `GET /v1/workspaces` to look up the workspace IDs  and template
+	// IDs or `template_data.id` in your IBM Cloud account.
 	TID *string `json:"-" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
@@ -7764,8 +7696,7 @@ func (options *GetWorkspaceInputsOptions) SetHeaders(param map[string]string) *G
 
 // GetWorkspaceLogUrlsOptions : The GetWorkspaceLogUrls options.
 type GetWorkspaceLogUrlsOptions struct {
-	// The ID of the workspace for which you want to retrieve details.  To find the workspace ID, use the `GET /workspaces`
-	// API.
+	// The ID of the workspace.  To find the workspace ID, use the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
@@ -7793,8 +7724,7 @@ func (options *GetWorkspaceLogUrlsOptions) SetHeaders(param map[string]string) *
 
 // GetWorkspaceOptions : The GetWorkspace options.
 type GetWorkspaceOptions struct {
-	// The ID of the workspace for which you want to retrieve detailed information. To find the workspace ID, use the `GET
-	// /v1/workspaces` API.
+	// The ID of the workspace.  To find the workspace ID, use the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
@@ -7822,8 +7752,8 @@ func (options *GetWorkspaceOptions) SetHeaders(param map[string]string) *GetWork
 
 // GetWorkspaceOutputsOptions : The GetWorkspaceOutputs options.
 type GetWorkspaceOutputsOptions struct {
-	// The ID of the workspace for which you want to retrieve output values. To find the workspace ID, use the `GET
-	// /workspaces` API.
+	// The ID of the workspace for which you want to retrieve output parameters and  values. To find the workspace ID, use
+	// the `GET /workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
@@ -7851,12 +7781,11 @@ func (options *GetWorkspaceOutputsOptions) SetHeaders(param map[string]string) *
 
 // GetWorkspaceReadmeOptions : The GetWorkspaceReadme options.
 type GetWorkspaceReadmeOptions struct {
-	// The ID of the workspace for which you want to retrieve the `README.md` file that is stored in the GitHub or GitLab
-	// repository that your workspace points to. To find the workspace ID, use the `GET /v1/workspaces` API.
+	// The ID of the workspace.  To find the workspace ID, use the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
-	// The GitHub or GitLab branch where the `README.md` file is stored, or the commit ID or tag that references the
-	// `README.md` file that you want to retrieve. If you do not specify this option, the `README.md` file is retrieved
+	// The GitHub or GitLab branch where the `README.md` file is stored,  or the commit ID or tag that references the
+	// `README.md` file that you want to retrieve.  If you do not specify this option, the `README.md` file is retrieved
 	// from the master branch by default.
 	Ref *string `json:"-"`
 
@@ -7907,8 +7836,7 @@ func (options *GetWorkspaceReadmeOptions) SetHeaders(param map[string]string) *G
 
 // GetWorkspaceResourcesOptions : The GetWorkspaceResources options.
 type GetWorkspaceResourcesOptions struct {
-	// The ID of the workspace for which you want to retrieve details.  To find the workspace ID, use the `GET /workspaces`
-	// API.
+	// The ID of the workspace.  To find the workspace ID, use the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
@@ -7936,8 +7864,8 @@ func (options *GetWorkspaceResourcesOptions) SetHeaders(param map[string]string)
 
 // GetWorkspaceStateOptions : The GetWorkspaceState options.
 type GetWorkspaceStateOptions struct {
-	// The ID of the workspace for which you want to retrieve the Terraform statefile URL.  To find the workspace ID, use
-	// the GET /v1/workspaces API.
+	// The ID of the workspace for which you want to retrieve the Terraform statefile.  To find the workspace ID, use the
+	// `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
@@ -7965,13 +7893,13 @@ func (options *GetWorkspaceStateOptions) SetHeaders(param map[string]string) *Ge
 
 // GetWorkspaceTemplateStateOptions : The GetWorkspaceTemplateState options.
 type GetWorkspaceTemplateStateOptions struct {
-	// The ID of the workspace for which you want to retrieve the Terraform statefile URL.  To find the workspace ID, use
-	// the GET /v1/workspaces API.
+	// The ID of the workspace for which you want to retrieve the Terraform statefile.  To find the workspace ID, use the
+	// `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
 	// The ID of the Terraform template for which you want to retrieve the Terraform statefile.  When you create a
 	// workspace, the Terraform template that your workspace points to is assigned a unique ID.  To find this ID, use the
-	// GET /v1/workspaces API and review the template_data.id value.
+	// `GET /v1/workspaces` API and review the template_data.id value.
 	TID *string `json:"-" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
@@ -8021,7 +7949,7 @@ type InventoryResourceRecord struct {
 	// provisioned using Schematics.
 	Location *string `json:"location,omitempty"`
 
-	// Resource-group name for the Inventory definition.  By default, Action will be created in Default Resource Group.
+	// Resource-group name for the Inventory definition.  By default, Inventory will be created in Default Resource Group.
 	ResourceGroup *string `json:"resource_group,omitempty"`
 
 	// Inventory creation time.
@@ -8105,7 +8033,7 @@ func UnmarshalInventoryResourceRecord(m map[string]json.RawMessage, result inter
 	return
 }
 
-// InventoryResourceRecordList : List of Inventory resource records.
+// InventoryResourceRecordList : List of Inventory definition records.
 type InventoryResourceRecordList struct {
 	// Total number of records.
 	TotalCount *int64 `json:"total_count,omitempty"`
@@ -8116,7 +8044,7 @@ type InventoryResourceRecordList struct {
 	// Skipped number of records.
 	Offset *int64 `json:"offset" validate:"required"`
 
-	// List of inventory resource records.
+	// List of inventory definition records.
 	Inventories []InventoryResourceRecord `json:"inventories,omitempty"`
 }
 
@@ -10451,38 +10379,9 @@ func (options *ListInventoriesOptions) SetHeaders(param map[string]string) *List
 	return options
 }
 
-// ListInventoryValuesOptions : The ListInventoryValues options.
-type ListInventoryValuesOptions struct {
-	// Resource Inventory Id.  Use GET /inventories API to look up the Resource Inventory definition Ids  in your IBM Cloud
-	// account.
-	InventoryID *string `json:"-" validate:"required,ne="`
-
-	// Allows users to set headers on API requests
-	Headers map[string]string
-}
-
-// NewListInventoryValuesOptions : Instantiate ListInventoryValuesOptions
-func (*SchematicsV1) NewListInventoryValuesOptions(inventoryID string) *ListInventoryValuesOptions {
-	return &ListInventoryValuesOptions{
-		InventoryID: core.StringPtr(inventoryID),
-	}
-}
-
-// SetInventoryID : Allow user to set InventoryID
-func (_options *ListInventoryValuesOptions) SetInventoryID(inventoryID string) *ListInventoryValuesOptions {
-	_options.InventoryID = core.StringPtr(inventoryID)
-	return _options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *ListInventoryValuesOptions) SetHeaders(param map[string]string) *ListInventoryValuesOptions {
-	options.Headers = param
-	return options
-}
-
 // ListJobLogsOptions : The ListJobLogs options.
 type ListJobLogsOptions struct {
-	// Job Id. Use GET /jobs API to look up the Job Ids in your IBM Cloud account.
+	// Job Id. Use `GET /v2/jobs` API to look up the Job Ids in your IBM Cloud account.
 	JobID *string `json:"-" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
@@ -10815,8 +10714,7 @@ func (options *ListSchematicsLocationOptions) SetHeaders(param map[string]string
 
 // ListWorkspaceActivitiesOptions : The ListWorkspaceActivities options.
 type ListWorkspaceActivitiesOptions struct {
-	// The ID of the workspace for which you want to retrieve details.  To find the workspace ID, use the `GET /workspaces`
-	// API.
+	// The ID of the workspace.  To find the workspace ID, use the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
 	// The starting position of the item in the list of items. For example, if you have three workspaces in your account,
@@ -11089,29 +10987,27 @@ func UnmarshalOutputValuesInner(m map[string]json.RawMessage, result interface{}
 
 // PlanWorkspaceCommandOptions : The PlanWorkspaceCommand options.
 type PlanWorkspaceCommandOptions struct {
-	// The ID of the workspace, for which you want to run a Schematics `plan` job. To find the ID of your workspace, use
+	// The ID of the workspace, for which you want to run a Schematics `plan` job.  To find the ID of your workspace, use
 	// the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
-	// The IAM refresh token is required only if you want to delete all the Terraform resources before deleting the
-	// Schematics workspace. If you want to delete the workspace only and keep all your Terraform resources, refresh token
-	// is not required.
+	// The IAM refresh token for the user or service identity.
 	//
-	//  **Retrieving refresh token**:
-	//  * Use `export IBMCLOUD_API_KEY=<ibmcloud_api_key>`, and execute `curl -X POST
+	//   **Retrieving refresh token**:
+	//   * Use `export IBMCLOUD_API_KEY=<ibmcloud_api_key>`, and execute `curl -X POST
 	// "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d
 	// "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=$IBMCLOUD_API_KEY" -u bx:bx`.
-	//  * For more information, about creating IAM access token and API Docs, refer, [IAM access
+	//   * For more information, about creating IAM access token and API Docs, refer, [IAM access
 	// token](/apidocs/iam-identity-token-api#gettoken-password) and [Create API
 	// key](/apidocs/iam-identity-token-api#create-api-key).
 	//
-	//  **Limitation**:
-	//  * If the token is expired, you can use `refresh token` to get a new IAM access token.
-	//  * The `refresh_token` parameter cannot be used to retrieve a new IAM access token.
-	//  * When the IAM access token is about to expire, use the API key to create a new access token.
+	//   **Limitation**:
+	//   * If the token is expired, you can use `refresh token` to get a new IAM access token.
+	//   * The `refresh_token` parameter cannot be used to retrieve a new IAM access token.
+	//   * When the IAM access token is about to expire, use the API key to create a new access token.
 	RefreshToken *string `json:"-" validate:"required"`
 
-	// The IAM delegated token for your IBM Cloud account. This token is required for requests that are sent via the UI
+	// The IAM delegated token for your IBM Cloud account.  This token is required for requests that are sent via the UI
 	// only.
 	DelegatedToken *string `json:"-"`
 
@@ -11165,7 +11061,8 @@ type ProcessTemplateMetaDataOptions struct {
 	// Type of source for the Template.
 	SourceType *string `json:"source_type,omitempty"`
 
-	// The personal access token associated with your GitHub or GitLab repository, required to clone the repository.
+	// The personal access token to authenticate with your private GitHub or GitLab repository and access your Terraform
+	// template.
 	XGithubToken *string `json:"-"`
 
 	// Allows users to set headers on API requests
@@ -11231,29 +11128,27 @@ func (options *ProcessTemplateMetaDataOptions) SetHeaders(param map[string]strin
 
 // RefreshWorkspaceCommandOptions : The RefreshWorkspaceCommand options.
 type RefreshWorkspaceCommandOptions struct {
-	// The ID of the workspace for which you want to perform a Schematics `refresh` job. To find the workspace ID, use the
-	// `GET /workspaces` API.
+	// The ID of the workspace, for which you want to run a Schematics `refresh` job.  To find the ID of your workspace,
+	// use the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
-	// The IAM refresh token is required only if you want to delete all the Terraform resources before deleting the
-	// Schematics workspace. If you want to delete the workspace only and keep all your Terraform resources, refresh token
-	// is not required.
+	// The IAM refresh token for the user or service identity.
 	//
-	//  **Retrieving refresh token**:
-	//  * Use `export IBMCLOUD_API_KEY=<ibmcloud_api_key>`, and execute `curl -X POST
+	//   **Retrieving refresh token**:
+	//   * Use `export IBMCLOUD_API_KEY=<ibmcloud_api_key>`, and execute `curl -X POST
 	// "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d
 	// "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=$IBMCLOUD_API_KEY" -u bx:bx`.
-	//  * For more information, about creating IAM access token and API Docs, refer, [IAM access
+	//   * For more information, about creating IAM access token and API Docs, refer, [IAM access
 	// token](/apidocs/iam-identity-token-api#gettoken-password) and [Create API
 	// key](/apidocs/iam-identity-token-api#create-api-key).
 	//
-	//  **Limitation**:
-	//  * If the token is expired, you can use `refresh token` to get a new IAM access token.
-	//  * The `refresh_token` parameter cannot be used to retrieve a new IAM access token.
-	//  * When the IAM access token is about to expire, use the API key to create a new access token.
+	//   **Limitation**:
+	//   * If the token is expired, you can use `refresh token` to get a new IAM access token.
+	//   * The `refresh_token` parameter cannot be used to retrieve a new IAM access token.
+	//   * When the IAM access token is about to expire, use the API key to create a new access token.
 	RefreshToken *string `json:"-" validate:"required"`
 
-	// The IAM delegated token for your IBM Cloud account. This token is required for requests that are sent via the UI
+	// The IAM delegated token for your IBM Cloud account.  This token is required for requests that are sent via the UI
 	// only.
 	DelegatedToken *string `json:"-"`
 
@@ -11295,15 +11190,15 @@ func (options *RefreshWorkspaceCommandOptions) SetHeaders(param map[string]strin
 
 // ReplaceInventoryOptions : The ReplaceInventory options.
 type ReplaceInventoryOptions struct {
-	// Resource Inventory Id.  Use GET /inventories API to look up the Resource Inventory definition Ids  in your IBM Cloud
-	// account.
+	// Resource Inventory Id.  Use `GET /v2/inventories` API to look up the Resource Inventory definition Ids  in your IBM
+	// Cloud account.
 	InventoryID *string `json:"-" validate:"required,ne="`
 
-	// The unique name of your Inventory resource. The name can be up to 128 characters long and can include alphanumeric
+	// The unique name of your Inventory definition. The name can be up to 128 characters long and can include alphanumeric
 	// characters, spaces, dashes, and underscores.
 	Name *string `json:"name,omitempty"`
 
-	// The description of your Inventory resource. The description can be up to 2048 characters long in size.
+	// The description of your Inventory definition. The description can be up to 2048 characters long in size.
 	Description *string `json:"description,omitempty"`
 
 	// List of locations supported by IBM Cloud Schematics service.  While creating your workspace or action, choose the
@@ -11311,13 +11206,15 @@ type ReplaceInventoryOptions struct {
 	// provisioned using Schematics.
 	Location *string `json:"location,omitempty"`
 
-	// Resource-group name for the Inventory resource.  By default, Action will be created in Default Resource Group.
+	// Resource-group name for the Inventory definition.   By default, Inventory definition will be created in Default
+	// Resource Group.
 	ResourceGroup *string `json:"resource_group,omitempty"`
 
 	// Input inventory of host and host group for the playbook, in the `.ini` file format.
 	InventoriesIni *string `json:"inventories_ini,omitempty"`
 
-	// Input resource queries that is used to dynamically generate the inventory of host and host group for the playbook.
+	// Input resource query definitions that is used to dynamically generate the inventory of host and host group for the
+	// playbook.
 	ResourceQueries []string `json:"resource_queries,omitempty"`
 
 	// Allows users to set headers on API requests
@@ -11392,7 +11289,7 @@ func (options *ReplaceInventoryOptions) SetHeaders(param map[string]string) *Rep
 
 // ReplaceResourcesQueryOptions : The ReplaceResourcesQuery options.
 type ReplaceResourcesQueryOptions struct {
-	// Resource query Id.  Use GET /resource_query API to look up the Resource query definition Ids  in your IBM Cloud
+	// Resource query Id.  Use `GET /v2/resource_query` API to look up the Resource query definition Ids  in your IBM Cloud
 	// account.
 	QueryID *string `json:"-" validate:"required,ne="`
 
@@ -11453,13 +11350,12 @@ func (options *ReplaceResourcesQueryOptions) SetHeaders(param map[string]string)
 
 // ReplaceWorkspaceInputsOptions : The ReplaceWorkspaceInputs options.
 type ReplaceWorkspaceInputsOptions struct {
-	// The ID of the workspace for which you want to retrieve the input variables that you declared in your Terraform
-	// template. To find the workspace ID, use the `GET /v1/workspaces` API.
+	// The ID of the workspace.  To find the workspace ID, use the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
-	// The ID of the Terraform template for which you want to retrieve all your input variables. When you create a
-	// workspace, the Terraform template that your workspace points to is assigned a unique ID. To find this ID, use the
-	// `GET /v1/workspaces` API and review the `template_data.id` value.
+	// The ID of the Terraform template in your workspace.  When you create a workspace, the Terraform template that  your
+	// workspace points to is assigned a unique ID. Use the `GET /v1/workspaces` to look up the workspace IDs  and template
+	// IDs or `template_data.id` in your IBM Cloud account.
 	TID *string `json:"-" validate:"required,ne="`
 
 	// A list of environment variables that you want to apply during the execution of a bash script or Terraform job. This
@@ -11526,7 +11422,7 @@ func (options *ReplaceWorkspaceInputsOptions) SetHeaders(param map[string]string
 
 // ReplaceWorkspaceOptions : The ReplaceWorkspace options.
 type ReplaceWorkspaceOptions struct {
-	// The ID of the workspace that you want to update. To find the ID, use the `GET /v1/workspaces` API.
+	// The ID of the workspace.  To find the workspace ID, use the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
 	// Information about the software template that you chose from the IBM Cloud catalog. This information is returned for
@@ -11957,11 +11853,23 @@ func UnmarshalResourceQueryResponseRecordResponse(m map[string]json.RawMessage, 
 
 // RunWorkspaceCommandsOptions : The RunWorkspaceCommands options.
 type RunWorkspaceCommandsOptions struct {
-	// The ID of the workspace for which you want to retrieve details.  To find the workspace ID, use the `GET /workspaces`
-	// API.
+	// The ID of the workspace.  To find the workspace ID, use the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
-	// The IAM refresh token associated with the IBM Cloud account.
+	// The IAM refresh token for the user or service identity.
+	//
+	//   **Retrieving refresh token**:
+	//   * Use `export IBMCLOUD_API_KEY=<ibmcloud_api_key>`, and execute `curl -X POST
+	// "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d
+	// "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=$IBMCLOUD_API_KEY" -u bx:bx`.
+	//   * For more information, about creating IAM access token and API Docs, refer, [IAM access
+	// token](/apidocs/iam-identity-token-api#gettoken-password) and [Create API
+	// key](/apidocs/iam-identity-token-api#create-api-key).
+	//
+	//   **Limitation**:
+	//   * If the token is expired, you can use `refresh token` to get a new IAM access token.
+	//   * The `refresh_token` parameter cannot be used to retrieve a new IAM access token.
+	//   * When the IAM access token is about to expire, use the API key to create a new access token.
 	RefreshToken *string `json:"-" validate:"required"`
 
 	// List of commands.  You can execute single set of commands or multiple commands.  For more information, about the
@@ -13139,7 +13047,7 @@ type UpdateActionOptions struct {
 	//  172.22.192.6
 	//  [dbhost]
 	//  172.22.192.5"`. For more information, about an inventory host group syntax, see [Inventory host
-	// groups](/docs/schematics?topic=schematics-schematics-cli-reference#schematics-inventory-host-grps).
+	// groups](https://cloud.ibm.com/docs/schematics?topic=schematics-schematics-cli-reference#schematics-inventory-host-grps).
 	TargetsIni *string `json:"targets_ini,omitempty"`
 
 	// Input variables for the Action.
@@ -13157,7 +13065,8 @@ type UpdateActionOptions struct {
 	// System lock status.
 	SysLock *SystemLock `json:"sys_lock,omitempty"`
 
-	// The personal access token associated with your GitHub or GitLab repository, required to clone the repository.
+	// The personal access token to authenticate with your private GitHub or GitLab repository and access your Terraform
+	// template.
 	XGithubToken *string `json:"-"`
 
 	// Allows users to set headers on API requests
@@ -13335,15 +13244,15 @@ func (options *UpdateActionOptions) SetHeaders(param map[string]string) *UpdateA
 
 // UpdateInventoryOptions : The UpdateInventory options.
 type UpdateInventoryOptions struct {
-	// Resource Inventory Id.  Use GET /inventories API to look up the Resource Inventory definition Ids  in your IBM Cloud
-	// account.
+	// Resource Inventory Id.  Use `GET /v2/inventories` API to look up the Resource Inventory definition Ids  in your IBM
+	// Cloud account.
 	InventoryID *string `json:"-" validate:"required,ne="`
 
-	// The unique name of your Inventory resource. The name can be up to 128 characters long and can include alphanumeric
+	// The unique name of your Inventory definition. The name can be up to 128 characters long and can include alphanumeric
 	// characters, spaces, dashes, and underscores.
 	Name *string `json:"name,omitempty"`
 
-	// The description of your Inventory resource. The description can be up to 2048 characters long in size.
+	// The description of your Inventory definition. The description can be up to 2048 characters long in size.
 	Description *string `json:"description,omitempty"`
 
 	// List of locations supported by IBM Cloud Schematics service.  While creating your workspace or action, choose the
@@ -13351,13 +13260,15 @@ type UpdateInventoryOptions struct {
 	// provisioned using Schematics.
 	Location *string `json:"location,omitempty"`
 
-	// Resource-group name for the Inventory resource.  By default, Action will be created in Default Resource Group.
+	// Resource-group name for the Inventory definition.   By default, Inventory definition will be created in Default
+	// Resource Group.
 	ResourceGroup *string `json:"resource_group,omitempty"`
 
 	// Input inventory of host and host group for the playbook, in the `.ini` file format.
 	InventoriesIni *string `json:"inventories_ini,omitempty"`
 
-	// Input resource queries that is used to dynamically generate the inventory of host and host group for the playbook.
+	// Input resource query definitions that is used to dynamically generate the inventory of host and host group for the
+	// playbook.
 	ResourceQueries []string `json:"resource_queries,omitempty"`
 
 	// Allows users to set headers on API requests
@@ -13432,10 +13343,23 @@ func (options *UpdateInventoryOptions) SetHeaders(param map[string]string) *Upda
 
 // UpdateJobOptions : The UpdateJob options.
 type UpdateJobOptions struct {
-	// Job Id. Use GET /jobs API to look up the Job Ids in your IBM Cloud account.
+	// Job Id. Use `GET /v2/jobs` API to look up the Job Ids in your IBM Cloud account.
 	JobID *string `json:"-" validate:"required,ne="`
 
-	// The IAM refresh token associated with the IBM Cloud account.
+	// The IAM refresh token for the user or service identity.
+	//
+	//   **Retrieving refresh token**:
+	//   * Use `export IBMCLOUD_API_KEY=<ibmcloud_api_key>`, and execute `curl -X POST
+	// "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d
+	// "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=$IBMCLOUD_API_KEY" -u bx:bx`.
+	//   * For more information, about creating IAM access token and API Docs, refer, [IAM access
+	// token](/apidocs/iam-identity-token-api#gettoken-password) and [Create API
+	// key](/apidocs/iam-identity-token-api#create-api-key).
+	//
+	//   **Limitation**:
+	//   * If the token is expired, you can use `refresh token` to get a new IAM access token.
+	//   * The `refresh_token` parameter cannot be used to retrieve a new IAM access token.
+	//   * When the IAM access token is about to expire, use the API key to create a new access token.
 	RefreshToken *string `json:"-" validate:"required"`
 
 	// Name of the Schematics automation resource.
@@ -13703,7 +13627,7 @@ func (options *UpdateKmsSettingsOptions) SetHeaders(param map[string]string) *Up
 
 // UpdateWorkspaceOptions : The UpdateWorkspace options.
 type UpdateWorkspaceOptions struct {
-	// The ID of the workspace that you want to update. To find the ID, use the `GET /v1/workspaces` API.
+	// The ID of the workspace.  To find the workspace ID, use the `GET /v1/workspaces` API.
 	WID *string `json:"-" validate:"required,ne="`
 
 	// Information about the software template that you chose from the IBM Cloud catalog. This information is returned for
@@ -15120,7 +15044,7 @@ type WorkspaceVariableRequest struct {
 	// complex variables, as you provide in a `.tfvars` file. **You need to enter escaped string of `HCL` format for the
 	// complex variable value**. For more information, about how to declare variables in a terraform configuration file and
 	// provide value to schematics, see [Providing values for the declared
-	// variables](/docs/schematics?topic=schematics-create-tf-config#declare-variable).
+	// variables](https://cloud.ibm.com/docs/schematics?topic=schematics-create-tf-config#declare-variable).
 	Value *string `json:"value,omitempty"`
 }
 
@@ -15179,7 +15103,7 @@ type WorkspaceVariableResponse struct {
 	// complex variables, as you provide in a `.tfvars` file. **You need to enter escaped string of `HCL` format for the
 	// complex variable value**. For more information, about how to declare variables in a terraform configuration file and
 	// provide value to schematics, see [Providing values for the declared
-	// variables](/docs/schematics?topic=schematics-create-tf-config#declare-variable).
+	// variables](https://cloud.ibm.com/docs/schematics?topic=schematics-create-tf-config#declare-variable).
 	Value *string `json:"value,omitempty"`
 }
 

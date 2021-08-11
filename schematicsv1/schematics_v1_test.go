@@ -361,6 +361,206 @@ var _ = Describe(`SchematicsV1`, func() {
 			})
 		})
 	})
+	Describe(`ListLocations(listLocationsOptions *ListLocationsOptions) - Operation response error`, func() {
+		listLocationsPath := "/v2/locations"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(listLocationsPath))
+					Expect(req.Method).To(Equal("GET"))
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, `} this is not valid json {`)
+				}))
+			})
+			It(`Invoke ListLocations with error: Operation response processing error`, func() {
+				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(schematicsService).ToNot(BeNil())
+
+				// Construct an instance of the ListLocationsOptions model
+				listLocationsOptionsModel := new(schematicsv1.ListLocationsOptions)
+				listLocationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Expect response parsing to fail since we are receiving a text/plain response
+				result, response, operationErr := schematicsService.ListLocations(listLocationsOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+
+				// Enable retries and test again
+				schematicsService.EnableRetries(0, 0)
+				result, response, operationErr = schematicsService.ListLocations(listLocationsOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
+	Describe(`ListLocations(listLocationsOptions *ListLocationsOptions)`, func() {
+		listLocationsPath := "/v2/locations"
+		Context(`Using mock server endpoint with timeout`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(listLocationsPath))
+					Expect(req.Method).To(Equal("GET"))
+
+					// Sleep a short time to support a timeout test
+					time.Sleep(100 * time.Millisecond)
+
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"locations": [{"region": "Region", "metro": "Metro", "geography_code": "GeographyCode", "geography": "Geography", "country": "Country", "kind": "Kind", "paired_region": ["PairedRegion"], "restricted": true}]}`)
+				}))
+			})
+			It(`Invoke ListLocations successfully with retries`, func() {
+				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(schematicsService).ToNot(BeNil())
+				schematicsService.EnableRetries(0, 0)
+
+				// Construct an instance of the ListLocationsOptions model
+				listLocationsOptionsModel := new(schematicsv1.ListLocationsOptions)
+				listLocationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with a Context to test a timeout error
+				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc()
+				_, _, operationErr := schematicsService.ListLocationsWithContext(ctx, listLocationsOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+
+				// Disable retries and test again
+				schematicsService.DisableRetries()
+				result, response, operationErr := schematicsService.ListLocations(listLocationsOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+				// Re-test the timeout error with retries disabled
+				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc2()
+				_, _, operationErr = schematicsService.ListLocationsWithContext(ctx, listLocationsOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(listLocationsPath))
+					Expect(req.Method).To(Equal("GET"))
+
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"locations": [{"region": "Region", "metro": "Metro", "geography_code": "GeographyCode", "geography": "Geography", "country": "Country", "kind": "Kind", "paired_region": ["PairedRegion"], "restricted": true}]}`)
+				}))
+			})
+			It(`Invoke ListLocations successfully`, func() {
+				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(schematicsService).ToNot(BeNil())
+
+				// Invoke operation with nil options model (negative test)
+				result, response, operationErr := schematicsService.ListLocations(nil)
+				Expect(operationErr).NotTo(BeNil())
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+
+				// Construct an instance of the ListLocationsOptions model
+				listLocationsOptionsModel := new(schematicsv1.ListLocationsOptions)
+				listLocationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with valid options model (positive test)
+				result, response, operationErr = schematicsService.ListLocations(listLocationsOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+			})
+			It(`Invoke ListLocations with error: Operation request error`, func() {
+				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(schematicsService).ToNot(BeNil())
+
+				// Construct an instance of the ListLocationsOptions model
+				listLocationsOptionsModel := new(schematicsv1.ListLocationsOptions)
+				listLocationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Invoke operation with empty URL (negative test)
+				err := schematicsService.SetServiceURL("")
+				Expect(err).To(BeNil())
+				result, response, operationErr := schematicsService.ListLocations(listLocationsOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke ListLocations successfully`, func() {
+				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(schematicsService).ToNot(BeNil())
+
+				// Construct an instance of the ListLocationsOptions model
+				listLocationsOptionsModel := new(schematicsv1.ListLocationsOptions)
+				listLocationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := schematicsService.ListLocations(listLocationsOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
 	Describe(`ListResourceGroup(listResourceGroupOptions *ListResourceGroupOptions) - Operation response error`, func() {
 		listResourceGroupPath := "/v1/resource_groups"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
@@ -750,206 +950,6 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Invoke operation
 				result, response, operationErr := schematicsService.GetSchematicsVersion(getSchematicsVersionOptionsModel)
-				Expect(operationErr).To(BeNil())
-				Expect(response).ToNot(BeNil())
-
-				// Verify a nil result
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
-	Describe(`ListLocations(listLocationsOptions *ListLocationsOptions) - Operation response error`, func() {
-		listLocationsPath := "/v2/locations"
-		Context(`Using mock server endpoint with invalid JSON response`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(listLocationsPath))
-					Expect(req.Method).To(Equal("GET"))
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
-				}))
-			})
-			It(`Invoke ListLocations with error: Operation response processing error`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Construct an instance of the ListLocationsOptions model
-				listLocationsOptionsModel := new(schematicsv1.ListLocationsOptions)
-				listLocationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := schematicsService.ListLocations(listLocationsOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-
-				// Enable retries and test again
-				schematicsService.EnableRetries(0, 0)
-				result, response, operationErr = schematicsService.ListLocations(listLocationsOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
-	Describe(`ListLocations(listLocationsOptions *ListLocationsOptions)`, func() {
-		listLocationsPath := "/v2/locations"
-		Context(`Using mock server endpoint with timeout`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(listLocationsPath))
-					Expect(req.Method).To(Equal("GET"))
-
-					// Sleep a short time to support a timeout test
-					time.Sleep(100 * time.Millisecond)
-
-					// Set mock response
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"locations": [{"region": "Region", "metro": "Metro", "geography_code": "GeographyCode", "geography": "Geography", "country": "Country", "kind": "Kind", "paired_region": ["PairedRegion"], "restricted": true}]}`)
-				}))
-			})
-			It(`Invoke ListLocations successfully with retries`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-				schematicsService.EnableRetries(0, 0)
-
-				// Construct an instance of the ListLocationsOptions model
-				listLocationsOptionsModel := new(schematicsv1.ListLocationsOptions)
-				listLocationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-
-				// Invoke operation with a Context to test a timeout error
-				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
-				defer cancelFunc()
-				_, _, operationErr := schematicsService.ListLocationsWithContext(ctx, listLocationsOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
-
-				// Disable retries and test again
-				schematicsService.DisableRetries()
-				result, response, operationErr := schematicsService.ListLocations(listLocationsOptionsModel)
-				Expect(operationErr).To(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).ToNot(BeNil())
-
-				// Re-test the timeout error with retries disabled
-				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
-				defer cancelFunc2()
-				_, _, operationErr = schematicsService.ListLocationsWithContext(ctx, listLocationsOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-		Context(`Using mock server endpoint`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(listLocationsPath))
-					Expect(req.Method).To(Equal("GET"))
-
-					// Set mock response
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"locations": [{"region": "Region", "metro": "Metro", "geography_code": "GeographyCode", "geography": "Geography", "country": "Country", "kind": "Kind", "paired_region": ["PairedRegion"], "restricted": true}]}`)
-				}))
-			})
-			It(`Invoke ListLocations successfully`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := schematicsService.ListLocations(nil)
-				Expect(operationErr).NotTo(BeNil())
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-
-				// Construct an instance of the ListLocationsOptions model
-				listLocationsOptionsModel := new(schematicsv1.ListLocationsOptions)
-				listLocationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-
-				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = schematicsService.ListLocations(listLocationsOptionsModel)
-				Expect(operationErr).To(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).ToNot(BeNil())
-
-			})
-			It(`Invoke ListLocations with error: Operation request error`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Construct an instance of the ListLocationsOptions model
-				listLocationsOptionsModel := new(schematicsv1.ListLocationsOptions)
-				listLocationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Invoke operation with empty URL (negative test)
-				err := schematicsService.SetServiceURL("")
-				Expect(err).To(BeNil())
-				result, response, operationErr := schematicsService.ListLocations(listLocationsOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-		Context(`Using mock server endpoint with missing response body`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Set success status code with no respoonse body
-					res.WriteHeader(200)
-				}))
-			})
-			It(`Invoke ListLocations successfully`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Construct an instance of the ListLocationsOptions model
-				listLocationsOptionsModel := new(schematicsv1.ListLocationsOptions)
-				listLocationsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-
-				// Invoke operation
-				result, response, operationErr := schematicsService.ListLocations(listLocationsOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -3079,7 +3079,7 @@ var _ = Describe(`SchematicsV1`, func() {
 
 					Expect(req.Header["Refresh_token"]).ToNot(BeNil())
 					Expect(req.Header["Refresh_token"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
-					// TODO: Add check for destroy_resources query parameter
+					Expect(req.URL.Query()["destroy_resources"]).To(Equal([]string{"testString"}))
 					// Sleep a short time to support a timeout test
 					time.Sleep(100 * time.Millisecond)
 
@@ -3100,9 +3100,9 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Construct an instance of the DeleteWorkspaceOptions model
 				deleteWorkspaceOptionsModel := new(schematicsv1.DeleteWorkspaceOptions)
-				deleteWorkspaceOptionsModel.WID = core.StringPtr("testString")
-				deleteWorkspaceOptionsModel.DestroyResources = core.BoolPtr(true)
 				deleteWorkspaceOptionsModel.RefreshToken = core.StringPtr("testString")
+				deleteWorkspaceOptionsModel.WID = core.StringPtr("testString")
+				deleteWorkspaceOptionsModel.DestroyResources = core.StringPtr("testString")
 				deleteWorkspaceOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
@@ -3141,7 +3141,7 @@ var _ = Describe(`SchematicsV1`, func() {
 
 					Expect(req.Header["Refresh_token"]).ToNot(BeNil())
 					Expect(req.Header["Refresh_token"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
-					// TODO: Add check for destroy_resources query parameter
+					Expect(req.URL.Query()["destroy_resources"]).To(Equal([]string{"testString"}))
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
@@ -3164,9 +3164,9 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Construct an instance of the DeleteWorkspaceOptions model
 				deleteWorkspaceOptionsModel := new(schematicsv1.DeleteWorkspaceOptions)
-				deleteWorkspaceOptionsModel.WID = core.StringPtr("testString")
-				deleteWorkspaceOptionsModel.DestroyResources = core.BoolPtr(true)
 				deleteWorkspaceOptionsModel.RefreshToken = core.StringPtr("testString")
+				deleteWorkspaceOptionsModel.WID = core.StringPtr("testString")
+				deleteWorkspaceOptionsModel.DestroyResources = core.StringPtr("testString")
 				deleteWorkspaceOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
@@ -3186,9 +3186,9 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Construct an instance of the DeleteWorkspaceOptions model
 				deleteWorkspaceOptionsModel := new(schematicsv1.DeleteWorkspaceOptions)
-				deleteWorkspaceOptionsModel.WID = core.StringPtr("testString")
-				deleteWorkspaceOptionsModel.DestroyResources = core.BoolPtr(true)
 				deleteWorkspaceOptionsModel.RefreshToken = core.StringPtr("testString")
+				deleteWorkspaceOptionsModel.WID = core.StringPtr("testString")
+				deleteWorkspaceOptionsModel.DestroyResources = core.StringPtr("testString")
 				deleteWorkspaceOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := schematicsService.SetServiceURL("")
@@ -3229,9 +3229,9 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Construct an instance of the DeleteWorkspaceOptions model
 				deleteWorkspaceOptionsModel := new(schematicsv1.DeleteWorkspaceOptions)
-				deleteWorkspaceOptionsModel.WID = core.StringPtr("testString")
-				deleteWorkspaceOptionsModel.DestroyResources = core.BoolPtr(true)
 				deleteWorkspaceOptionsModel.RefreshToken = core.StringPtr("testString")
+				deleteWorkspaceOptionsModel.WID = core.StringPtr("testString")
+				deleteWorkspaceOptionsModel.DestroyResources = core.StringPtr("testString")
 				deleteWorkspaceOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
@@ -16953,435 +16953,6 @@ var _ = Describe(`SchematicsV1`, func() {
 			})
 		})
 	})
-	Describe(`ListInventoryValues(listInventoryValuesOptions *ListInventoryValuesOptions) - Operation response error`, func() {
-		listInventoryValuesPath := "/v2/inventories/testString/variables"
-		Context(`Using mock server endpoint with invalid JSON response`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(listInventoryValuesPath))
-					Expect(req.Method).To(Equal("GET"))
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
-				}))
-			})
-			It(`Invoke ListInventoryValues with error: Operation response processing error`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Construct an instance of the ListInventoryValuesOptions model
-				listInventoryValuesOptionsModel := new(schematicsv1.ListInventoryValuesOptions)
-				listInventoryValuesOptionsModel.InventoryID = core.StringPtr("testString")
-				listInventoryValuesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := schematicsService.ListInventoryValues(listInventoryValuesOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-
-				// Enable retries and test again
-				schematicsService.EnableRetries(0, 0)
-				result, response, operationErr = schematicsService.ListInventoryValues(listInventoryValuesOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
-	Describe(`ListInventoryValues(listInventoryValuesOptions *ListInventoryValuesOptions)`, func() {
-		listInventoryValuesPath := "/v2/inventories/testString/variables"
-		Context(`Using mock server endpoint with timeout`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(listInventoryValuesPath))
-					Expect(req.Method).To(Equal("GET"))
-
-					// Sleep a short time to support a timeout test
-					time.Sleep(100 * time.Millisecond)
-
-					// Set mock response
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"total_count": 10, "limit": 5, "offset": 6, "inventories": [{"name": "Name", "id": "ID", "description": "Description", "location": "us-south", "resource_group": "ResourceGroup", "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "inventories_ini": "InventoriesIni", "resource_queries": ["ResourceQueries"]}]}`)
-				}))
-			})
-			It(`Invoke ListInventoryValues successfully with retries`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-				schematicsService.EnableRetries(0, 0)
-
-				// Construct an instance of the ListInventoryValuesOptions model
-				listInventoryValuesOptionsModel := new(schematicsv1.ListInventoryValuesOptions)
-				listInventoryValuesOptionsModel.InventoryID = core.StringPtr("testString")
-				listInventoryValuesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-
-				// Invoke operation with a Context to test a timeout error
-				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
-				defer cancelFunc()
-				_, _, operationErr := schematicsService.ListInventoryValuesWithContext(ctx, listInventoryValuesOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
-
-				// Disable retries and test again
-				schematicsService.DisableRetries()
-				result, response, operationErr := schematicsService.ListInventoryValues(listInventoryValuesOptionsModel)
-				Expect(operationErr).To(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).ToNot(BeNil())
-
-				// Re-test the timeout error with retries disabled
-				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
-				defer cancelFunc2()
-				_, _, operationErr = schematicsService.ListInventoryValuesWithContext(ctx, listInventoryValuesOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-		Context(`Using mock server endpoint`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(listInventoryValuesPath))
-					Expect(req.Method).To(Equal("GET"))
-
-					// Set mock response
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"total_count": 10, "limit": 5, "offset": 6, "inventories": [{"name": "Name", "id": "ID", "description": "Description", "location": "us-south", "resource_group": "ResourceGroup", "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "inventories_ini": "InventoriesIni", "resource_queries": ["ResourceQueries"]}]}`)
-				}))
-			})
-			It(`Invoke ListInventoryValues successfully`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := schematicsService.ListInventoryValues(nil)
-				Expect(operationErr).NotTo(BeNil())
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-
-				// Construct an instance of the ListInventoryValuesOptions model
-				listInventoryValuesOptionsModel := new(schematicsv1.ListInventoryValuesOptions)
-				listInventoryValuesOptionsModel.InventoryID = core.StringPtr("testString")
-				listInventoryValuesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-
-				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = schematicsService.ListInventoryValues(listInventoryValuesOptionsModel)
-				Expect(operationErr).To(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).ToNot(BeNil())
-
-			})
-			It(`Invoke ListInventoryValues with error: Operation validation and request error`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Construct an instance of the ListInventoryValuesOptions model
-				listInventoryValuesOptionsModel := new(schematicsv1.ListInventoryValuesOptions)
-				listInventoryValuesOptionsModel.InventoryID = core.StringPtr("testString")
-				listInventoryValuesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Invoke operation with empty URL (negative test)
-				err := schematicsService.SetServiceURL("")
-				Expect(err).To(BeNil())
-				result, response, operationErr := schematicsService.ListInventoryValues(listInventoryValuesOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-				// Construct a second instance of the ListInventoryValuesOptions model with no property values
-				listInventoryValuesOptionsModelNew := new(schematicsv1.ListInventoryValuesOptions)
-				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = schematicsService.ListInventoryValues(listInventoryValuesOptionsModelNew)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-		Context(`Using mock server endpoint with missing response body`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Set success status code with no respoonse body
-					res.WriteHeader(200)
-				}))
-			})
-			It(`Invoke ListInventoryValues successfully`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Construct an instance of the ListInventoryValuesOptions model
-				listInventoryValuesOptionsModel := new(schematicsv1.ListInventoryValuesOptions)
-				listInventoryValuesOptionsModel.InventoryID = core.StringPtr("testString")
-				listInventoryValuesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-
-				// Invoke operation
-				result, response, operationErr := schematicsService.ListInventoryValues(listInventoryValuesOptionsModel)
-				Expect(operationErr).To(BeNil())
-				Expect(response).ToNot(BeNil())
-
-				// Verify a nil result
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
-	Describe(`GetInventoryValue(getInventoryValueOptions *GetInventoryValueOptions) - Operation response error`, func() {
-		getInventoryValuePath := "/v2/inventories/testString/variables/testString"
-		Context(`Using mock server endpoint with invalid JSON response`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(getInventoryValuePath))
-					Expect(req.Method).To(Equal("GET"))
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
-				}))
-			})
-			It(`Invoke GetInventoryValue with error: Operation response processing error`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Construct an instance of the GetInventoryValueOptions model
-				getInventoryValueOptionsModel := new(schematicsv1.GetInventoryValueOptions)
-				getInventoryValueOptionsModel.InventoryID = core.StringPtr("testString")
-				getInventoryValueOptionsModel.VarName = core.StringPtr("testString")
-				getInventoryValueOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := schematicsService.GetInventoryValue(getInventoryValueOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-
-				// Enable retries and test again
-				schematicsService.EnableRetries(0, 0)
-				result, response, operationErr = schematicsService.GetInventoryValue(getInventoryValueOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
-	Describe(`GetInventoryValue(getInventoryValueOptions *GetInventoryValueOptions)`, func() {
-		getInventoryValuePath := "/v2/inventories/testString/variables/testString"
-		Context(`Using mock server endpoint with timeout`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(getInventoryValuePath))
-					Expect(req.Method).To(Equal("GET"))
-
-					// Sleep a short time to support a timeout test
-					time.Sleep(100 * time.Millisecond)
-
-					// Set mock response
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"name": "Name", "id": "ID", "description": "Description", "location": "us-south", "resource_group": "ResourceGroup", "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "inventories_ini": "InventoriesIni", "resource_queries": ["ResourceQueries"]}`)
-				}))
-			})
-			It(`Invoke GetInventoryValue successfully with retries`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-				schematicsService.EnableRetries(0, 0)
-
-				// Construct an instance of the GetInventoryValueOptions model
-				getInventoryValueOptionsModel := new(schematicsv1.GetInventoryValueOptions)
-				getInventoryValueOptionsModel.InventoryID = core.StringPtr("testString")
-				getInventoryValueOptionsModel.VarName = core.StringPtr("testString")
-				getInventoryValueOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-
-				// Invoke operation with a Context to test a timeout error
-				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
-				defer cancelFunc()
-				_, _, operationErr := schematicsService.GetInventoryValueWithContext(ctx, getInventoryValueOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
-
-				// Disable retries and test again
-				schematicsService.DisableRetries()
-				result, response, operationErr := schematicsService.GetInventoryValue(getInventoryValueOptionsModel)
-				Expect(operationErr).To(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).ToNot(BeNil())
-
-				// Re-test the timeout error with retries disabled
-				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
-				defer cancelFunc2()
-				_, _, operationErr = schematicsService.GetInventoryValueWithContext(ctx, getInventoryValueOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-		Context(`Using mock server endpoint`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(getInventoryValuePath))
-					Expect(req.Method).To(Equal("GET"))
-
-					// Set mock response
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"name": "Name", "id": "ID", "description": "Description", "location": "us-south", "resource_group": "ResourceGroup", "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "inventories_ini": "InventoriesIni", "resource_queries": ["ResourceQueries"]}`)
-				}))
-			})
-			It(`Invoke GetInventoryValue successfully`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := schematicsService.GetInventoryValue(nil)
-				Expect(operationErr).NotTo(BeNil())
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-
-				// Construct an instance of the GetInventoryValueOptions model
-				getInventoryValueOptionsModel := new(schematicsv1.GetInventoryValueOptions)
-				getInventoryValueOptionsModel.InventoryID = core.StringPtr("testString")
-				getInventoryValueOptionsModel.VarName = core.StringPtr("testString")
-				getInventoryValueOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-
-				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = schematicsService.GetInventoryValue(getInventoryValueOptionsModel)
-				Expect(operationErr).To(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).ToNot(BeNil())
-
-			})
-			It(`Invoke GetInventoryValue with error: Operation validation and request error`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Construct an instance of the GetInventoryValueOptions model
-				getInventoryValueOptionsModel := new(schematicsv1.GetInventoryValueOptions)
-				getInventoryValueOptionsModel.InventoryID = core.StringPtr("testString")
-				getInventoryValueOptionsModel.VarName = core.StringPtr("testString")
-				getInventoryValueOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Invoke operation with empty URL (negative test)
-				err := schematicsService.SetServiceURL("")
-				Expect(err).To(BeNil())
-				result, response, operationErr := schematicsService.GetInventoryValue(getInventoryValueOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-				// Construct a second instance of the GetInventoryValueOptions model with no property values
-				getInventoryValueOptionsModelNew := new(schematicsv1.GetInventoryValueOptions)
-				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = schematicsService.GetInventoryValue(getInventoryValueOptionsModelNew)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-		Context(`Using mock server endpoint with missing response body`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Set success status code with no respoonse body
-					res.WriteHeader(200)
-				}))
-			})
-			It(`Invoke GetInventoryValue successfully`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Construct an instance of the GetInventoryValueOptions model
-				getInventoryValueOptionsModel := new(schematicsv1.GetInventoryValueOptions)
-				getInventoryValueOptionsModel.InventoryID = core.StringPtr("testString")
-				getInventoryValueOptionsModel.VarName = core.StringPtr("testString")
-				getInventoryValueOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-
-				// Invoke operation
-				result, response, operationErr := schematicsService.GetInventoryValue(getInventoryValueOptionsModel)
-				Expect(operationErr).To(BeNil())
-				Expect(response).ToNot(BeNil())
-
-				// Verify a nil result
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
 	Describe(`ListResourceQuery(listResourceQueryOptions *ListResourceQueryOptions) - Operation response error`, func() {
 		listResourceQueryPath := "/v2/resources_query"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
@@ -20512,16 +20083,17 @@ var _ = Describe(`SchematicsV1`, func() {
 			})
 			It(`Invoke NewDeleteWorkspaceOptions successfully`, func() {
 				// Construct an instance of the DeleteWorkspaceOptions model
+				refreshToken := "testString"
 				wID := "testString"
-				deleteWorkspaceOptionsModel := schematicsService.NewDeleteWorkspaceOptions(wID)
-				deleteWorkspaceOptionsModel.SetWID("testString")
-				deleteWorkspaceOptionsModel.SetDestroyResources(true)
+				deleteWorkspaceOptionsModel := schematicsService.NewDeleteWorkspaceOptions(refreshToken, wID)
 				deleteWorkspaceOptionsModel.SetRefreshToken("testString")
+				deleteWorkspaceOptionsModel.SetWID("testString")
+				deleteWorkspaceOptionsModel.SetDestroyResources("testString")
 				deleteWorkspaceOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(deleteWorkspaceOptionsModel).ToNot(BeNil())
-				Expect(deleteWorkspaceOptionsModel.WID).To(Equal(core.StringPtr("testString")))
-				Expect(deleteWorkspaceOptionsModel.DestroyResources).To(Equal(core.BoolPtr(true)))
 				Expect(deleteWorkspaceOptionsModel.RefreshToken).To(Equal(core.StringPtr("testString")))
+				Expect(deleteWorkspaceOptionsModel.WID).To(Equal(core.StringPtr("testString")))
+				Expect(deleteWorkspaceOptionsModel.DestroyResources).To(Equal(core.StringPtr("testString")))
 				Expect(deleteWorkspaceOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewDestroyWorkspaceCommandOptions successfully`, func() {
@@ -20596,19 +20168,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				Expect(getInventoryOptionsModel).ToNot(BeNil())
 				Expect(getInventoryOptionsModel.InventoryID).To(Equal(core.StringPtr("testString")))
 				Expect(getInventoryOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
-			})
-			It(`Invoke NewGetInventoryValueOptions successfully`, func() {
-				// Construct an instance of the GetInventoryValueOptions model
-				inventoryID := "testString"
-				varName := "testString"
-				getInventoryValueOptionsModel := schematicsService.NewGetInventoryValueOptions(inventoryID, varName)
-				getInventoryValueOptionsModel.SetInventoryID("testString")
-				getInventoryValueOptionsModel.SetVarName("testString")
-				getInventoryValueOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
-				Expect(getInventoryValueOptionsModel).ToNot(BeNil())
-				Expect(getInventoryValueOptionsModel.InventoryID).To(Equal(core.StringPtr("testString")))
-				Expect(getInventoryValueOptionsModel.VarName).To(Equal(core.StringPtr("testString")))
-				Expect(getInventoryValueOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewGetJobOptions successfully`, func() {
 				// Construct an instance of the GetJobOptions model
@@ -20868,16 +20427,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				Expect(listInventoriesOptionsModel.Sort).To(Equal(core.StringPtr("testString")))
 				Expect(listInventoriesOptionsModel.Profile).To(Equal(core.StringPtr("ids")))
 				Expect(listInventoriesOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
-			})
-			It(`Invoke NewListInventoryValuesOptions successfully`, func() {
-				// Construct an instance of the ListInventoryValuesOptions model
-				inventoryID := "testString"
-				listInventoryValuesOptionsModel := schematicsService.NewListInventoryValuesOptions(inventoryID)
-				listInventoryValuesOptionsModel.SetInventoryID("testString")
-				listInventoryValuesOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
-				Expect(listInventoryValuesOptionsModel).ToNot(BeNil())
-				Expect(listInventoryValuesOptionsModel.InventoryID).To(Equal(core.StringPtr("testString")))
-				Expect(listInventoryValuesOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewListJobLogsOptions successfully`, func() {
 				// Construct an instance of the ListJobLogsOptions model
