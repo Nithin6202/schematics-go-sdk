@@ -17,9 +17,10 @@
 package schematicsv1_test
 
 import (
+	"testing"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"testing"
 )
 
 func TestSchematicsV1(t *testing.T) {
