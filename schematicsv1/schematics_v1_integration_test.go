@@ -50,7 +50,7 @@ func createSampleWorkspaceWithoutRepoURL() *schematicsv1.WorkspaceResponse {
 
 	templateSourceDataRequestModel := &schematicsv1.TemplateSourceDataRequest{
 		Folder: core.StringPtr("."),
-		Type:   core.StringPtr("terraform_v0.11.14"),
+		Type:   core.StringPtr("terraform_v0.13.7"),
 		Variablestore: []schematicsv1.WorkspaceVariableRequest{
 			{
 				Name:  core.StringPtr("variable_name1"),
@@ -67,7 +67,7 @@ func createSampleWorkspaceWithoutRepoURL() *schematicsv1.WorkspaceResponse {
 		Description:  core.StringPtr(""),
 		Name:         core.StringPtr("myworkspace"),
 		TemplateData: []schematicsv1.TemplateSourceDataRequest{*templateSourceDataRequestModel},
-		Type:         []string{"terraform_v0.11.14"},
+		Type:         []string{"terraform_v0.13.7"},
 		Tags:         []string{},
 	}
 
@@ -164,7 +164,7 @@ func uploadTarFile(ws *schematicsv1.WorkspaceResponse) *schematicsv1.TemplateRep
 	schematicsService, _ := schematicsv1.NewSchematicsV1UsingExternalConfig(schematicsServiceOptions)
 
 	fileDir, _ := os.Getwd()
-	fileName := "tf_cloudless_sleepy_git_archive.tar"
+	fileName := "tf_cloudless_sleepy13_public_archive.tar"
 	filePath := path.Join(fileDir, "tarfiles", fileName)
 	fileReader, _ := os.Open(filePath)
 	fileReaderWrapper := ioutil.NopCloser(fileReader)
@@ -296,6 +296,61 @@ func applyWorkspaceByIDWithoutWait(wid *string) *string {
 	}
 
 	return applyResult.Activityid
+
+}
+
+func createSampleInventoryWithoutInventoryIni() *schematicsv1.InventoryResourceRecord {
+	schematicsServiceOptions := &schematicsv1.SchematicsV1Options{}
+
+	schematicsService, err := schematicsv1.NewSchematicsV1UsingExternalConfig(schematicsServiceOptions)
+
+	createInventoryOptions := &schematicsv1.CreateInventoryOptions{
+		Name:        core.StringPtr("myinventory"),
+		Description: core.StringPtr("test inventory"),
+	}
+
+	inventoryResourceRecord, detailedResponse, err := schematicsService.CreateInventory(createInventoryOptions)
+	if err != nil {
+		fmt.Printf("Failed to create the inventory : %v and the response is %s", err, detailedResponse)
+		panic(err)
+	}
+
+	return inventoryResourceRecord
+}
+
+func addInventoryIni(inventory *schematicsv1.InventoryResourceRecord) *schematicsv1.InventoryResourceRecord {
+	schematicsServiceOptions := &schematicsv1.SchematicsV1Options{}
+
+	schematicsService, err := schematicsv1.NewSchematicsV1UsingExternalConfig(schematicsServiceOptions)
+
+	replaceInventoryOptions := &schematicsv1.ReplaceInventoryOptions{
+		InventoryID:    inventory.ID,
+		Name:           core.StringPtr("my_updated_inventory"),
+		InventoriesIni: core.StringPtr("[webserverhost] \n 172.16.0.4"),
+	}
+
+	inventoryResourceRecord, detailedResponse, err := schematicsService.ReplaceInventory(replaceInventoryOptions)
+	if err != nil {
+		fmt.Printf("Failed to update the inventory : %v and the response is %s", err, detailedResponse)
+		panic(err)
+	}
+
+	return inventoryResourceRecord
+}
+
+func deleteInventoryByID(inventory_id *string) {
+
+	schematicsServiceOptions := &schematicsv1.SchematicsV1Options{}
+
+	schematicsService, err := schematicsv1.NewSchematicsV1UsingExternalConfig(schematicsServiceOptions)
+
+	detailedResponse, err := schematicsService.DeleteInventory(&schematicsv1.DeleteInventoryOptions{
+		InventoryID: inventory_id,
+	})
+
+	if err != nil {
+		fmt.Printf("Failed to delete the inventory : %v and the response is %s", err, detailedResponse)
+	}
 
 }
 
@@ -460,7 +515,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 
 			templateSourceDataRequestModel := &schematicsv1.TemplateSourceDataRequest{
 				Folder: core.StringPtr("."),
-				Type:   core.StringPtr("terraform_v0.11.14"),
+				Type:   core.StringPtr("terraform_v0.13.7"),
 				Variablestore: []schematicsv1.WorkspaceVariableRequest{
 					{
 						Name:  core.StringPtr("variable_name1"),
@@ -478,7 +533,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 				Name:         core.StringPtr("myworkspace"),
 				TemplateData: []schematicsv1.TemplateSourceDataRequest{*templateSourceDataRequestModel},
 				TemplateRef:  core.StringPtr("testString"),
-				Type:         []string{"terraform_v0.11.14"},
+				Type:         []string{"terraform_v0.13.7"},
 			}
 
 			workspaceResponse, response, err := schematicsService.CreateWorkspace(createWorkspaceOptions)
@@ -537,7 +592,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 		It(`ReplaceWorkspace(replaceWorkspaceOptions *ReplaceWorkspaceOptions)`, func() {
 
 			templateRepoRequestUpdateModel := &schematicsv1.TemplateRepoUpdateRequest{
-				URL:     core.StringPtr("https://github.com/ptaube/tf_cloudless_sleepy"),
+				URL:     core.StringPtr("https://github.com/sanjana-soni16/tf_cloudless_sleepy_1.1"),
 				RepoURL: core.StringPtr("literal string"),
 			}
 
@@ -545,7 +600,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 				WID:          ws.ID,
 				Description:  core.StringPtr(""),
 				Name:         core.StringPtr("myworkspace"),
-				Type:         []string{"terraform_v0.12.20"},
+				Type:         []string{"terraform_v1.1.5"},
 				TemplateRepo: templateRepoRequestUpdateModel,
 				CatalogRef: &schematicsv1.CatalogRef{
 					ItemID:          core.StringPtr("literal string"),
@@ -565,7 +620,6 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 			Expect(workspaceResponse).ToNot(BeNil())
 
 			waitForWorkspaceStatus(ws.ID, "INACTIVE")
-
 		})
 
 		AfterEach(func() {
@@ -588,7 +642,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 				WID:         ws.ID,
 				Description: core.StringPtr("Updated"),
 				Name:        core.StringPtr("myworkspace"),
-				Type:        []string{"terraform_v0.12.20"},
+				Type:        []string{"terraform_v0.13.7"},
 				WorkspaceStatus: &schematicsv1.WorkspaceStatusUpdateRequest{
 					Frozen:   core.BoolPtr(false),
 					FrozenBy: core.StringPtr("<frozen_by>"),
@@ -600,7 +654,6 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(detailedResponse.StatusCode).To(Equal(200))
 			Expect(workspaceResponse).ToNot(BeNil())
-
 		})
 
 		AfterEach(func() {
@@ -619,7 +672,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 		It(`UploadTemplateTar(uploadTemplateTarOptions *UploadTemplateTarOptions)`, func() {
 
 			fileDir, _ := os.Getwd()
-			fileName := "tf_cloudless_sleepy_git_archive.tar"
+			fileName := "tf_cloudless_sleepy13_public_archive.tar"
 			filePath := path.Join(fileDir, "tarfiles", fileName)
 			fileReader, _ := os.Open(filePath)
 			fileReaderWrapper := ioutil.NopCloser(fileReader) // no-op Close method wrapping the provided Reader
@@ -665,7 +718,6 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(templateReadme).ToNot(BeNil())
-
 		})
 		AfterEach(func() {
 			deleteWorkspaceByID(ws.ID)
@@ -693,7 +745,6 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(workspaceActivities).ToNot(BeNil())
-
 		})
 		AfterEach(func() {
 			deleteWorkspaceByID(ws.ID)
@@ -717,13 +768,11 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 				WID:        ws.ID,
 				ActivityID: activityID,
 			}
-
 			workspaceActivity, response, err := schematicsService.GetWorkspaceActivity(getWorkspaceActivityOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(workspaceActivity).ToNot(BeNil())
-
 		})
 		AfterEach(func() {
 			deleteWorkspaceByID(ws.ID)
@@ -746,7 +795,6 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 				WID:          ws.ID,
 				RefreshToken: &refresh_token,
 			}
-
 			workspaceActivityApplyResult, response, err := schematicsService.ApplyWorkspaceCommand(applyWorkspaceCommandOptions)
 
 			Expect(err).To(BeNil())
@@ -819,6 +867,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 			ws = createSampleWorkspaceWithoutRepoURL()
+			uploadTarFile(ws)
 		})
 
 		It(`DestroyWorkspaceCommand(destroyWorkspaceCommandOptions *DestroyWorkspaceCommandOptions)`, func() {
@@ -827,7 +876,6 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 				WID:          ws.ID,
 				RefreshToken: &refresh_token,
 			}
-
 			workspaceActivityDestroyResult, response, err := schematicsService.DestroyWorkspaceCommand(destroyWorkspaceCommandOptions)
 
 			Expect(err).To(BeNil())
@@ -1119,11 +1167,11 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 				TID: ws.TemplateData[0].ID,
 			}
 
-			_, response, _ := schematicsService.GetWorkspaceTemplateState(getWorkspaceTemplateStateOptions)
+			templateStateStore, response, err := schematicsService.GetWorkspaceTemplateState(getWorkspaceTemplateStateOptions)
 
-			//Expect(err).To(BeNil())
+			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(response.RawResult).ToNot(BeNil())
+			Expect(templateStateStore).ToNot(BeNil())
 
 		})
 		AfterEach(func() {
@@ -1253,6 +1301,35 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 			deleteWorkspaceByID(ws.ID)
 		})
 	})
+
+	Describe(`GetInventoryDefinition - Get an inventory definition with detailed profile`, func() {
+		var inventory *schematicsv1.InventoryResourceRecord
+
+		BeforeEach(func() {
+			shouldSkipTest()
+			inventory = createSampleInventoryWithoutInventoryIni()
+			inventory = addInventoryIni(inventory)
+		})
+		It(`GetInventory(getInventoryOptions *GetInventoryOptions)`, func() {
+
+			getInventoryOptions := &schematicsv1.GetInventoryOptions{
+				InventoryID: inventory.ID,
+				Profile:     core.StringPtr("detailed"),
+			}
+
+			inventoryResourceRecord, response, err := schematicsService.GetInventory(getInventoryOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(inventoryResourceRecord).ToNot(BeNil())
+			Expect(*inventoryResourceRecord.InventoriesIni).ToNot(BeNil())
+
+		})
+		AfterEach(func() {
+			deleteInventoryByID(inventory.ID)
+		})
+	})
+
 })
 
 //
