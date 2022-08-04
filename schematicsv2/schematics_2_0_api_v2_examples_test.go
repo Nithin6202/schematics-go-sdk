@@ -20,7 +20,6 @@
 package schematics20apiv2_test
 
 import (
-	"com.ibm.cloud/schematics20apiv2"
 	"encoding/json"
 	"fmt"
 	"github.com/IBM/go-sdk-core/v5/core"
