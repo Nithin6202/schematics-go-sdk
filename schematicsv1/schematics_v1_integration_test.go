@@ -217,6 +217,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 				Offset: core.Int64Ptr(int64(0)),
 				Limit: core.Int64Ptr(int64(100)),
 				Profile: core.StringPtr("ids"),
+				ResourceGroup: core.StringPtr("testString"),
 			}
 
 			workspaceResponseList, response, err := schematicsService.ListWorkspaces(listWorkspacesOptions)
@@ -233,7 +234,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 		It(`CreateWorkspace(createWorkspaceOptions *CreateWorkspaceOptions)`, func() {
 			serviceExtensionsModel := &schematicsv1.ServiceExtensions{
 				Name: core.StringPtr("flavor"),
-				Value: core.StringPtr("standard"),
+				Value: core.StringPtr("testString"),
 				Type: core.StringPtr("string"),
 			}
 
@@ -377,7 +378,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 		It(`ReplaceWorkspace(replaceWorkspaceOptions *ReplaceWorkspaceOptions)`, func() {
 			serviceExtensionsModel := &schematicsv1.ServiceExtensions{
 				Name: core.StringPtr("flavor"),
-				Value: core.StringPtr("standard"),
+				Value: core.StringPtr("testString"),
 				Type: core.StringPtr("string"),
 			}
 
@@ -508,7 +509,7 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 		It(`UpdateWorkspace(updateWorkspaceOptions *UpdateWorkspaceOptions)`, func() {
 			serviceExtensionsModel := &schematicsv1.ServiceExtensions{
 				Name: core.StringPtr("flavor"),
-				Value: core.StringPtr("standard"),
+				Value: core.StringPtr("testString"),
 				Type: core.StringPtr("string"),
 			}
 
@@ -2660,7 +2661,6 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 		})
 		It(`ListAgentData(listAgentDataOptions *ListAgentDataOptions)`, func() {
 			listAgentDataOptions := &schematicsv1.ListAgentDataOptions{
-				XFeatureAgents: core.BoolPtr(true),
 				Offset: core.Int64Ptr(int64(0)),
 				Limit: core.Int64Ptr(int64(100)),
 				Profile: core.StringPtr("summary"),
@@ -2735,7 +2735,6 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 			}
 
 			createAgentDataOptions := &schematicsv1.CreateAgentDataOptions{
-				XFeatureAgents: core.BoolPtr(true),
 				Name: core.StringPtr("MyDevAgent"),
 				ResourceGroup: core.StringPtr("Default"),
 				Version: core.StringPtr("v1.0.0"),
@@ -2764,7 +2763,6 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 		It(`GetAgentData(getAgentDataOptions *GetAgentDataOptions)`, func() {
 			getAgentDataOptions := &schematicsv1.GetAgentDataOptions{
 				AgentID: core.StringPtr("testString"),
-				XFeatureAgents: core.BoolPtr(true),
 				Profile: core.StringPtr("summary"),
 			}
 
@@ -2837,7 +2835,6 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 
 			updateAgentDataOptions := &schematicsv1.UpdateAgentDataOptions{
 				AgentID: core.StringPtr("testString"),
-				XFeatureAgents: core.BoolPtr(true),
 				Name: core.StringPtr("MyDevAgent"),
 				ResourceGroup: core.StringPtr("Default"),
 				Version: core.StringPtr("v1.0.0"),
@@ -2868,10 +2865,10 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 				AgentID: core.StringPtr("testString"),
 			}
 
-			agentPrsJob, response, err := schematicsService.GetPrsAgentJob(getPrsAgentJobOptions)
+			result, response, err := schematicsService.GetPrsAgentJob(getPrsAgentJobOptions)
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(202))
-			Expect(agentPrsJob).ToNot(BeNil())
+			Expect(result).ToNot(BeNil())
 		})
 	})
 
@@ -2885,10 +2882,10 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 				Force: core.BoolPtr(true),
 			}
 
-			agentPrsJob, response, err := schematicsService.PrsAgentJob(prsAgentJobOptions)
+			result, response, err := schematicsService.PrsAgentJob(prsAgentJobOptions)
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(202))
-			Expect(agentPrsJob).ToNot(BeNil())
+			Expect(result).ToNot(BeNil())
 		})
 	})
 
@@ -2901,10 +2898,10 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 				AgentID: core.StringPtr("testString"),
 			}
 
-			agentHealthJob, response, err := schematicsService.GetHealthCheckAgentJob(getHealthCheckAgentJobOptions)
+			result, response, err := schematicsService.GetHealthCheckAgentJob(getHealthCheckAgentJobOptions)
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(202))
-			Expect(agentHealthJob).ToNot(BeNil())
+			Expect(result).ToNot(BeNil())
 		})
 	})
 
@@ -2918,10 +2915,10 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 				Force: core.BoolPtr(true),
 			}
 
-			agentHealthJob, response, err := schematicsService.HealthCheckAgentJob(healthCheckAgentJobOptions)
+			result, response, err := schematicsService.HealthCheckAgentJob(healthCheckAgentJobOptions)
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(202))
-			Expect(agentHealthJob).ToNot(BeNil())
+			Expect(result).ToNot(BeNil())
 		})
 	})
 
@@ -2934,10 +2931,10 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 				AgentID: core.StringPtr("testString"),
 			}
 
-			agentDeployJob, response, err := schematicsService.GetDeployAgentJob(getDeployAgentJobOptions)
+			result, response, err := schematicsService.GetDeployAgentJob(getDeployAgentJobOptions)
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(202))
-			Expect(agentDeployJob).ToNot(BeNil())
+			Expect(result).ToNot(BeNil())
 		})
 	})
 
@@ -2951,10 +2948,10 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 				Force: core.BoolPtr(true),
 			}
 
-			agentDeployJob, response, err := schematicsService.DeployAgentJob(deployAgentJobOptions)
+			result, response, err := schematicsService.DeployAgentJob(deployAgentJobOptions)
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(202))
-			Expect(agentDeployJob).ToNot(BeNil())
+			Expect(result).ToNot(BeNil())
 		})
 	})
 
@@ -3323,7 +3320,6 @@ var _ = Describe(`SchematicsV1 Integration Tests`, func() {
 		It(`DeleteAgentData(deleteAgentDataOptions *DeleteAgentDataOptions)`, func() {
 			deleteAgentDataOptions := &schematicsv1.DeleteAgentDataOptions{
 				AgentID: core.StringPtr("testString"),
-				XFeatureAgents: core.BoolPtr(true),
 			}
 
 			response, err := schematicsService.DeleteAgentData(deleteAgentDataOptions)

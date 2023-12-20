@@ -533,6 +533,9 @@ func (schematics *SchematicsV1) ListWorkspacesWithContext(ctx context.Context, l
 	if listWorkspacesOptions.Profile != nil {
 		builder.AddQuery("profile", fmt.Sprint(*listWorkspacesOptions.Profile))
 	}
+	if listWorkspacesOptions.ResourceGroup != nil {
+		builder.AddQuery("resource_group", fmt.Sprint(*listWorkspacesOptions.ResourceGroup))
+	}
 
 	request, err := builder.Build()
 	if err != nil {
@@ -5779,10 +5782,6 @@ func (schematics *SchematicsV1) ListAgentData(listAgentDataOptions *ListAgentDat
 
 // ListAgentDataWithContext is an alternate form of the ListAgentData method which supports a Context parameter
 func (schematics *SchematicsV1) ListAgentDataWithContext(ctx context.Context, listAgentDataOptions *ListAgentDataOptions) (result *AgentDataList, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(listAgentDataOptions, "listAgentDataOptions cannot be nil")
-	if err != nil {
-		return
-	}
 	err = core.ValidateStruct(listAgentDataOptions, "listAgentDataOptions")
 	if err != nil {
 		return
@@ -5805,9 +5804,6 @@ func (schematics *SchematicsV1) ListAgentDataWithContext(ctx context.Context, li
 		builder.AddHeader(headerName, headerValue)
 	}
 	builder.AddHeader("Accept", "application/json")
-	if listAgentDataOptions.XFeatureAgents != nil {
-		builder.AddHeader("X-Feature-Agents", fmt.Sprint(*listAgentDataOptions.XFeatureAgents))
-	}
 
 	if listAgentDataOptions.Offset != nil {
 		builder.AddQuery("offset", fmt.Sprint(*listAgentDataOptions.Offset))
@@ -5898,9 +5894,6 @@ func (schematics *SchematicsV1) CreateAgentDataWithContext(ctx context.Context, 
 	}
 	builder.AddHeader("Accept", "application/json")
 	builder.AddHeader("Content-Type", "application/json")
-	if createAgentDataOptions.XFeatureAgents != nil {
-		builder.AddHeader("X-Feature-Agents", fmt.Sprint(*createAgentDataOptions.XFeatureAgents))
-	}
 
 	body := make(map[string]interface{})
 	if createAgentDataOptions.Name != nil {
@@ -6014,9 +6007,6 @@ func (schematics *SchematicsV1) GetAgentDataWithContext(ctx context.Context, get
 		builder.AddHeader(headerName, headerValue)
 	}
 	builder.AddHeader("Accept", "application/json")
-	if getAgentDataOptions.XFeatureAgents != nil {
-		builder.AddHeader("X-Feature-Agents", fmt.Sprint(*getAgentDataOptions.XFeatureAgents))
-	}
 
 	if getAgentDataOptions.Profile != nil {
 		builder.AddQuery("profile", fmt.Sprint(*getAgentDataOptions.Profile))
@@ -6092,9 +6082,6 @@ func (schematics *SchematicsV1) UpdateAgentDataWithContext(ctx context.Context, 
 	}
 	builder.AddHeader("Accept", "application/json")
 	builder.AddHeader("Content-Type", "application/json")
-	if updateAgentDataOptions.XFeatureAgents != nil {
-		builder.AddHeader("X-Feature-Agents", fmt.Sprint(*updateAgentDataOptions.XFeatureAgents))
-	}
 
 	body := make(map[string]interface{})
 	if updateAgentDataOptions.Name != nil {
@@ -6206,9 +6193,6 @@ func (schematics *SchematicsV1) DeleteAgentDataWithContext(ctx context.Context, 
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
-	if deleteAgentDataOptions.XFeatureAgents != nil {
-		builder.AddHeader("X-Feature-Agents", fmt.Sprint(*deleteAgentDataOptions.XFeatureAgents))
-	}
 
 	request, err := builder.Build()
 	if err != nil {
@@ -6230,12 +6214,12 @@ func (schematics *SchematicsV1) DeleteAgentDataWithContext(ctx context.Context, 
 //   Schematics support generic authorization for its resources. For more information, about Schematics access and
 // permissions, see [Schematics service access
 //    roles and required permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
-func (schematics *SchematicsV1) GetPrsAgentJob(getPrsAgentJobOptions *GetPrsAgentJobOptions) (result *AgentPRSJob, response *core.DetailedResponse, err error) {
+func (schematics *SchematicsV1) GetPrsAgentJob(getPrsAgentJobOptions *GetPrsAgentJobOptions) (result *string, response *core.DetailedResponse, err error) {
 	return schematics.GetPrsAgentJobWithContext(context.Background(), getPrsAgentJobOptions)
 }
 
 // GetPrsAgentJobWithContext is an alternate form of the GetPrsAgentJob method which supports a Context parameter
-func (schematics *SchematicsV1) GetPrsAgentJobWithContext(ctx context.Context, getPrsAgentJobOptions *GetPrsAgentJobOptions) (result *AgentPRSJob, response *core.DetailedResponse, err error) {
+func (schematics *SchematicsV1) GetPrsAgentJobWithContext(ctx context.Context, getPrsAgentJobOptions *GetPrsAgentJobOptions) (result *string, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getPrsAgentJobOptions, "getPrsAgentJobOptions cannot be nil")
 	if err != nil {
 		return
@@ -6272,18 +6256,7 @@ func (schematics *SchematicsV1) GetPrsAgentJobWithContext(ctx context.Context, g
 		return
 	}
 
-	var rawResponse map[string]json.RawMessage
-	response, err = schematics.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	if rawResponse != nil {
-		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalAgentPRSJob)
-		if err != nil {
-			return
-		}
-		response.Result = result
-	}
+	response, err = schematics.Service.Request(request, &result)
 
 	return
 }
@@ -6295,12 +6268,12 @@ func (schematics *SchematicsV1) GetPrsAgentJobWithContext(ctx context.Context, g
 // <h3>Authorization</h3> Schematics support generic authorization for its resources. For more information, about
 // Schematics access and permissions, see [Schematics service access
 //    roles and required permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
-func (schematics *SchematicsV1) PrsAgentJob(prsAgentJobOptions *PrsAgentJobOptions) (result *AgentPRSJob, response *core.DetailedResponse, err error) {
+func (schematics *SchematicsV1) PrsAgentJob(prsAgentJobOptions *PrsAgentJobOptions) (result *string, response *core.DetailedResponse, err error) {
 	return schematics.PrsAgentJobWithContext(context.Background(), prsAgentJobOptions)
 }
 
 // PrsAgentJobWithContext is an alternate form of the PrsAgentJob method which supports a Context parameter
-func (schematics *SchematicsV1) PrsAgentJobWithContext(ctx context.Context, prsAgentJobOptions *PrsAgentJobOptions) (result *AgentPRSJob, response *core.DetailedResponse, err error) {
+func (schematics *SchematicsV1) PrsAgentJobWithContext(ctx context.Context, prsAgentJobOptions *PrsAgentJobOptions) (result *string, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(prsAgentJobOptions, "prsAgentJobOptions cannot be nil")
 	if err != nil {
 		return
@@ -6341,18 +6314,7 @@ func (schematics *SchematicsV1) PrsAgentJobWithContext(ctx context.Context, prsA
 		return
 	}
 
-	var rawResponse map[string]json.RawMessage
-	response, err = schematics.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	if rawResponse != nil {
-		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalAgentPRSJob)
-		if err != nil {
-			return
-		}
-		response.Result = result
-	}
+	response, err = schematics.Service.Request(request, &result)
 
 	return
 }
@@ -6365,12 +6327,12 @@ func (schematics *SchematicsV1) PrsAgentJobWithContext(ctx context.Context, prsA
 //  Schematics support generic authorization for its resources. For more information, about Schematics access and
 // permissions, see [Schematics service access
 //    roles and required permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
-func (schematics *SchematicsV1) GetHealthCheckAgentJob(getHealthCheckAgentJobOptions *GetHealthCheckAgentJobOptions) (result *AgentHealthJob, response *core.DetailedResponse, err error) {
+func (schematics *SchematicsV1) GetHealthCheckAgentJob(getHealthCheckAgentJobOptions *GetHealthCheckAgentJobOptions) (result *string, response *core.DetailedResponse, err error) {
 	return schematics.GetHealthCheckAgentJobWithContext(context.Background(), getHealthCheckAgentJobOptions)
 }
 
 // GetHealthCheckAgentJobWithContext is an alternate form of the GetHealthCheckAgentJob method which supports a Context parameter
-func (schematics *SchematicsV1) GetHealthCheckAgentJobWithContext(ctx context.Context, getHealthCheckAgentJobOptions *GetHealthCheckAgentJobOptions) (result *AgentHealthJob, response *core.DetailedResponse, err error) {
+func (schematics *SchematicsV1) GetHealthCheckAgentJobWithContext(ctx context.Context, getHealthCheckAgentJobOptions *GetHealthCheckAgentJobOptions) (result *string, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getHealthCheckAgentJobOptions, "getHealthCheckAgentJobOptions cannot be nil")
 	if err != nil {
 		return
@@ -6407,18 +6369,7 @@ func (schematics *SchematicsV1) GetHealthCheckAgentJobWithContext(ctx context.Co
 		return
 	}
 
-	var rawResponse map[string]json.RawMessage
-	response, err = schematics.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	if rawResponse != nil {
-		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalAgentHealthJob)
-		if err != nil {
-			return
-		}
-		response.Result = result
-	}
+	response, err = schematics.Service.Request(request, &result)
 
 	return
 }
@@ -6429,12 +6380,12 @@ func (schematics *SchematicsV1) GetHealthCheckAgentJobWithContext(ctx context.Co
 // <h3>Authorization</h3> Schematics support generic authorization for its resources. For more information, about
 // Schematics access and permissions, see [Schematics service access
 //    roles and required permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
-func (schematics *SchematicsV1) HealthCheckAgentJob(healthCheckAgentJobOptions *HealthCheckAgentJobOptions) (result *AgentHealthJob, response *core.DetailedResponse, err error) {
+func (schematics *SchematicsV1) HealthCheckAgentJob(healthCheckAgentJobOptions *HealthCheckAgentJobOptions) (result *string, response *core.DetailedResponse, err error) {
 	return schematics.HealthCheckAgentJobWithContext(context.Background(), healthCheckAgentJobOptions)
 }
 
 // HealthCheckAgentJobWithContext is an alternate form of the HealthCheckAgentJob method which supports a Context parameter
-func (schematics *SchematicsV1) HealthCheckAgentJobWithContext(ctx context.Context, healthCheckAgentJobOptions *HealthCheckAgentJobOptions) (result *AgentHealthJob, response *core.DetailedResponse, err error) {
+func (schematics *SchematicsV1) HealthCheckAgentJobWithContext(ctx context.Context, healthCheckAgentJobOptions *HealthCheckAgentJobOptions) (result *string, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(healthCheckAgentJobOptions, "healthCheckAgentJobOptions cannot be nil")
 	if err != nil {
 		return
@@ -6475,18 +6426,7 @@ func (schematics *SchematicsV1) HealthCheckAgentJobWithContext(ctx context.Conte
 		return
 	}
 
-	var rawResponse map[string]json.RawMessage
-	response, err = schematics.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	if rawResponse != nil {
-		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalAgentHealthJob)
-		if err != nil {
-			return
-		}
-		response.Result = result
-	}
+	response, err = schematics.Service.Request(request, &result)
 
 	return
 }
@@ -6498,12 +6438,12 @@ func (schematics *SchematicsV1) HealthCheckAgentJobWithContext(ctx context.Conte
 // <h3>Authorization</h3> Schematics support generic authorization for its resources. For more information, about
 // Schematics access and permissions, see [Schematics service access
 //    roles and required permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
-func (schematics *SchematicsV1) GetDeployAgentJob(getDeployAgentJobOptions *GetDeployAgentJobOptions) (result *AgentDeployJob, response *core.DetailedResponse, err error) {
+func (schematics *SchematicsV1) GetDeployAgentJob(getDeployAgentJobOptions *GetDeployAgentJobOptions) (result *string, response *core.DetailedResponse, err error) {
 	return schematics.GetDeployAgentJobWithContext(context.Background(), getDeployAgentJobOptions)
 }
 
 // GetDeployAgentJobWithContext is an alternate form of the GetDeployAgentJob method which supports a Context parameter
-func (schematics *SchematicsV1) GetDeployAgentJobWithContext(ctx context.Context, getDeployAgentJobOptions *GetDeployAgentJobOptions) (result *AgentDeployJob, response *core.DetailedResponse, err error) {
+func (schematics *SchematicsV1) GetDeployAgentJobWithContext(ctx context.Context, getDeployAgentJobOptions *GetDeployAgentJobOptions) (result *string, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getDeployAgentJobOptions, "getDeployAgentJobOptions cannot be nil")
 	if err != nil {
 		return
@@ -6540,18 +6480,7 @@ func (schematics *SchematicsV1) GetDeployAgentJobWithContext(ctx context.Context
 		return
 	}
 
-	var rawResponse map[string]json.RawMessage
-	response, err = schematics.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	if rawResponse != nil {
-		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalAgentDeployJob)
-		if err != nil {
-			return
-		}
-		response.Result = result
-	}
+	response, err = schematics.Service.Request(request, &result)
 
 	return
 }
@@ -6562,12 +6491,12 @@ func (schematics *SchematicsV1) GetDeployAgentJobWithContext(ctx context.Context
 // <h3>Authorization</h3> Schematics support generic authorization for its resources. For more information, about
 // Schematics access and permissions, see [Schematics service access
 //    roles and required permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access#access-roles).
-func (schematics *SchematicsV1) DeployAgentJob(deployAgentJobOptions *DeployAgentJobOptions) (result *AgentDeployJob, response *core.DetailedResponse, err error) {
+func (schematics *SchematicsV1) DeployAgentJob(deployAgentJobOptions *DeployAgentJobOptions) (result *string, response *core.DetailedResponse, err error) {
 	return schematics.DeployAgentJobWithContext(context.Background(), deployAgentJobOptions)
 }
 
 // DeployAgentJobWithContext is an alternate form of the DeployAgentJob method which supports a Context parameter
-func (schematics *SchematicsV1) DeployAgentJobWithContext(ctx context.Context, deployAgentJobOptions *DeployAgentJobOptions) (result *AgentDeployJob, response *core.DetailedResponse, err error) {
+func (schematics *SchematicsV1) DeployAgentJobWithContext(ctx context.Context, deployAgentJobOptions *DeployAgentJobOptions) (result *string, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(deployAgentJobOptions, "deployAgentJobOptions cannot be nil")
 	if err != nil {
 		return
@@ -6608,18 +6537,7 @@ func (schematics *SchematicsV1) DeployAgentJobWithContext(ctx context.Context, d
 		return
 	}
 
-	var rawResponse map[string]json.RawMessage
-	response, err = schematics.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	if rawResponse != nil {
-		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalAgentDeployJob)
-		if err != nil {
-			return
-		}
-		response.Result = result
-	}
+	response, err = schematics.Service.Request(request, &result)
 
 	return
 }
@@ -8392,7 +8310,7 @@ type AgentDataRecentDeployJob struct {
 	// Agent version.
 	AgentVersion *string `json:"agent_version,omitempty"`
 
-	// Final result of the agent deployment job.
+	// Status of Jobs.
 	StatusCode *string `json:"status_code,omitempty"`
 
 	// The outcome of the agent deployment job, in a formatted log string.
@@ -8403,12 +8321,16 @@ type AgentDataRecentDeployJob struct {
 }
 
 // Constants associated with the AgentDataRecentDeployJob.StatusCode property.
-// Final result of the agent deployment job.
+// Status of Jobs.
 const (
-	AgentDataRecentDeployJob_StatusCode_Failed = "failed"
-	AgentDataRecentDeployJob_StatusCode_InProgress = "in-progress"
-	AgentDataRecentDeployJob_StatusCode_Pending = "pending"
-	AgentDataRecentDeployJob_StatusCode_Success = "success"
+	AgentDataRecentDeployJob_StatusCode_JobCancelled = "job_cancelled"
+	AgentDataRecentDeployJob_StatusCode_JobFailed = "job_failed"
+	AgentDataRecentDeployJob_StatusCode_JobFinished = "job_finished"
+	AgentDataRecentDeployJob_StatusCode_JobInProgress = "job_in_progress"
+	AgentDataRecentDeployJob_StatusCode_JobPending = "job_pending"
+	AgentDataRecentDeployJob_StatusCode_JobReadyToExecute = "job_ready_to_execute"
+	AgentDataRecentDeployJob_StatusCode_JobStopInProgress = "job_stop_in_progress"
+	AgentDataRecentDeployJob_StatusCode_JobStopped = "job_stopped"
 )
 
 // UnmarshalAgentDataRecentDeployJob unmarshals an instance of AgentDataRecentDeployJob from the specified map of raw messages.
@@ -8471,7 +8393,7 @@ type AgentDataRecentHealthJob struct {
 	// Agent version.
 	AgentVersion *string `json:"agent_version,omitempty"`
 
-	// Final result of the health-check job.
+	// Status of Jobs.
 	StatusCode *string `json:"status_code,omitempty"`
 
 	// The outcome of the health-check job, in a formatted log string.
@@ -8482,12 +8404,16 @@ type AgentDataRecentHealthJob struct {
 }
 
 // Constants associated with the AgentDataRecentHealthJob.StatusCode property.
-// Final result of the health-check job.
+// Status of Jobs.
 const (
-	AgentDataRecentHealthJob_StatusCode_Failed = "failed"
-	AgentDataRecentHealthJob_StatusCode_InProgress = "in-progress"
-	AgentDataRecentHealthJob_StatusCode_Pending = "pending"
-	AgentDataRecentHealthJob_StatusCode_Success = "success"
+	AgentDataRecentHealthJob_StatusCode_JobCancelled = "job_cancelled"
+	AgentDataRecentHealthJob_StatusCode_JobFailed = "job_failed"
+	AgentDataRecentHealthJob_StatusCode_JobFinished = "job_finished"
+	AgentDataRecentHealthJob_StatusCode_JobInProgress = "job_in_progress"
+	AgentDataRecentHealthJob_StatusCode_JobPending = "job_pending"
+	AgentDataRecentHealthJob_StatusCode_JobReadyToExecute = "job_ready_to_execute"
+	AgentDataRecentHealthJob_StatusCode_JobStopInProgress = "job_stop_in_progress"
+	AgentDataRecentHealthJob_StatusCode_JobStopped = "job_stopped"
 )
 
 // UnmarshalAgentDataRecentHealthJob unmarshals an instance of AgentDataRecentHealthJob from the specified map of raw messages.
@@ -8546,7 +8472,7 @@ type AgentDataRecentPrsJob struct {
 	// Agent version.
 	AgentVersion *string `json:"agent_version,omitempty"`
 
-	// Final result of the pre-requisite scanner job.
+	// Status of Jobs.
 	StatusCode *string `json:"status_code,omitempty"`
 
 	// The outcome of the pre-requisite scanner job, in a formatted log string.
@@ -8557,174 +8483,21 @@ type AgentDataRecentPrsJob struct {
 }
 
 // Constants associated with the AgentDataRecentPrsJob.StatusCode property.
-// Final result of the pre-requisite scanner job.
+// Status of Jobs.
 const (
-	AgentDataRecentPrsJob_StatusCode_Failed = "failed"
-	AgentDataRecentPrsJob_StatusCode_InProgress = "in-progress"
-	AgentDataRecentPrsJob_StatusCode_Pending = "pending"
-	AgentDataRecentPrsJob_StatusCode_Success = "success"
+	AgentDataRecentPrsJob_StatusCode_JobCancelled = "job_cancelled"
+	AgentDataRecentPrsJob_StatusCode_JobFailed = "job_failed"
+	AgentDataRecentPrsJob_StatusCode_JobFinished = "job_finished"
+	AgentDataRecentPrsJob_StatusCode_JobInProgress = "job_in_progress"
+	AgentDataRecentPrsJob_StatusCode_JobPending = "job_pending"
+	AgentDataRecentPrsJob_StatusCode_JobReadyToExecute = "job_ready_to_execute"
+	AgentDataRecentPrsJob_StatusCode_JobStopInProgress = "job_stop_in_progress"
+	AgentDataRecentPrsJob_StatusCode_JobStopped = "job_stopped"
 )
 
 // UnmarshalAgentDataRecentPrsJob unmarshals an instance of AgentDataRecentPrsJob from the specified map of raw messages.
 func UnmarshalAgentDataRecentPrsJob(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(AgentDataRecentPrsJob)
-	err = core.UnmarshalPrimitive(m, "agent_id", &obj.AgentID)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "job_id", &obj.JobID)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "updated_at", &obj.UpdatedAt)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "updated_by", &obj.UpdatedBy)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "agent_version", &obj.AgentVersion)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "status_code", &obj.StatusCode)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "status_message", &obj.StatusMessage)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "log_url", &obj.LogURL)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// AgentDeployJob : Post-installations checks for Agent health.
-type AgentDeployJob struct {
-	// Id of the agent.
-	AgentID *string `json:"agent_id,omitempty"`
-
-	// Job Id.
-	JobID *string `json:"job_id,omitempty"`
-
-	// The agent deploy job updation time.
-	UpdatedAt *strfmt.DateTime `json:"updated_at,omitempty"`
-
-	// Email address of user who ran the agent deploy job.
-	UpdatedBy *string `json:"updated_by,omitempty"`
-
-	// True, when the same version of the agent was redeployed.
-	IsRedeployed *bool `json:"is_redeployed,omitempty"`
-
-	// Agent version.
-	AgentVersion *string `json:"agent_version,omitempty"`
-
-	// Final result of the agent deployment job.
-	StatusCode *string `json:"status_code,omitempty"`
-
-	// The outcome of the agent deployment job, in a formatted log string.
-	StatusMessage *string `json:"status_message,omitempty"`
-
-	// URL to the full agent deployment job logs.
-	LogURL *string `json:"log_url,omitempty"`
-}
-
-// Constants associated with the AgentDeployJob.StatusCode property.
-// Final result of the agent deployment job.
-const (
-	AgentDeployJob_StatusCode_Failed = "failed"
-	AgentDeployJob_StatusCode_InProgress = "in-progress"
-	AgentDeployJob_StatusCode_Pending = "pending"
-	AgentDeployJob_StatusCode_Success = "success"
-)
-
-// UnmarshalAgentDeployJob unmarshals an instance of AgentDeployJob from the specified map of raw messages.
-func UnmarshalAgentDeployJob(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(AgentDeployJob)
-	err = core.UnmarshalPrimitive(m, "agent_id", &obj.AgentID)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "job_id", &obj.JobID)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "updated_at", &obj.UpdatedAt)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "updated_by", &obj.UpdatedBy)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "is_redeployed", &obj.IsRedeployed)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "agent_version", &obj.AgentVersion)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "status_code", &obj.StatusCode)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "status_message", &obj.StatusMessage)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "log_url", &obj.LogURL)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// AgentHealthJob : Agent health check.
-type AgentHealthJob struct {
-	// Id of the agent.
-	AgentID *string `json:"agent_id,omitempty"`
-
-	// Job Id.
-	JobID *string `json:"job_id,omitempty"`
-
-	// The agent health check job updation time.
-	UpdatedAt *strfmt.DateTime `json:"updated_at,omitempty"`
-
-	// Email address of user who ran the agent health check job.
-	UpdatedBy *string `json:"updated_by,omitempty"`
-
-	// Agent version.
-	AgentVersion *string `json:"agent_version,omitempty"`
-
-	// Final result of the health-check job.
-	StatusCode *string `json:"status_code,omitempty"`
-
-	// The outcome of the health-check job, in a formatted log string.
-	StatusMessage *string `json:"status_message,omitempty"`
-
-	// URL to the full health-check job logs.
-	LogURL *string `json:"log_url,omitempty"`
-}
-
-// Constants associated with the AgentHealthJob.StatusCode property.
-// Final result of the health-check job.
-const (
-	AgentHealthJob_StatusCode_Failed = "failed"
-	AgentHealthJob_StatusCode_InProgress = "in-progress"
-	AgentHealthJob_StatusCode_Pending = "pending"
-	AgentHealthJob_StatusCode_Success = "success"
-)
-
-// UnmarshalAgentHealthJob unmarshals an instance of AgentHealthJob from the specified map of raw messages.
-func UnmarshalAgentHealthJob(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(AgentHealthJob)
 	err = core.UnmarshalPrimitive(m, "agent_id", &obj.AgentID)
 	if err != nil {
 		return
@@ -9015,81 +8788,6 @@ func UnmarshalAgentMetadataInfo(m map[string]json.RawMessage, result interface{}
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "value", &obj.Value)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// AgentPRSJob : Run a pre-requisite scanner for deploying agent.
-type AgentPRSJob struct {
-	// Id of the agent.
-	AgentID *string `json:"agent_id,omitempty"`
-
-	// Job Id.
-	JobID *string `json:"job_id,omitempty"`
-
-	// The agent prs job updation time.
-	UpdatedAt *strfmt.DateTime `json:"updated_at,omitempty"`
-
-	// Email address of user who ran the agent prs job.
-	UpdatedBy *string `json:"updated_by,omitempty"`
-
-	// Agent version.
-	AgentVersion *string `json:"agent_version,omitempty"`
-
-	// Final result of the pre-requisite scanner job.
-	StatusCode *string `json:"status_code,omitempty"`
-
-	// The outcome of the pre-requisite scanner job, in a formatted log string.
-	StatusMessage *string `json:"status_message,omitempty"`
-
-	// URL to the full pre-requisite scanner job logs.
-	LogURL *string `json:"log_url,omitempty"`
-}
-
-// Constants associated with the AgentPRSJob.StatusCode property.
-// Final result of the pre-requisite scanner job.
-const (
-	AgentPRSJob_StatusCode_Failed = "failed"
-	AgentPRSJob_StatusCode_InProgress = "in-progress"
-	AgentPRSJob_StatusCode_Pending = "pending"
-	AgentPRSJob_StatusCode_Success = "success"
-)
-
-// UnmarshalAgentPRSJob unmarshals an instance of AgentPRSJob from the specified map of raw messages.
-func UnmarshalAgentPRSJob(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(AgentPRSJob)
-	err = core.UnmarshalPrimitive(m, "agent_id", &obj.AgentID)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "job_id", &obj.JobID)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "updated_at", &obj.UpdatedAt)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "updated_by", &obj.UpdatedBy)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "agent_version", &obj.AgentVersion)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "status_code", &obj.StatusCode)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "status_message", &obj.StatusMessage)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "log_url", &obj.LogURL)
 	if err != nil {
 		return
 	}
@@ -10989,9 +10687,6 @@ func (options *CreateActionOptions) SetHeaders(param map[string]string) *CreateA
 
 // CreateAgentDataOptions : The CreateAgentData options.
 type CreateAgentDataOptions struct {
-	// New Feature Flag.
-	XFeatureAgents *bool `json:"X-Feature-Agents" validate:"required"`
-
 	// The name of the agent (must be unique, for an account).
 	Name *string `json:"name" validate:"required"`
 
@@ -11046,9 +10741,8 @@ const (
 )
 
 // NewCreateAgentDataOptions : Instantiate CreateAgentDataOptions
-func (*SchematicsV1) NewCreateAgentDataOptions(xFeatureAgents bool, name string, resourceGroup string, version string, schematicsLocation string, agentLocation string, agentInfrastructure *AgentInfrastructure) *CreateAgentDataOptions {
+func (*SchematicsV1) NewCreateAgentDataOptions(name string, resourceGroup string, version string, schematicsLocation string, agentLocation string, agentInfrastructure *AgentInfrastructure) *CreateAgentDataOptions {
 	return &CreateAgentDataOptions{
-		XFeatureAgents: core.BoolPtr(xFeatureAgents),
 		Name: core.StringPtr(name),
 		ResourceGroup: core.StringPtr(resourceGroup),
 		Version: core.StringPtr(version),
@@ -11056,12 +10750,6 @@ func (*SchematicsV1) NewCreateAgentDataOptions(xFeatureAgents bool, name string,
 		AgentLocation: core.StringPtr(agentLocation),
 		AgentInfrastructure: agentInfrastructure,
 	}
-}
-
-// SetXFeatureAgents : Allow user to set XFeatureAgents
-func (_options *CreateAgentDataOptions) SetXFeatureAgents(xFeatureAgents bool) *CreateAgentDataOptions {
-	_options.XFeatureAgents = core.BoolPtr(xFeatureAgents)
-	return _options
 }
 
 // SetName : Allow user to set Name
@@ -12236,30 +11924,20 @@ type DeleteAgentDataOptions struct {
 	// Agent ID to get the details of agent.
 	AgentID *string `json:"agent_id" validate:"required,ne="`
 
-	// New Feature Flag.
-	XFeatureAgents *bool `json:"X-Feature-Agents" validate:"required"`
-
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewDeleteAgentDataOptions : Instantiate DeleteAgentDataOptions
-func (*SchematicsV1) NewDeleteAgentDataOptions(agentID string, xFeatureAgents bool) *DeleteAgentDataOptions {
+func (*SchematicsV1) NewDeleteAgentDataOptions(agentID string) *DeleteAgentDataOptions {
 	return &DeleteAgentDataOptions{
 		AgentID: core.StringPtr(agentID),
-		XFeatureAgents: core.BoolPtr(xFeatureAgents),
 	}
 }
 
 // SetAgentID : Allow user to set AgentID
 func (_options *DeleteAgentDataOptions) SetAgentID(agentID string) *DeleteAgentDataOptions {
 	_options.AgentID = core.StringPtr(agentID)
-	return _options
-}
-
-// SetXFeatureAgents : Allow user to set XFeatureAgents
-func (_options *DeleteAgentDataOptions) SetXFeatureAgents(xFeatureAgents bool) *DeleteAgentDataOptions {
-	_options.XFeatureAgents = core.BoolPtr(xFeatureAgents)
 	return _options
 }
 
@@ -13055,9 +12733,6 @@ type GetAgentDataOptions struct {
 	// Agent ID to get the details of agent.
 	AgentID *string `json:"agent_id" validate:"required,ne="`
 
-	// New Feature Flag.
-	XFeatureAgents *bool `json:"X-Feature-Agents" validate:"required"`
-
 	// Level of details returned by the get method.
 	Profile *string `json:"profile,omitempty"`
 
@@ -13074,22 +12749,15 @@ const (
 )
 
 // NewGetAgentDataOptions : Instantiate GetAgentDataOptions
-func (*SchematicsV1) NewGetAgentDataOptions(agentID string, xFeatureAgents bool) *GetAgentDataOptions {
+func (*SchematicsV1) NewGetAgentDataOptions(agentID string) *GetAgentDataOptions {
 	return &GetAgentDataOptions{
 		AgentID: core.StringPtr(agentID),
-		XFeatureAgents: core.BoolPtr(xFeatureAgents),
 	}
 }
 
 // SetAgentID : Allow user to set AgentID
 func (_options *GetAgentDataOptions) SetAgentID(agentID string) *GetAgentDataOptions {
 	_options.AgentID = core.StringPtr(agentID)
-	return _options
-}
-
-// SetXFeatureAgents : Allow user to set XFeatureAgents
-func (_options *GetAgentDataOptions) SetXFeatureAgents(xFeatureAgents bool) *GetAgentDataOptions {
-	_options.XFeatureAgents = core.BoolPtr(xFeatureAgents)
 	return _options
 }
 
@@ -17046,9 +16714,6 @@ func (options *ListActionsOptions) SetHeaders(param map[string]string) *ListActi
 
 // ListAgentDataOptions : The ListAgentData options.
 type ListAgentDataOptions struct {
-	// This flag must be true.
-	XFeatureAgents *bool `json:"X-Feature-Agents" validate:"required"`
-
 	// The starting position of the item in the list of items. For example, if you have three workspaces in your account,
 	// the first workspace is assigned position number 0, the second workspace is assigned position number 1, and so forth.
 	// If you have 6 workspaces and you want to list the details for workspaces `2-6`, enter 1. To limit the number of
@@ -17087,16 +16752,8 @@ const (
 )
 
 // NewListAgentDataOptions : Instantiate ListAgentDataOptions
-func (*SchematicsV1) NewListAgentDataOptions(xFeatureAgents bool) *ListAgentDataOptions {
-	return &ListAgentDataOptions{
-		XFeatureAgents: core.BoolPtr(xFeatureAgents),
-	}
-}
-
-// SetXFeatureAgents : Allow user to set XFeatureAgents
-func (_options *ListAgentDataOptions) SetXFeatureAgents(xFeatureAgents bool) *ListAgentDataOptions {
-	_options.XFeatureAgents = core.BoolPtr(xFeatureAgents)
-	return _options
+func (*SchematicsV1) NewListAgentDataOptions() *ListAgentDataOptions {
+	return &ListAgentDataOptions{}
 }
 
 // SetOffset : Allow user to set Offset
@@ -17473,7 +17130,7 @@ type ListKmsOptions struct {
 	// The location of the Resource.
 	Location *string `json:"location" validate:"required"`
 
-	// The resource group (by default, fetch from all resource groups).
+	// The resource group (by default, fetch from all resource groups) name or ID.
 	ResourceGroup *string `json:"resource_group,omitempty"`
 
 	// The maximum number of items that you want to list. The number must be a positive integer between 1 and 2000. If no
@@ -17778,6 +17435,9 @@ type ListWorkspacesOptions struct {
 	// Level of details returned by the get method.
 	Profile *string `json:"profile,omitempty"`
 
+	// The resource group (by default, fetch from all resource groups) name or ID.
+	ResourceGroup *string `json:"resource_group,omitempty"`
+
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
@@ -17809,6 +17469,12 @@ func (_options *ListWorkspacesOptions) SetLimit(limit int64) *ListWorkspacesOpti
 // SetProfile : Allow user to set Profile
 func (_options *ListWorkspacesOptions) SetProfile(profile string) *ListWorkspacesOptions {
 	_options.Profile = core.StringPtr(profile)
+	return _options
+}
+
+// SetResourceGroup : Allow user to set ResourceGroup
+func (_options *ListWorkspacesOptions) SetResourceGroup(resourceGroup string) *ListWorkspacesOptions {
+	_options.ResourceGroup = core.StringPtr(resourceGroup)
 	return _options
 }
 
@@ -18296,6 +17962,9 @@ type PolicyLite struct {
 
 	// The policy updation time.
 	UpdatedAt *strfmt.DateTime `json:"updated_at,omitempty"`
+
+	// The user who updated the policy.
+	UpdatedBy *string `json:"updated_by,omitempty"`
 }
 
 // Constants associated with the PolicyLite.Location property.
@@ -18368,6 +18037,10 @@ func UnmarshalPolicyLite(m map[string]json.RawMessage, result interface{}) (err 
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "updated_at", &obj.UpdatedAt)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "updated_by", &obj.UpdatedBy)
 	if err != nil {
 		return
 	}
@@ -19935,8 +19608,8 @@ type ServiceExtensions struct {
 	// Name of the Service Data.
 	Name *string `json:"name,omitempty"`
 
-	// Value of the Service Data.
-	Value *string `json:"value,omitempty"`
+	// Values of service data.
+	Value interface{} `json:"value,omitempty"`
 
 	// Type of the value string, int, bool.
 	Type *string `json:"type,omitempty"`
@@ -21194,9 +20867,6 @@ type UpdateAgentDataOptions struct {
 	// Agent ID to get the details of agent.
 	AgentID *string `json:"agent_id" validate:"required,ne="`
 
-	// New Feature Flag.
-	XFeatureAgents *bool `json:"X-Feature-Agents" validate:"required"`
-
 	// The name of the agent (must be unique, for an account).
 	Name *string `json:"name" validate:"required"`
 
@@ -21251,10 +20921,9 @@ const (
 )
 
 // NewUpdateAgentDataOptions : Instantiate UpdateAgentDataOptions
-func (*SchematicsV1) NewUpdateAgentDataOptions(agentID string, xFeatureAgents bool, name string, resourceGroup string, version string, schematicsLocation string, agentLocation string, agentInfrastructure *AgentInfrastructure) *UpdateAgentDataOptions {
+func (*SchematicsV1) NewUpdateAgentDataOptions(agentID string, name string, resourceGroup string, version string, schematicsLocation string, agentLocation string, agentInfrastructure *AgentInfrastructure) *UpdateAgentDataOptions {
 	return &UpdateAgentDataOptions{
 		AgentID: core.StringPtr(agentID),
-		XFeatureAgents: core.BoolPtr(xFeatureAgents),
 		Name: core.StringPtr(name),
 		ResourceGroup: core.StringPtr(resourceGroup),
 		Version: core.StringPtr(version),
@@ -21267,12 +20936,6 @@ func (*SchematicsV1) NewUpdateAgentDataOptions(agentID string, xFeatureAgents bo
 // SetAgentID : Allow user to set AgentID
 func (_options *UpdateAgentDataOptions) SetAgentID(agentID string) *UpdateAgentDataOptions {
 	_options.AgentID = core.StringPtr(agentID)
-	return _options
-}
-
-// SetXFeatureAgents : Allow user to set XFeatureAgents
-func (_options *UpdateAgentDataOptions) SetXFeatureAgents(xFeatureAgents bool) *UpdateAgentDataOptions {
-	_options.XFeatureAgents = core.BoolPtr(xFeatureAgents)
 	return _options
 }
 
@@ -23076,6 +22739,9 @@ type WorkspaceResponse struct {
 	// The associate cart order ID.
 	CartID *string `json:"cart_id,omitempty"`
 
+	// The associate project ID.
+	ProjectID *string `json:"project_id,omitempty"`
+
 	// Name of the last Action performed on workspace.
 	LastActionName *string `json:"last_action_name,omitempty"`
 
@@ -23187,6 +22853,10 @@ func UnmarshalWorkspaceResponse(m map[string]json.RawMessage, result interface{}
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "cart_id", &obj.CartID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "project_id", &obj.ProjectID)
 	if err != nil {
 		return
 	}

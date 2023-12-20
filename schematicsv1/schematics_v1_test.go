@@ -1431,6 +1431,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					Expect(req.URL.Query()["offset"]).To(Equal([]string{fmt.Sprint(int64(0))}))
 					Expect(req.URL.Query()["limit"]).To(Equal([]string{fmt.Sprint(int64(100))}))
 					Expect(req.URL.Query()["profile"]).To(Equal([]string{"ids"}))
+					Expect(req.URL.Query()["resource_group"]).To(Equal([]string{"testString"}))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
 					fmt.Fprint(res, `} this is not valid json {`)
@@ -1449,6 +1450,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				listWorkspacesOptionsModel.Offset = core.Int64Ptr(int64(0))
 				listWorkspacesOptionsModel.Limit = core.Int64Ptr(int64(100))
 				listWorkspacesOptionsModel.Profile = core.StringPtr("ids")
+				listWorkspacesOptionsModel.ResourceGroup = core.StringPtr("testString")
 				listWorkspacesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
 				result, response, operationErr := schematicsService.ListWorkspaces(listWorkspacesOptionsModel)
@@ -1482,13 +1484,14 @@ var _ = Describe(`SchematicsV1`, func() {
 					Expect(req.URL.Query()["offset"]).To(Equal([]string{fmt.Sprint(int64(0))}))
 					Expect(req.URL.Query()["limit"]).To(Equal([]string{fmt.Sprint(int64(100))}))
 					Expect(req.URL.Query()["profile"]).To(Equal([]string{"ids"}))
+					Expect(req.URL.Query()["resource_group"]).To(Equal([]string{"testString"}))
 					// Sleep a short time to support a timeout test
 					time.Sleep(100 * time.Millisecond)
 
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"count": 5, "limit": 5, "offset": 6, "workspaces": [{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "standard", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}]}`)
+					fmt.Fprintf(res, "%s", `{"count": 5, "limit": 5, "offset": 6, "workspaces": [{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "anyValue", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "project_id": "ProjectID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}]}`)
 				}))
 			})
 			It(`Invoke ListWorkspaces successfully with retries`, func() {
@@ -1505,6 +1508,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				listWorkspacesOptionsModel.Offset = core.Int64Ptr(int64(0))
 				listWorkspacesOptionsModel.Limit = core.Int64Ptr(int64(100))
 				listWorkspacesOptionsModel.Profile = core.StringPtr("ids")
+				listWorkspacesOptionsModel.ResourceGroup = core.StringPtr("testString")
 				listWorkspacesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
@@ -1544,10 +1548,11 @@ var _ = Describe(`SchematicsV1`, func() {
 					Expect(req.URL.Query()["offset"]).To(Equal([]string{fmt.Sprint(int64(0))}))
 					Expect(req.URL.Query()["limit"]).To(Equal([]string{fmt.Sprint(int64(100))}))
 					Expect(req.URL.Query()["profile"]).To(Equal([]string{"ids"}))
+					Expect(req.URL.Query()["resource_group"]).To(Equal([]string{"testString"}))
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"count": 5, "limit": 5, "offset": 6, "workspaces": [{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "standard", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}]}`)
+					fmt.Fprintf(res, "%s", `{"count": 5, "limit": 5, "offset": 6, "workspaces": [{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "anyValue", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "project_id": "ProjectID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}]}`)
 				}))
 			})
 			It(`Invoke ListWorkspaces successfully`, func() {
@@ -1569,6 +1574,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				listWorkspacesOptionsModel.Offset = core.Int64Ptr(int64(0))
 				listWorkspacesOptionsModel.Limit = core.Int64Ptr(int64(100))
 				listWorkspacesOptionsModel.Profile = core.StringPtr("ids")
+				listWorkspacesOptionsModel.ResourceGroup = core.StringPtr("testString")
 				listWorkspacesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
@@ -1591,6 +1597,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				listWorkspacesOptionsModel.Offset = core.Int64Ptr(int64(0))
 				listWorkspacesOptionsModel.Limit = core.Int64Ptr(int64(100))
 				listWorkspacesOptionsModel.Profile = core.StringPtr("ids")
+				listWorkspacesOptionsModel.ResourceGroup = core.StringPtr("testString")
 				listWorkspacesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := schematicsService.SetServiceURL("")
@@ -1627,6 +1634,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				listWorkspacesOptionsModel.Offset = core.Int64Ptr(int64(0))
 				listWorkspacesOptionsModel.Limit = core.Int64Ptr(int64(100))
 				listWorkspacesOptionsModel.Profile = core.StringPtr("ids")
+				listWorkspacesOptionsModel.ResourceGroup = core.StringPtr("testString")
 				listWorkspacesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
@@ -1670,7 +1678,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the ServiceExtensions model
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 
 				// Construct an instance of the CatalogRef model
@@ -1836,7 +1844,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(201)
-					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "standard", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
+					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "anyValue", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "project_id": "ProjectID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
 				}))
 			})
 			It(`Invoke CreateWorkspace successfully with retries`, func() {
@@ -1851,7 +1859,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the ServiceExtensions model
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 
 				// Construct an instance of the CatalogRef model
@@ -2020,7 +2028,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(201)
-					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "standard", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
+					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "anyValue", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "project_id": "ProjectID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
 				}))
 			})
 			It(`Invoke CreateWorkspace successfully`, func() {
@@ -2040,7 +2048,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the ServiceExtensions model
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 
 				// Construct an instance of the CatalogRef model
@@ -2172,7 +2180,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the ServiceExtensions model
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 
 				// Construct an instance of the CatalogRef model
@@ -2318,7 +2326,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the ServiceExtensions model
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 
 				// Construct an instance of the CatalogRef model
@@ -2507,7 +2515,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "standard", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
+					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "anyValue", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "project_id": "ProjectID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
 				}))
 			})
 			It(`Invoke GetWorkspace successfully with retries`, func() {
@@ -2561,7 +2569,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "standard", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
+					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "anyValue", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "project_id": "ProjectID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
 				}))
 			})
 			It(`Invoke GetWorkspace successfully`, func() {
@@ -2685,7 +2693,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the ServiceExtensions model
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 
 				// Construct an instance of the CatalogRef model
@@ -2854,7 +2862,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "standard", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
+					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "anyValue", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "project_id": "ProjectID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
 				}))
 			})
 			It(`Invoke ReplaceWorkspace successfully with retries`, func() {
@@ -2869,7 +2877,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the ServiceExtensions model
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 
 				// Construct an instance of the CatalogRef model
@@ -3041,7 +3049,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "standard", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
+					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "anyValue", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "project_id": "ProjectID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
 				}))
 			})
 			It(`Invoke ReplaceWorkspace successfully`, func() {
@@ -3061,7 +3069,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the ServiceExtensions model
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 
 				// Construct an instance of the CatalogRef model
@@ -3196,7 +3204,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the ServiceExtensions model
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 
 				// Construct an instance of the CatalogRef model
@@ -3352,7 +3360,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the ServiceExtensions model
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 
 				// Construct an instance of the CatalogRef model
@@ -3689,7 +3697,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the ServiceExtensions model
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 
 				// Construct an instance of the CatalogRef model
@@ -3855,7 +3863,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "standard", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
+					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "anyValue", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "project_id": "ProjectID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
 				}))
 			})
 			It(`Invoke UpdateWorkspace successfully with retries`, func() {
@@ -3870,7 +3878,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the ServiceExtensions model
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 
 				// Construct an instance of the CatalogRef model
@@ -4039,7 +4047,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "standard", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
+					fmt.Fprintf(res, "%s", `{"applied_shareddata_ids": ["AppliedShareddataIds"], "catalog_ref": {"dry_run": true, "owning_account": "OwningAccount", "item_icon_url": "ItemIconURL", "item_id": "ItemID", "item_name": "ItemName", "item_readme_url": "ItemReadmeURL", "item_url": "ItemURL", "launch_url": "LaunchURL", "offering_version": "OfferingVersion", "service_extensions": [{"name": "flavor", "value": "anyValue", "type": "string"}]}, "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "crn": "Crn", "dependencies": {"parents": ["Parents"], "children": ["Children"]}, "description": "Description", "id": "ID", "last_health_check_at": "2019-01-01T12:00:00.000Z", "location": "Location", "name": "Name", "resource_group": "ResourceGroup", "runtime_data": [{"engine_cmd": "EngineCmd", "engine_name": "EngineName", "engine_version": "EngineVersion", "id": "ID", "log_store_url": "LogStoreURL", "output_values": [{"anyKey": "anyValue"}], "resources": [[{"anyKey": "anyValue"}]], "state_store_url": "StateStoreURL"}], "shared_data": {"cluster_id": "ClusterID", "cluster_name": "ClusterName", "entitlement_keys": [{"anyKey": "anyValue"}], "namespace": "Namespace", "region": "Region", "resource_group_id": "ResourceGroupID"}, "status": "Status", "tags": ["Tags"], "template_data": [{"env_values": [{"hidden": true, "name": "Name", "secure": true, "value": "Value"}], "folder": "Folder", "compact": false, "has_githubtoken": true, "id": "ID", "type": "Type", "uninstall_script_name": "UninstallScriptName", "values": "Values", "values_metadata": [{"anyKey": "anyValue"}], "values_url": "ValuesURL", "variablestore": [{"description": "Description", "name": "Name", "secure": true, "type": "Type", "value": "Value"}]}], "template_ref": "TemplateRef", "template_repo": {"branch": "Branch", "full_url": "FullURL", "has_uploadedgitrepotar": false, "release": "Release", "repo_sha_value": "RepoShaValue", "repo_url": "RepoURL", "url": "URL"}, "type": ["Type"], "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "cart_id": "CartID", "project_id": "ProjectID", "last_action_name": "LastActionName", "last_activity_id": "LastActivityID", "last_job": {"job_id": "JobID", "job_name": "JobName", "job_status": "JobStatus"}, "workspace_status": {"frozen": true, "frozen_at": "2019-01-01T12:00:00.000Z", "frozen_by": "FrozenBy", "locked": true, "locked_by": "LockedBy", "locked_time": "2019-01-01T12:00:00.000Z"}, "workspace_status_msg": {"status_code": "StatusCode", "status_msg": "StatusMsg"}, "agent": {"id": "ID", "name": "Name", "assignment_policy_id": "AssignmentPolicyID"}}`)
 				}))
 			})
 			It(`Invoke UpdateWorkspace successfully`, func() {
@@ -4059,7 +4067,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the ServiceExtensions model
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 
 				// Construct an instance of the CatalogRef model
@@ -4193,7 +4201,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the ServiceExtensions model
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 
 				// Construct an instance of the CatalogRef model
@@ -4348,7 +4356,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the ServiceExtensions model
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 
 				// Construct an instance of the CatalogRef model
@@ -22761,8 +22769,6 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Verify the contents of the request
 					Expect(req.URL.EscapedPath()).To(Equal(listAgentDataPath))
 					Expect(req.Method).To(Equal("GET"))
-					Expect(req.Header["X-Feature-Agents"]).ToNot(BeNil())
-					Expect(req.Header["X-Feature-Agents"][0]).To(Equal(fmt.Sprintf("%v", true)))
 					Expect(req.URL.Query()["offset"]).To(Equal([]string{fmt.Sprint(int64(0))}))
 					Expect(req.URL.Query()["limit"]).To(Equal([]string{fmt.Sprint(int64(100))}))
 					Expect(req.URL.Query()["profile"]).To(Equal([]string{"summary"}))
@@ -22782,7 +22788,6 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Construct an instance of the ListAgentDataOptions model
 				listAgentDataOptionsModel := new(schematicsv1.ListAgentDataOptions)
-				listAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				listAgentDataOptionsModel.Offset = core.Int64Ptr(int64(0))
 				listAgentDataOptionsModel.Limit = core.Int64Ptr(int64(100))
 				listAgentDataOptionsModel.Profile = core.StringPtr("summary")
@@ -22817,8 +22822,6 @@ var _ = Describe(`SchematicsV1`, func() {
 					Expect(req.URL.EscapedPath()).To(Equal(listAgentDataPath))
 					Expect(req.Method).To(Equal("GET"))
 
-					Expect(req.Header["X-Feature-Agents"]).ToNot(BeNil())
-					Expect(req.Header["X-Feature-Agents"][0]).To(Equal(fmt.Sprintf("%v", true)))
 					Expect(req.URL.Query()["offset"]).To(Equal([]string{fmt.Sprint(int64(0))}))
 					Expect(req.URL.Query()["limit"]).To(Equal([]string{fmt.Sprint(int64(100))}))
 					Expect(req.URL.Query()["profile"]).To(Equal([]string{"summary"}))
@@ -22843,7 +22846,6 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Construct an instance of the ListAgentDataOptions model
 				listAgentDataOptionsModel := new(schematicsv1.ListAgentDataOptions)
-				listAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				listAgentDataOptionsModel.Offset = core.Int64Ptr(int64(0))
 				listAgentDataOptionsModel.Limit = core.Int64Ptr(int64(100))
 				listAgentDataOptionsModel.Profile = core.StringPtr("summary")
@@ -22884,8 +22886,6 @@ var _ = Describe(`SchematicsV1`, func() {
 					Expect(req.URL.EscapedPath()).To(Equal(listAgentDataPath))
 					Expect(req.Method).To(Equal("GET"))
 
-					Expect(req.Header["X-Feature-Agents"]).ToNot(BeNil())
-					Expect(req.Header["X-Feature-Agents"][0]).To(Equal(fmt.Sprintf("%v", true)))
 					Expect(req.URL.Query()["offset"]).To(Equal([]string{fmt.Sprint(int64(0))}))
 					Expect(req.URL.Query()["limit"]).To(Equal([]string{fmt.Sprint(int64(100))}))
 					Expect(req.URL.Query()["profile"]).To(Equal([]string{"summary"}))
@@ -22912,7 +22912,6 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Construct an instance of the ListAgentDataOptions model
 				listAgentDataOptionsModel := new(schematicsv1.ListAgentDataOptions)
-				listAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				listAgentDataOptionsModel.Offset = core.Int64Ptr(int64(0))
 				listAgentDataOptionsModel.Limit = core.Int64Ptr(int64(100))
 				listAgentDataOptionsModel.Profile = core.StringPtr("summary")
@@ -22926,7 +22925,7 @@ var _ = Describe(`SchematicsV1`, func() {
 				Expect(result).ToNot(BeNil())
 
 			})
-			It(`Invoke ListAgentData with error: Operation validation and request error`, func() {
+			It(`Invoke ListAgentData with error: Operation request error`, func() {
 				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -22936,7 +22935,6 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Construct an instance of the ListAgentDataOptions model
 				listAgentDataOptionsModel := new(schematicsv1.ListAgentDataOptions)
-				listAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				listAgentDataOptionsModel.Offset = core.Int64Ptr(int64(0))
 				listAgentDataOptionsModel.Limit = core.Int64Ptr(int64(100))
 				listAgentDataOptionsModel.Profile = core.StringPtr("summary")
@@ -22948,13 +22946,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				result, response, operationErr := schematicsService.ListAgentData(listAgentDataOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
-				Expect(response).To(BeNil())
-				Expect(result).To(BeNil())
-				// Construct a second instance of the ListAgentDataOptions model with no property values
-				listAgentDataOptionsModelNew := new(schematicsv1.ListAgentDataOptions)
-				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = schematicsService.ListAgentData(listAgentDataOptionsModelNew)
-				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 			})
@@ -22981,7 +22972,6 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Construct an instance of the ListAgentDataOptions model
 				listAgentDataOptionsModel := new(schematicsv1.ListAgentDataOptions)
-				listAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				listAgentDataOptionsModel.Offset = core.Int64Ptr(int64(0))
 				listAgentDataOptionsModel.Limit = core.Int64Ptr(int64(100))
 				listAgentDataOptionsModel.Profile = core.StringPtr("summary")
@@ -23011,8 +23001,6 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Verify the contents of the request
 					Expect(req.URL.EscapedPath()).To(Equal(createAgentDataPath))
 					Expect(req.Method).To(Equal("POST"))
-					Expect(req.Header["X-Feature-Agents"]).ToNot(BeNil())
-					Expect(req.Header["X-Feature-Agents"][0]).To(Equal(fmt.Sprintf("%v", true)))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(201)
 					fmt.Fprint(res, `} this is not valid json {`)
@@ -23083,7 +23071,6 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Construct an instance of the CreateAgentDataOptions model
 				createAgentDataOptionsModel := new(schematicsv1.CreateAgentDataOptions)
-				createAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				createAgentDataOptionsModel.Name = core.StringPtr("MyDevAgent")
 				createAgentDataOptionsModel.ResourceGroup = core.StringPtr("Default")
 				createAgentDataOptionsModel.Version = core.StringPtr("v1.0.0")
@@ -23142,15 +23129,13 @@ var _ = Describe(`SchematicsV1`, func() {
 					}
 					fmt.Fprintf(GinkgoWriter, "  Request body: %s", bodyBuf.String())
 
-					Expect(req.Header["X-Feature-Agents"]).ToNot(BeNil())
-					Expect(req.Header["X-Feature-Agents"][0]).To(Equal(fmt.Sprintf("%v", true)))
 					// Sleep a short time to support a timeout test
 					time.Sleep(100 * time.Millisecond)
 
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(201)
-					fmt.Fprintf(res, "%s", `{"name": "MyDevAgent", "description": "Create Agent", "resource_group": "Default", "tags": ["Tags"], "version": "v1.0.0", "schematics_location": "us-south", "agent_location": "us-south", "agent_infrastructure": {"infra_type": "ibm_kubernetes", "cluster_id": "ClusterID", "cluster_resource_group": "ClusterResourceGroup", "cos_instance_name": "CosInstanceName", "cos_bucket_name": "CosBucketName", "cos_bucket_region": "CosBucketRegion"}, "agent_metadata": [{"name": "purpose", "value": ["Value"]}], "agent_inputs": [{"name": "Name", "value": "Value", "use_default": true, "metadata": {"type": "boolean", "aliases": ["Aliases"], "description": "Description", "cloud_data_type": "CloudDataType", "default_value": "DefaultValue", "link_status": "normal", "secure": true, "immutable": false, "hidden": true, "required": true, "options": ["Options"], "min_value": 8, "max_value": 8, "min_length": 9, "max_length": 9, "matches": "Matches", "position": 8, "group_by": "GroupBy", "source": "Source"}, "link": "Link"}], "user_state": {"state": "enable", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "agent_crn": "AgentCrn", "id": "ID", "created_at": "2019-01-01T12:00:00.000Z", "creation_by": "CreationBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "system_state": {"status_code": "error", "status_message": "StatusMessage"}, "agent_kpi": {"availability_indicator": "available", "lifecycle_indicator": "consistent", "percent_usage_indicator": "PercentUsageIndicator", "application_indicators": ["anyValue"], "infra_indicators": ["anyValue"]}, "recent_prs_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_deploy_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_health_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}}`)
+					fmt.Fprintf(res, "%s", `{"name": "MyDevAgent", "description": "Create Agent", "resource_group": "Default", "tags": ["Tags"], "version": "v1.0.0", "schematics_location": "us-south", "agent_location": "us-south", "agent_infrastructure": {"infra_type": "ibm_kubernetes", "cluster_id": "ClusterID", "cluster_resource_group": "ClusterResourceGroup", "cos_instance_name": "CosInstanceName", "cos_bucket_name": "CosBucketName", "cos_bucket_region": "CosBucketRegion"}, "agent_metadata": [{"name": "purpose", "value": ["Value"]}], "agent_inputs": [{"name": "Name", "value": "Value", "use_default": true, "metadata": {"type": "boolean", "aliases": ["Aliases"], "description": "Description", "cloud_data_type": "CloudDataType", "default_value": "DefaultValue", "link_status": "normal", "secure": true, "immutable": false, "hidden": true, "required": true, "options": ["Options"], "min_value": 8, "max_value": 8, "min_length": 9, "max_length": 9, "matches": "Matches", "position": 8, "group_by": "GroupBy", "source": "Source"}, "link": "Link"}], "user_state": {"state": "enable", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "agent_crn": "AgentCrn", "id": "ID", "created_at": "2019-01-01T12:00:00.000Z", "creation_by": "CreationBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "system_state": {"status_code": "error", "status_message": "StatusMessage"}, "agent_kpi": {"availability_indicator": "available", "lifecycle_indicator": "consistent", "percent_usage_indicator": "PercentUsageIndicator", "application_indicators": ["anyValue"], "infra_indicators": ["anyValue"]}, "recent_prs_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_deploy_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_health_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}}`)
 				}))
 			})
 			It(`Invoke CreateAgentData successfully with retries`, func() {
@@ -23219,7 +23204,6 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Construct an instance of the CreateAgentDataOptions model
 				createAgentDataOptionsModel := new(schematicsv1.CreateAgentDataOptions)
-				createAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				createAgentDataOptionsModel.Name = core.StringPtr("MyDevAgent")
 				createAgentDataOptionsModel.ResourceGroup = core.StringPtr("Default")
 				createAgentDataOptionsModel.Version = core.StringPtr("v1.0.0")
@@ -23284,12 +23268,10 @@ var _ = Describe(`SchematicsV1`, func() {
 					}
 					fmt.Fprintf(GinkgoWriter, "  Request body: %s", bodyBuf.String())
 
-					Expect(req.Header["X-Feature-Agents"]).ToNot(BeNil())
-					Expect(req.Header["X-Feature-Agents"][0]).To(Equal(fmt.Sprintf("%v", true)))
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(201)
-					fmt.Fprintf(res, "%s", `{"name": "MyDevAgent", "description": "Create Agent", "resource_group": "Default", "tags": ["Tags"], "version": "v1.0.0", "schematics_location": "us-south", "agent_location": "us-south", "agent_infrastructure": {"infra_type": "ibm_kubernetes", "cluster_id": "ClusterID", "cluster_resource_group": "ClusterResourceGroup", "cos_instance_name": "CosInstanceName", "cos_bucket_name": "CosBucketName", "cos_bucket_region": "CosBucketRegion"}, "agent_metadata": [{"name": "purpose", "value": ["Value"]}], "agent_inputs": [{"name": "Name", "value": "Value", "use_default": true, "metadata": {"type": "boolean", "aliases": ["Aliases"], "description": "Description", "cloud_data_type": "CloudDataType", "default_value": "DefaultValue", "link_status": "normal", "secure": true, "immutable": false, "hidden": true, "required": true, "options": ["Options"], "min_value": 8, "max_value": 8, "min_length": 9, "max_length": 9, "matches": "Matches", "position": 8, "group_by": "GroupBy", "source": "Source"}, "link": "Link"}], "user_state": {"state": "enable", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "agent_crn": "AgentCrn", "id": "ID", "created_at": "2019-01-01T12:00:00.000Z", "creation_by": "CreationBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "system_state": {"status_code": "error", "status_message": "StatusMessage"}, "agent_kpi": {"availability_indicator": "available", "lifecycle_indicator": "consistent", "percent_usage_indicator": "PercentUsageIndicator", "application_indicators": ["anyValue"], "infra_indicators": ["anyValue"]}, "recent_prs_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_deploy_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_health_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}}`)
+					fmt.Fprintf(res, "%s", `{"name": "MyDevAgent", "description": "Create Agent", "resource_group": "Default", "tags": ["Tags"], "version": "v1.0.0", "schematics_location": "us-south", "agent_location": "us-south", "agent_infrastructure": {"infra_type": "ibm_kubernetes", "cluster_id": "ClusterID", "cluster_resource_group": "ClusterResourceGroup", "cos_instance_name": "CosInstanceName", "cos_bucket_name": "CosBucketName", "cos_bucket_region": "CosBucketRegion"}, "agent_metadata": [{"name": "purpose", "value": ["Value"]}], "agent_inputs": [{"name": "Name", "value": "Value", "use_default": true, "metadata": {"type": "boolean", "aliases": ["Aliases"], "description": "Description", "cloud_data_type": "CloudDataType", "default_value": "DefaultValue", "link_status": "normal", "secure": true, "immutable": false, "hidden": true, "required": true, "options": ["Options"], "min_value": 8, "max_value": 8, "min_length": 9, "max_length": 9, "matches": "Matches", "position": 8, "group_by": "GroupBy", "source": "Source"}, "link": "Link"}], "user_state": {"state": "enable", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "agent_crn": "AgentCrn", "id": "ID", "created_at": "2019-01-01T12:00:00.000Z", "creation_by": "CreationBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "system_state": {"status_code": "error", "status_message": "StatusMessage"}, "agent_kpi": {"availability_indicator": "available", "lifecycle_indicator": "consistent", "percent_usage_indicator": "PercentUsageIndicator", "application_indicators": ["anyValue"], "infra_indicators": ["anyValue"]}, "recent_prs_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_deploy_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_health_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}}`)
 				}))
 			})
 			It(`Invoke CreateAgentData successfully`, func() {
@@ -23363,7 +23345,6 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Construct an instance of the CreateAgentDataOptions model
 				createAgentDataOptionsModel := new(schematicsv1.CreateAgentDataOptions)
-				createAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				createAgentDataOptionsModel.Name = core.StringPtr("MyDevAgent")
 				createAgentDataOptionsModel.ResourceGroup = core.StringPtr("Default")
 				createAgentDataOptionsModel.Version = core.StringPtr("v1.0.0")
@@ -23450,7 +23431,6 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Construct an instance of the CreateAgentDataOptions model
 				createAgentDataOptionsModel := new(schematicsv1.CreateAgentDataOptions)
-				createAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				createAgentDataOptionsModel.Name = core.StringPtr("MyDevAgent")
 				createAgentDataOptionsModel.ResourceGroup = core.StringPtr("Default")
 				createAgentDataOptionsModel.Version = core.StringPtr("v1.0.0")
@@ -23558,7 +23538,6 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Construct an instance of the CreateAgentDataOptions model
 				createAgentDataOptionsModel := new(schematicsv1.CreateAgentDataOptions)
-				createAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				createAgentDataOptionsModel.Name = core.StringPtr("MyDevAgent")
 				createAgentDataOptionsModel.ResourceGroup = core.StringPtr("Default")
 				createAgentDataOptionsModel.Version = core.StringPtr("v1.0.0")
@@ -23596,8 +23575,6 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Verify the contents of the request
 					Expect(req.URL.EscapedPath()).To(Equal(getAgentDataPath))
 					Expect(req.Method).To(Equal("GET"))
-					Expect(req.Header["X-Feature-Agents"]).ToNot(BeNil())
-					Expect(req.Header["X-Feature-Agents"][0]).To(Equal(fmt.Sprintf("%v", true)))
 					Expect(req.URL.Query()["profile"]).To(Equal([]string{"summary"}))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
@@ -23615,7 +23592,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the GetAgentDataOptions model
 				getAgentDataOptionsModel := new(schematicsv1.GetAgentDataOptions)
 				getAgentDataOptionsModel.AgentID = core.StringPtr("testString")
-				getAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				getAgentDataOptionsModel.Profile = core.StringPtr("summary")
 				getAgentDataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
@@ -23647,8 +23623,6 @@ var _ = Describe(`SchematicsV1`, func() {
 					Expect(req.URL.EscapedPath()).To(Equal(getAgentDataPath))
 					Expect(req.Method).To(Equal("GET"))
 
-					Expect(req.Header["X-Feature-Agents"]).ToNot(BeNil())
-					Expect(req.Header["X-Feature-Agents"][0]).To(Equal(fmt.Sprintf("%v", true)))
 					Expect(req.URL.Query()["profile"]).To(Equal([]string{"summary"}))
 					// Sleep a short time to support a timeout test
 					time.Sleep(100 * time.Millisecond)
@@ -23656,7 +23630,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"name": "MyDevAgent", "description": "Create Agent", "resource_group": "Default", "tags": ["Tags"], "version": "v1.0.0", "schematics_location": "us-south", "agent_location": "us-south", "agent_infrastructure": {"infra_type": "ibm_kubernetes", "cluster_id": "ClusterID", "cluster_resource_group": "ClusterResourceGroup", "cos_instance_name": "CosInstanceName", "cos_bucket_name": "CosBucketName", "cos_bucket_region": "CosBucketRegion"}, "agent_metadata": [{"name": "purpose", "value": ["Value"]}], "agent_inputs": [{"name": "Name", "value": "Value", "use_default": true, "metadata": {"type": "boolean", "aliases": ["Aliases"], "description": "Description", "cloud_data_type": "CloudDataType", "default_value": "DefaultValue", "link_status": "normal", "secure": true, "immutable": false, "hidden": true, "required": true, "options": ["Options"], "min_value": 8, "max_value": 8, "min_length": 9, "max_length": 9, "matches": "Matches", "position": 8, "group_by": "GroupBy", "source": "Source"}, "link": "Link"}], "user_state": {"state": "enable", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "agent_crn": "AgentCrn", "id": "ID", "created_at": "2019-01-01T12:00:00.000Z", "creation_by": "CreationBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "system_state": {"status_code": "error", "status_message": "StatusMessage"}, "agent_kpi": {"availability_indicator": "available", "lifecycle_indicator": "consistent", "percent_usage_indicator": "PercentUsageIndicator", "application_indicators": ["anyValue"], "infra_indicators": ["anyValue"]}, "recent_prs_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_deploy_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_health_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}}`)
+					fmt.Fprintf(res, "%s", `{"name": "MyDevAgent", "description": "Create Agent", "resource_group": "Default", "tags": ["Tags"], "version": "v1.0.0", "schematics_location": "us-south", "agent_location": "us-south", "agent_infrastructure": {"infra_type": "ibm_kubernetes", "cluster_id": "ClusterID", "cluster_resource_group": "ClusterResourceGroup", "cos_instance_name": "CosInstanceName", "cos_bucket_name": "CosBucketName", "cos_bucket_region": "CosBucketRegion"}, "agent_metadata": [{"name": "purpose", "value": ["Value"]}], "agent_inputs": [{"name": "Name", "value": "Value", "use_default": true, "metadata": {"type": "boolean", "aliases": ["Aliases"], "description": "Description", "cloud_data_type": "CloudDataType", "default_value": "DefaultValue", "link_status": "normal", "secure": true, "immutable": false, "hidden": true, "required": true, "options": ["Options"], "min_value": 8, "max_value": 8, "min_length": 9, "max_length": 9, "matches": "Matches", "position": 8, "group_by": "GroupBy", "source": "Source"}, "link": "Link"}], "user_state": {"state": "enable", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "agent_crn": "AgentCrn", "id": "ID", "created_at": "2019-01-01T12:00:00.000Z", "creation_by": "CreationBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "system_state": {"status_code": "error", "status_message": "StatusMessage"}, "agent_kpi": {"availability_indicator": "available", "lifecycle_indicator": "consistent", "percent_usage_indicator": "PercentUsageIndicator", "application_indicators": ["anyValue"], "infra_indicators": ["anyValue"]}, "recent_prs_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_deploy_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_health_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}}`)
 				}))
 			})
 			It(`Invoke GetAgentData successfully with retries`, func() {
@@ -23671,7 +23645,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the GetAgentDataOptions model
 				getAgentDataOptionsModel := new(schematicsv1.GetAgentDataOptions)
 				getAgentDataOptionsModel.AgentID = core.StringPtr("testString")
-				getAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				getAgentDataOptionsModel.Profile = core.StringPtr("summary")
 				getAgentDataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
@@ -23709,13 +23682,11 @@ var _ = Describe(`SchematicsV1`, func() {
 					Expect(req.URL.EscapedPath()).To(Equal(getAgentDataPath))
 					Expect(req.Method).To(Equal("GET"))
 
-					Expect(req.Header["X-Feature-Agents"]).ToNot(BeNil())
-					Expect(req.Header["X-Feature-Agents"][0]).To(Equal(fmt.Sprintf("%v", true)))
 					Expect(req.URL.Query()["profile"]).To(Equal([]string{"summary"}))
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"name": "MyDevAgent", "description": "Create Agent", "resource_group": "Default", "tags": ["Tags"], "version": "v1.0.0", "schematics_location": "us-south", "agent_location": "us-south", "agent_infrastructure": {"infra_type": "ibm_kubernetes", "cluster_id": "ClusterID", "cluster_resource_group": "ClusterResourceGroup", "cos_instance_name": "CosInstanceName", "cos_bucket_name": "CosBucketName", "cos_bucket_region": "CosBucketRegion"}, "agent_metadata": [{"name": "purpose", "value": ["Value"]}], "agent_inputs": [{"name": "Name", "value": "Value", "use_default": true, "metadata": {"type": "boolean", "aliases": ["Aliases"], "description": "Description", "cloud_data_type": "CloudDataType", "default_value": "DefaultValue", "link_status": "normal", "secure": true, "immutable": false, "hidden": true, "required": true, "options": ["Options"], "min_value": 8, "max_value": 8, "min_length": 9, "max_length": 9, "matches": "Matches", "position": 8, "group_by": "GroupBy", "source": "Source"}, "link": "Link"}], "user_state": {"state": "enable", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "agent_crn": "AgentCrn", "id": "ID", "created_at": "2019-01-01T12:00:00.000Z", "creation_by": "CreationBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "system_state": {"status_code": "error", "status_message": "StatusMessage"}, "agent_kpi": {"availability_indicator": "available", "lifecycle_indicator": "consistent", "percent_usage_indicator": "PercentUsageIndicator", "application_indicators": ["anyValue"], "infra_indicators": ["anyValue"]}, "recent_prs_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_deploy_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_health_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}}`)
+					fmt.Fprintf(res, "%s", `{"name": "MyDevAgent", "description": "Create Agent", "resource_group": "Default", "tags": ["Tags"], "version": "v1.0.0", "schematics_location": "us-south", "agent_location": "us-south", "agent_infrastructure": {"infra_type": "ibm_kubernetes", "cluster_id": "ClusterID", "cluster_resource_group": "ClusterResourceGroup", "cos_instance_name": "CosInstanceName", "cos_bucket_name": "CosBucketName", "cos_bucket_region": "CosBucketRegion"}, "agent_metadata": [{"name": "purpose", "value": ["Value"]}], "agent_inputs": [{"name": "Name", "value": "Value", "use_default": true, "metadata": {"type": "boolean", "aliases": ["Aliases"], "description": "Description", "cloud_data_type": "CloudDataType", "default_value": "DefaultValue", "link_status": "normal", "secure": true, "immutable": false, "hidden": true, "required": true, "options": ["Options"], "min_value": 8, "max_value": 8, "min_length": 9, "max_length": 9, "matches": "Matches", "position": 8, "group_by": "GroupBy", "source": "Source"}, "link": "Link"}], "user_state": {"state": "enable", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "agent_crn": "AgentCrn", "id": "ID", "created_at": "2019-01-01T12:00:00.000Z", "creation_by": "CreationBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "system_state": {"status_code": "error", "status_message": "StatusMessage"}, "agent_kpi": {"availability_indicator": "available", "lifecycle_indicator": "consistent", "percent_usage_indicator": "PercentUsageIndicator", "application_indicators": ["anyValue"], "infra_indicators": ["anyValue"]}, "recent_prs_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_deploy_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_health_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}}`)
 				}))
 			})
 			It(`Invoke GetAgentData successfully`, func() {
@@ -23735,7 +23706,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the GetAgentDataOptions model
 				getAgentDataOptionsModel := new(schematicsv1.GetAgentDataOptions)
 				getAgentDataOptionsModel.AgentID = core.StringPtr("testString")
-				getAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				getAgentDataOptionsModel.Profile = core.StringPtr("summary")
 				getAgentDataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
@@ -23757,7 +23727,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the GetAgentDataOptions model
 				getAgentDataOptionsModel := new(schematicsv1.GetAgentDataOptions)
 				getAgentDataOptionsModel.AgentID = core.StringPtr("testString")
-				getAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				getAgentDataOptionsModel.Profile = core.StringPtr("summary")
 				getAgentDataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
@@ -23800,7 +23769,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the GetAgentDataOptions model
 				getAgentDataOptionsModel := new(schematicsv1.GetAgentDataOptions)
 				getAgentDataOptionsModel.AgentID = core.StringPtr("testString")
-				getAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				getAgentDataOptionsModel.Profile = core.StringPtr("summary")
 				getAgentDataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
@@ -23827,8 +23795,6 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Verify the contents of the request
 					Expect(req.URL.EscapedPath()).To(Equal(updateAgentDataPath))
 					Expect(req.Method).To(Equal("PUT"))
-					Expect(req.Header["X-Feature-Agents"]).ToNot(BeNil())
-					Expect(req.Header["X-Feature-Agents"][0]).To(Equal(fmt.Sprintf("%v", true)))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(201)
 					fmt.Fprint(res, `} this is not valid json {`)
@@ -23900,7 +23866,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the UpdateAgentDataOptions model
 				updateAgentDataOptionsModel := new(schematicsv1.UpdateAgentDataOptions)
 				updateAgentDataOptionsModel.AgentID = core.StringPtr("testString")
-				updateAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				updateAgentDataOptionsModel.Name = core.StringPtr("MyDevAgent")
 				updateAgentDataOptionsModel.ResourceGroup = core.StringPtr("Default")
 				updateAgentDataOptionsModel.Version = core.StringPtr("v1.0.0")
@@ -23959,15 +23924,13 @@ var _ = Describe(`SchematicsV1`, func() {
 					}
 					fmt.Fprintf(GinkgoWriter, "  Request body: %s", bodyBuf.String())
 
-					Expect(req.Header["X-Feature-Agents"]).ToNot(BeNil())
-					Expect(req.Header["X-Feature-Agents"][0]).To(Equal(fmt.Sprintf("%v", true)))
 					// Sleep a short time to support a timeout test
 					time.Sleep(100 * time.Millisecond)
 
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(201)
-					fmt.Fprintf(res, "%s", `{"name": "MyDevAgent", "description": "Create Agent", "resource_group": "Default", "tags": ["Tags"], "version": "v1.0.0", "schematics_location": "us-south", "agent_location": "us-south", "agent_infrastructure": {"infra_type": "ibm_kubernetes", "cluster_id": "ClusterID", "cluster_resource_group": "ClusterResourceGroup", "cos_instance_name": "CosInstanceName", "cos_bucket_name": "CosBucketName", "cos_bucket_region": "CosBucketRegion"}, "agent_metadata": [{"name": "purpose", "value": ["Value"]}], "agent_inputs": [{"name": "Name", "value": "Value", "use_default": true, "metadata": {"type": "boolean", "aliases": ["Aliases"], "description": "Description", "cloud_data_type": "CloudDataType", "default_value": "DefaultValue", "link_status": "normal", "secure": true, "immutable": false, "hidden": true, "required": true, "options": ["Options"], "min_value": 8, "max_value": 8, "min_length": 9, "max_length": 9, "matches": "Matches", "position": 8, "group_by": "GroupBy", "source": "Source"}, "link": "Link"}], "user_state": {"state": "enable", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "agent_crn": "AgentCrn", "id": "ID", "created_at": "2019-01-01T12:00:00.000Z", "creation_by": "CreationBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "system_state": {"status_code": "error", "status_message": "StatusMessage"}, "agent_kpi": {"availability_indicator": "available", "lifecycle_indicator": "consistent", "percent_usage_indicator": "PercentUsageIndicator", "application_indicators": ["anyValue"], "infra_indicators": ["anyValue"]}, "recent_prs_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_deploy_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_health_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}}`)
+					fmt.Fprintf(res, "%s", `{"name": "MyDevAgent", "description": "Create Agent", "resource_group": "Default", "tags": ["Tags"], "version": "v1.0.0", "schematics_location": "us-south", "agent_location": "us-south", "agent_infrastructure": {"infra_type": "ibm_kubernetes", "cluster_id": "ClusterID", "cluster_resource_group": "ClusterResourceGroup", "cos_instance_name": "CosInstanceName", "cos_bucket_name": "CosBucketName", "cos_bucket_region": "CosBucketRegion"}, "agent_metadata": [{"name": "purpose", "value": ["Value"]}], "agent_inputs": [{"name": "Name", "value": "Value", "use_default": true, "metadata": {"type": "boolean", "aliases": ["Aliases"], "description": "Description", "cloud_data_type": "CloudDataType", "default_value": "DefaultValue", "link_status": "normal", "secure": true, "immutable": false, "hidden": true, "required": true, "options": ["Options"], "min_value": 8, "max_value": 8, "min_length": 9, "max_length": 9, "matches": "Matches", "position": 8, "group_by": "GroupBy", "source": "Source"}, "link": "Link"}], "user_state": {"state": "enable", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "agent_crn": "AgentCrn", "id": "ID", "created_at": "2019-01-01T12:00:00.000Z", "creation_by": "CreationBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "system_state": {"status_code": "error", "status_message": "StatusMessage"}, "agent_kpi": {"availability_indicator": "available", "lifecycle_indicator": "consistent", "percent_usage_indicator": "PercentUsageIndicator", "application_indicators": ["anyValue"], "infra_indicators": ["anyValue"]}, "recent_prs_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_deploy_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_health_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}}`)
 				}))
 			})
 			It(`Invoke UpdateAgentData successfully with retries`, func() {
@@ -24037,7 +24000,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the UpdateAgentDataOptions model
 				updateAgentDataOptionsModel := new(schematicsv1.UpdateAgentDataOptions)
 				updateAgentDataOptionsModel.AgentID = core.StringPtr("testString")
-				updateAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				updateAgentDataOptionsModel.Name = core.StringPtr("MyDevAgent")
 				updateAgentDataOptionsModel.ResourceGroup = core.StringPtr("Default")
 				updateAgentDataOptionsModel.Version = core.StringPtr("v1.0.0")
@@ -24102,12 +24064,10 @@ var _ = Describe(`SchematicsV1`, func() {
 					}
 					fmt.Fprintf(GinkgoWriter, "  Request body: %s", bodyBuf.String())
 
-					Expect(req.Header["X-Feature-Agents"]).ToNot(BeNil())
-					Expect(req.Header["X-Feature-Agents"][0]).To(Equal(fmt.Sprintf("%v", true)))
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(201)
-					fmt.Fprintf(res, "%s", `{"name": "MyDevAgent", "description": "Create Agent", "resource_group": "Default", "tags": ["Tags"], "version": "v1.0.0", "schematics_location": "us-south", "agent_location": "us-south", "agent_infrastructure": {"infra_type": "ibm_kubernetes", "cluster_id": "ClusterID", "cluster_resource_group": "ClusterResourceGroup", "cos_instance_name": "CosInstanceName", "cos_bucket_name": "CosBucketName", "cos_bucket_region": "CosBucketRegion"}, "agent_metadata": [{"name": "purpose", "value": ["Value"]}], "agent_inputs": [{"name": "Name", "value": "Value", "use_default": true, "metadata": {"type": "boolean", "aliases": ["Aliases"], "description": "Description", "cloud_data_type": "CloudDataType", "default_value": "DefaultValue", "link_status": "normal", "secure": true, "immutable": false, "hidden": true, "required": true, "options": ["Options"], "min_value": 8, "max_value": 8, "min_length": 9, "max_length": 9, "matches": "Matches", "position": 8, "group_by": "GroupBy", "source": "Source"}, "link": "Link"}], "user_state": {"state": "enable", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "agent_crn": "AgentCrn", "id": "ID", "created_at": "2019-01-01T12:00:00.000Z", "creation_by": "CreationBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "system_state": {"status_code": "error", "status_message": "StatusMessage"}, "agent_kpi": {"availability_indicator": "available", "lifecycle_indicator": "consistent", "percent_usage_indicator": "PercentUsageIndicator", "application_indicators": ["anyValue"], "infra_indicators": ["anyValue"]}, "recent_prs_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_deploy_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_health_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}}`)
+					fmt.Fprintf(res, "%s", `{"name": "MyDevAgent", "description": "Create Agent", "resource_group": "Default", "tags": ["Tags"], "version": "v1.0.0", "schematics_location": "us-south", "agent_location": "us-south", "agent_infrastructure": {"infra_type": "ibm_kubernetes", "cluster_id": "ClusterID", "cluster_resource_group": "ClusterResourceGroup", "cos_instance_name": "CosInstanceName", "cos_bucket_name": "CosBucketName", "cos_bucket_region": "CosBucketRegion"}, "agent_metadata": [{"name": "purpose", "value": ["Value"]}], "agent_inputs": [{"name": "Name", "value": "Value", "use_default": true, "metadata": {"type": "boolean", "aliases": ["Aliases"], "description": "Description", "cloud_data_type": "CloudDataType", "default_value": "DefaultValue", "link_status": "normal", "secure": true, "immutable": false, "hidden": true, "required": true, "options": ["Options"], "min_value": 8, "max_value": 8, "min_length": 9, "max_length": 9, "matches": "Matches", "position": 8, "group_by": "GroupBy", "source": "Source"}, "link": "Link"}], "user_state": {"state": "enable", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "agent_crn": "AgentCrn", "id": "ID", "created_at": "2019-01-01T12:00:00.000Z", "creation_by": "CreationBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "system_state": {"status_code": "error", "status_message": "StatusMessage"}, "agent_kpi": {"availability_indicator": "available", "lifecycle_indicator": "consistent", "percent_usage_indicator": "PercentUsageIndicator", "application_indicators": ["anyValue"], "infra_indicators": ["anyValue"]}, "recent_prs_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_deploy_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}, "recent_health_job": {"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "job_pending", "status_message": "StatusMessage", "log_url": "LogURL"}}`)
 				}))
 			})
 			It(`Invoke UpdateAgentData successfully`, func() {
@@ -24182,7 +24142,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the UpdateAgentDataOptions model
 				updateAgentDataOptionsModel := new(schematicsv1.UpdateAgentDataOptions)
 				updateAgentDataOptionsModel.AgentID = core.StringPtr("testString")
-				updateAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				updateAgentDataOptionsModel.Name = core.StringPtr("MyDevAgent")
 				updateAgentDataOptionsModel.ResourceGroup = core.StringPtr("Default")
 				updateAgentDataOptionsModel.Version = core.StringPtr("v1.0.0")
@@ -24270,7 +24229,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the UpdateAgentDataOptions model
 				updateAgentDataOptionsModel := new(schematicsv1.UpdateAgentDataOptions)
 				updateAgentDataOptionsModel.AgentID = core.StringPtr("testString")
-				updateAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				updateAgentDataOptionsModel.Name = core.StringPtr("MyDevAgent")
 				updateAgentDataOptionsModel.ResourceGroup = core.StringPtr("Default")
 				updateAgentDataOptionsModel.Version = core.StringPtr("v1.0.0")
@@ -24379,7 +24337,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the UpdateAgentDataOptions model
 				updateAgentDataOptionsModel := new(schematicsv1.UpdateAgentDataOptions)
 				updateAgentDataOptionsModel.AgentID = core.StringPtr("testString")
-				updateAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				updateAgentDataOptionsModel.Name = core.StringPtr("MyDevAgent")
 				updateAgentDataOptionsModel.ResourceGroup = core.StringPtr("Default")
 				updateAgentDataOptionsModel.Version = core.StringPtr("v1.0.0")
@@ -24418,8 +24375,6 @@ var _ = Describe(`SchematicsV1`, func() {
 					Expect(req.URL.EscapedPath()).To(Equal(deleteAgentDataPath))
 					Expect(req.Method).To(Equal("DELETE"))
 
-					Expect(req.Header["X-Feature-Agents"]).ToNot(BeNil())
-					Expect(req.Header["X-Feature-Agents"][0]).To(Equal(fmt.Sprintf("%v", true)))
 					res.WriteHeader(204)
 				}))
 			})
@@ -24439,7 +24394,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the DeleteAgentDataOptions model
 				deleteAgentDataOptionsModel := new(schematicsv1.DeleteAgentDataOptions)
 				deleteAgentDataOptionsModel.AgentID = core.StringPtr("testString")
-				deleteAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				deleteAgentDataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
@@ -24458,7 +24412,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				// Construct an instance of the DeleteAgentDataOptions model
 				deleteAgentDataOptionsModel := new(schematicsv1.DeleteAgentDataOptions)
 				deleteAgentDataOptionsModel.AgentID = core.StringPtr("testString")
-				deleteAgentDataOptionsModel.XFeatureAgents = core.BoolPtr(true)
 				deleteAgentDataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := schematicsService.SetServiceURL("")
@@ -24473,51 +24426,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				response, operationErr = schematicsService.DeleteAgentData(deleteAgentDataOptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
-	Describe(`GetPrsAgentJob(getPrsAgentJobOptions *GetPrsAgentJobOptions) - Operation response error`, func() {
-		getPrsAgentJobPath := "/v2/agents/testString/prs"
-		Context(`Using mock server endpoint with invalid JSON response`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(getPrsAgentJobPath))
-					Expect(req.Method).To(Equal("GET"))
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(202)
-					fmt.Fprint(res, `} this is not valid json {`)
-				}))
-			})
-			It(`Invoke GetPrsAgentJob with error: Operation response processing error`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Construct an instance of the GetPrsAgentJobOptions model
-				getPrsAgentJobOptionsModel := new(schematicsv1.GetPrsAgentJobOptions)
-				getPrsAgentJobOptionsModel.AgentID = core.StringPtr("testString")
-				getPrsAgentJobOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := schematicsService.GetPrsAgentJob(getPrsAgentJobOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-
-				// Enable retries and test again
-				schematicsService.EnableRetries(0, 0)
-				result, response, operationErr = schematicsService.GetPrsAgentJob(getPrsAgentJobOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
 			})
 			AfterEach(func() {
 				testServer.Close()
@@ -24541,7 +24449,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}`)
+					fmt.Fprintf(res, "%s", `"OperationResponse"`)
 				}))
 			})
 			It(`Invoke GetPrsAgentJob successfully with retries`, func() {
@@ -24595,7 +24503,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}`)
+					fmt.Fprintf(res, "%s", `"OperationResponse"`)
 				}))
 			})
 			It(`Invoke GetPrsAgentJob successfully`, func() {
@@ -24691,53 +24599,6 @@ var _ = Describe(`SchematicsV1`, func() {
 			})
 		})
 	})
-	Describe(`PrsAgentJob(prsAgentJobOptions *PrsAgentJobOptions) - Operation response error`, func() {
-		prsAgentJobPath := "/v2/agents/testString/prs"
-		Context(`Using mock server endpoint with invalid JSON response`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(prsAgentJobPath))
-					Expect(req.Method).To(Equal("PUT"))
-					// TODO: Add check for force query parameter
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(202)
-					fmt.Fprint(res, `} this is not valid json {`)
-				}))
-			})
-			It(`Invoke PrsAgentJob with error: Operation response processing error`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Construct an instance of the PrsAgentJobOptions model
-				prsAgentJobOptionsModel := new(schematicsv1.PrsAgentJobOptions)
-				prsAgentJobOptionsModel.AgentID = core.StringPtr("testString")
-				prsAgentJobOptionsModel.Force = core.BoolPtr(true)
-				prsAgentJobOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := schematicsService.PrsAgentJob(prsAgentJobOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-
-				// Enable retries and test again
-				schematicsService.EnableRetries(0, 0)
-				result, response, operationErr = schematicsService.PrsAgentJob(prsAgentJobOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
 	Describe(`PrsAgentJob(prsAgentJobOptions *PrsAgentJobOptions)`, func() {
 		prsAgentJobPath := "/v2/agents/testString/prs"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -24756,7 +24617,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}`)
+					fmt.Fprintf(res, "%s", `"OperationResponse"`)
 				}))
 			})
 			It(`Invoke PrsAgentJob successfully with retries`, func() {
@@ -24812,7 +24673,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}`)
+					fmt.Fprintf(res, "%s", `"OperationResponse"`)
 				}))
 			})
 			It(`Invoke PrsAgentJob successfully`, func() {
@@ -24911,51 +24772,6 @@ var _ = Describe(`SchematicsV1`, func() {
 			})
 		})
 	})
-	Describe(`GetHealthCheckAgentJob(getHealthCheckAgentJobOptions *GetHealthCheckAgentJobOptions) - Operation response error`, func() {
-		getHealthCheckAgentJobPath := "/v2/agents/testString/health"
-		Context(`Using mock server endpoint with invalid JSON response`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(getHealthCheckAgentJobPath))
-					Expect(req.Method).To(Equal("GET"))
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(202)
-					fmt.Fprint(res, `} this is not valid json {`)
-				}))
-			})
-			It(`Invoke GetHealthCheckAgentJob with error: Operation response processing error`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Construct an instance of the GetHealthCheckAgentJobOptions model
-				getHealthCheckAgentJobOptionsModel := new(schematicsv1.GetHealthCheckAgentJobOptions)
-				getHealthCheckAgentJobOptionsModel.AgentID = core.StringPtr("testString")
-				getHealthCheckAgentJobOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := schematicsService.GetHealthCheckAgentJob(getHealthCheckAgentJobOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-
-				// Enable retries and test again
-				schematicsService.EnableRetries(0, 0)
-				result, response, operationErr = schematicsService.GetHealthCheckAgentJob(getHealthCheckAgentJobOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
 	Describe(`GetHealthCheckAgentJob(getHealthCheckAgentJobOptions *GetHealthCheckAgentJobOptions)`, func() {
 		getHealthCheckAgentJobPath := "/v2/agents/testString/health"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -24973,7 +24789,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}`)
+					fmt.Fprintf(res, "%s", `"OperationResponse"`)
 				}))
 			})
 			It(`Invoke GetHealthCheckAgentJob successfully with retries`, func() {
@@ -25027,7 +24843,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}`)
+					fmt.Fprintf(res, "%s", `"OperationResponse"`)
 				}))
 			})
 			It(`Invoke GetHealthCheckAgentJob successfully`, func() {
@@ -25123,53 +24939,6 @@ var _ = Describe(`SchematicsV1`, func() {
 			})
 		})
 	})
-	Describe(`HealthCheckAgentJob(healthCheckAgentJobOptions *HealthCheckAgentJobOptions) - Operation response error`, func() {
-		healthCheckAgentJobPath := "/v2/agents/testString/health"
-		Context(`Using mock server endpoint with invalid JSON response`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(healthCheckAgentJobPath))
-					Expect(req.Method).To(Equal("PUT"))
-					// TODO: Add check for force query parameter
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(202)
-					fmt.Fprint(res, `} this is not valid json {`)
-				}))
-			})
-			It(`Invoke HealthCheckAgentJob with error: Operation response processing error`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Construct an instance of the HealthCheckAgentJobOptions model
-				healthCheckAgentJobOptionsModel := new(schematicsv1.HealthCheckAgentJobOptions)
-				healthCheckAgentJobOptionsModel.AgentID = core.StringPtr("testString")
-				healthCheckAgentJobOptionsModel.Force = core.BoolPtr(true)
-				healthCheckAgentJobOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := schematicsService.HealthCheckAgentJob(healthCheckAgentJobOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-
-				// Enable retries and test again
-				schematicsService.EnableRetries(0, 0)
-				result, response, operationErr = schematicsService.HealthCheckAgentJob(healthCheckAgentJobOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
 	Describe(`HealthCheckAgentJob(healthCheckAgentJobOptions *HealthCheckAgentJobOptions)`, func() {
 		healthCheckAgentJobPath := "/v2/agents/testString/health"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -25188,7 +24957,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}`)
+					fmt.Fprintf(res, "%s", `"OperationResponse"`)
 				}))
 			})
 			It(`Invoke HealthCheckAgentJob successfully with retries`, func() {
@@ -25244,7 +25013,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}`)
+					fmt.Fprintf(res, "%s", `"OperationResponse"`)
 				}))
 			})
 			It(`Invoke HealthCheckAgentJob successfully`, func() {
@@ -25343,51 +25112,6 @@ var _ = Describe(`SchematicsV1`, func() {
 			})
 		})
 	})
-	Describe(`GetDeployAgentJob(getDeployAgentJobOptions *GetDeployAgentJobOptions) - Operation response error`, func() {
-		getDeployAgentJobPath := "/v2/agents/testString/deploy"
-		Context(`Using mock server endpoint with invalid JSON response`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(getDeployAgentJobPath))
-					Expect(req.Method).To(Equal("GET"))
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(202)
-					fmt.Fprint(res, `} this is not valid json {`)
-				}))
-			})
-			It(`Invoke GetDeployAgentJob with error: Operation response processing error`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Construct an instance of the GetDeployAgentJobOptions model
-				getDeployAgentJobOptionsModel := new(schematicsv1.GetDeployAgentJobOptions)
-				getDeployAgentJobOptionsModel.AgentID = core.StringPtr("testString")
-				getDeployAgentJobOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := schematicsService.GetDeployAgentJob(getDeployAgentJobOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-
-				// Enable retries and test again
-				schematicsService.EnableRetries(0, 0)
-				result, response, operationErr = schematicsService.GetDeployAgentJob(getDeployAgentJobOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
 	Describe(`GetDeployAgentJob(getDeployAgentJobOptions *GetDeployAgentJobOptions)`, func() {
 		getDeployAgentJobPath := "/v2/agents/testString/deploy"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -25405,7 +25129,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}`)
+					fmt.Fprintf(res, "%s", `"OperationResponse"`)
 				}))
 			})
 			It(`Invoke GetDeployAgentJob successfully with retries`, func() {
@@ -25459,7 +25183,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}`)
+					fmt.Fprintf(res, "%s", `"OperationResponse"`)
 				}))
 			})
 			It(`Invoke GetDeployAgentJob successfully`, func() {
@@ -25555,53 +25279,6 @@ var _ = Describe(`SchematicsV1`, func() {
 			})
 		})
 	})
-	Describe(`DeployAgentJob(deployAgentJobOptions *DeployAgentJobOptions) - Operation response error`, func() {
-		deployAgentJobPath := "/v2/agents/testString/deploy"
-		Context(`Using mock server endpoint with invalid JSON response`, func() {
-			BeforeEach(func() {
-				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-					defer GinkgoRecover()
-
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(deployAgentJobPath))
-					Expect(req.Method).To(Equal("PUT"))
-					// TODO: Add check for force query parameter
-					res.Header().Set("Content-type", "application/json")
-					res.WriteHeader(202)
-					fmt.Fprint(res, `} this is not valid json {`)
-				}))
-			})
-			It(`Invoke DeployAgentJob with error: Operation response processing error`, func() {
-				schematicsService, serviceErr := schematicsv1.NewSchematicsV1(&schematicsv1.SchematicsV1Options{
-					URL:           testServer.URL,
-					Authenticator: &core.NoAuthAuthenticator{},
-				})
-				Expect(serviceErr).To(BeNil())
-				Expect(schematicsService).ToNot(BeNil())
-
-				// Construct an instance of the DeployAgentJobOptions model
-				deployAgentJobOptionsModel := new(schematicsv1.DeployAgentJobOptions)
-				deployAgentJobOptionsModel.AgentID = core.StringPtr("testString")
-				deployAgentJobOptionsModel.Force = core.BoolPtr(true)
-				deployAgentJobOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
-				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := schematicsService.DeployAgentJob(deployAgentJobOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-
-				// Enable retries and test again
-				schematicsService.EnableRetries(0, 0)
-				result, response, operationErr = schematicsService.DeployAgentJob(deployAgentJobOptionsModel)
-				Expect(operationErr).ToNot(BeNil())
-				Expect(response).ToNot(BeNil())
-				Expect(result).To(BeNil())
-			})
-			AfterEach(func() {
-				testServer.Close()
-			})
-		})
-	})
 	Describe(`DeployAgentJob(deployAgentJobOptions *DeployAgentJobOptions)`, func() {
 		deployAgentJobPath := "/v2/agents/testString/deploy"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -25620,7 +25297,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}`)
+					fmt.Fprintf(res, "%s", `"OperationResponse"`)
 				}))
 			})
 			It(`Invoke DeployAgentJob successfully with retries`, func() {
@@ -25676,7 +25353,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"agent_id": "AgentID", "job_id": "JobID", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy", "is_redeployed": false, "agent_version": "v1.0.0", "status_code": "pending", "status_message": "StatusMessage", "log_url": "LogURL"}`)
+					fmt.Fprintf(res, "%s", `"OperationResponse"`)
 				}))
 			})
 			It(`Invoke DeployAgentJob successfully`, func() {
@@ -26624,7 +26301,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"total_count": 10, "limit": 5, "offset": 6, "policies": [{"name": "Agent1-DevWS", "id": "ID", "crn": "Crn", "account": "Account", "description": "Policy for job execution of secured workspaces on agent1", "resource_group": "Default", "tags": ["Tags"], "location": "us-south", "state": {"state": "draft", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "policy_kind": "agent_assignment_policy", "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "updated_at": "2019-01-01T12:00:00.000Z"}]}`)
+					fmt.Fprintf(res, "%s", `{"total_count": 10, "limit": 5, "offset": 6, "policies": [{"name": "Agent1-DevWS", "id": "ID", "crn": "Crn", "account": "Account", "description": "Policy for job execution of secured workspaces on agent1", "resource_group": "Default", "tags": ["Tags"], "location": "us-south", "state": {"state": "draft", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "policy_kind": "agent_assignment_policy", "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy"}]}`)
 				}))
 			})
 			It(`Invoke ListPolicy successfully with retries`, func() {
@@ -26683,7 +26360,7 @@ var _ = Describe(`SchematicsV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"total_count": 10, "limit": 5, "offset": 6, "policies": [{"name": "Agent1-DevWS", "id": "ID", "crn": "Crn", "account": "Account", "description": "Policy for job execution of secured workspaces on agent1", "resource_group": "Default", "tags": ["Tags"], "location": "us-south", "state": {"state": "draft", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "policy_kind": "agent_assignment_policy", "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "updated_at": "2019-01-01T12:00:00.000Z"}]}`)
+					fmt.Fprintf(res, "%s", `{"total_count": 10, "limit": 5, "offset": 6, "policies": [{"name": "Agent1-DevWS", "id": "ID", "crn": "Crn", "account": "Account", "description": "Policy for job execution of secured workspaces on agent1", "resource_group": "Default", "tags": ["Tags"], "location": "us-south", "state": {"state": "draft", "set_by": "SetBy", "set_at": "2019-01-01T12:00:00.000Z"}, "policy_kind": "agent_assignment_policy", "created_at": "2019-01-01T12:00:00.000Z", "created_by": "CreatedBy", "updated_at": "2019-01-01T12:00:00.000Z", "updated_by": "UpdatedBy"}]}`)
 				}))
 			})
 			It(`Invoke ListPolicy successfully`, func() {
@@ -28367,15 +28044,13 @@ var _ = Describe(`SchematicsV1`, func() {
 				Expect(agentKpiDataModel.InfraIndicators).To(Equal([]interface{}{"testString"}))
 
 				// Construct an instance of the CreateAgentDataOptions model
-				xFeatureAgents := true
 				createAgentDataOptionsName := "MyDevAgent"
 				createAgentDataOptionsResourceGroup := "Default"
 				createAgentDataOptionsVersion := "v1.0.0"
 				createAgentDataOptionsSchematicsLocation := "us-south"
 				createAgentDataOptionsAgentLocation := "us-south"
 				var createAgentDataOptionsAgentInfrastructure *schematicsv1.AgentInfrastructure = nil
-				createAgentDataOptionsModel := schematicsService.NewCreateAgentDataOptions(xFeatureAgents, createAgentDataOptionsName, createAgentDataOptionsResourceGroup, createAgentDataOptionsVersion, createAgentDataOptionsSchematicsLocation, createAgentDataOptionsAgentLocation, createAgentDataOptionsAgentInfrastructure)
-				createAgentDataOptionsModel.SetXFeatureAgents(true)
+				createAgentDataOptionsModel := schematicsService.NewCreateAgentDataOptions(createAgentDataOptionsName, createAgentDataOptionsResourceGroup, createAgentDataOptionsVersion, createAgentDataOptionsSchematicsLocation, createAgentDataOptionsAgentLocation, createAgentDataOptionsAgentInfrastructure)
 				createAgentDataOptionsModel.SetName("MyDevAgent")
 				createAgentDataOptionsModel.SetResourceGroup("Default")
 				createAgentDataOptionsModel.SetVersion("v1.0.0")
@@ -28390,7 +28065,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				createAgentDataOptionsModel.SetAgentKpi(agentKpiDataModel)
 				createAgentDataOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(createAgentDataOptionsModel).ToNot(BeNil())
-				Expect(createAgentDataOptionsModel.XFeatureAgents).To(Equal(core.BoolPtr(true)))
 				Expect(createAgentDataOptionsModel.Name).To(Equal(core.StringPtr("MyDevAgent")))
 				Expect(createAgentDataOptionsModel.ResourceGroup).To(Equal(core.StringPtr("Default")))
 				Expect(createAgentDataOptionsModel.Version).To(Equal(core.StringPtr("v1.0.0")))
@@ -29275,10 +28949,10 @@ var _ = Describe(`SchematicsV1`, func() {
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				Expect(serviceExtensionsModel).ToNot(BeNil())
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 				Expect(serviceExtensionsModel.Name).To(Equal(core.StringPtr("flavor")))
-				Expect(serviceExtensionsModel.Value).To(Equal(core.StringPtr("standard")))
+				Expect(serviceExtensionsModel.Value).To(Equal(core.StringPtr("testString")))
 				Expect(serviceExtensionsModel.Type).To(Equal(core.StringPtr("string")))
 
 				// Construct an instance of the CatalogRef model
@@ -29498,14 +29172,11 @@ var _ = Describe(`SchematicsV1`, func() {
 			It(`Invoke NewDeleteAgentDataOptions successfully`, func() {
 				// Construct an instance of the DeleteAgentDataOptions model
 				agentID := "testString"
-				xFeatureAgents := true
-				deleteAgentDataOptionsModel := schematicsService.NewDeleteAgentDataOptions(agentID, xFeatureAgents)
+				deleteAgentDataOptionsModel := schematicsService.NewDeleteAgentDataOptions(agentID)
 				deleteAgentDataOptionsModel.SetAgentID("testString")
-				deleteAgentDataOptionsModel.SetXFeatureAgents(true)
 				deleteAgentDataOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(deleteAgentDataOptionsModel).ToNot(BeNil())
 				Expect(deleteAgentDataOptionsModel.AgentID).To(Equal(core.StringPtr("testString")))
-				Expect(deleteAgentDataOptionsModel.XFeatureAgents).To(Equal(core.BoolPtr(true)))
 				Expect(deleteAgentDataOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewDeleteAgentOptions successfully`, func() {
@@ -29683,15 +29354,12 @@ var _ = Describe(`SchematicsV1`, func() {
 			It(`Invoke NewGetAgentDataOptions successfully`, func() {
 				// Construct an instance of the GetAgentDataOptions model
 				agentID := "testString"
-				xFeatureAgents := true
-				getAgentDataOptionsModel := schematicsService.NewGetAgentDataOptions(agentID, xFeatureAgents)
+				getAgentDataOptionsModel := schematicsService.NewGetAgentDataOptions(agentID)
 				getAgentDataOptionsModel.SetAgentID("testString")
-				getAgentDataOptionsModel.SetXFeatureAgents(true)
 				getAgentDataOptionsModel.SetProfile("summary")
 				getAgentDataOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(getAgentDataOptionsModel).ToNot(BeNil())
 				Expect(getAgentDataOptionsModel.AgentID).To(Equal(core.StringPtr("testString")))
-				Expect(getAgentDataOptionsModel.XFeatureAgents).To(Equal(core.BoolPtr(true)))
 				Expect(getAgentDataOptionsModel.Profile).To(Equal(core.StringPtr("summary")))
 				Expect(getAgentDataOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
@@ -30054,16 +29722,13 @@ var _ = Describe(`SchematicsV1`, func() {
 			})
 			It(`Invoke NewListAgentDataOptions successfully`, func() {
 				// Construct an instance of the ListAgentDataOptions model
-				xFeatureAgents := true
-				listAgentDataOptionsModel := schematicsService.NewListAgentDataOptions(xFeatureAgents)
-				listAgentDataOptionsModel.SetXFeatureAgents(true)
+				listAgentDataOptionsModel := schematicsService.NewListAgentDataOptions()
 				listAgentDataOptionsModel.SetOffset(int64(0))
 				listAgentDataOptionsModel.SetLimit(int64(100))
 				listAgentDataOptionsModel.SetProfile("summary")
 				listAgentDataOptionsModel.SetFilter("all")
 				listAgentDataOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(listAgentDataOptionsModel).ToNot(BeNil())
-				Expect(listAgentDataOptionsModel.XFeatureAgents).To(Equal(core.BoolPtr(true)))
 				Expect(listAgentDataOptionsModel.Offset).To(Equal(core.Int64Ptr(int64(0))))
 				Expect(listAgentDataOptionsModel.Limit).To(Equal(core.Int64Ptr(int64(100))))
 				Expect(listAgentDataOptionsModel.Profile).To(Equal(core.StringPtr("summary")))
@@ -30234,11 +29899,13 @@ var _ = Describe(`SchematicsV1`, func() {
 				listWorkspacesOptionsModel.SetOffset(int64(0))
 				listWorkspacesOptionsModel.SetLimit(int64(100))
 				listWorkspacesOptionsModel.SetProfile("ids")
+				listWorkspacesOptionsModel.SetResourceGroup("testString")
 				listWorkspacesOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(listWorkspacesOptionsModel).ToNot(BeNil())
 				Expect(listWorkspacesOptionsModel.Offset).To(Equal(core.Int64Ptr(int64(0))))
 				Expect(listWorkspacesOptionsModel.Limit).To(Equal(core.Int64Ptr(int64(100))))
 				Expect(listWorkspacesOptionsModel.Profile).To(Equal(core.StringPtr("ids")))
+				Expect(listWorkspacesOptionsModel.ResourceGroup).To(Equal(core.StringPtr("testString")))
 				Expect(listWorkspacesOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewPlanWorkspaceCommandOptions successfully`, func() {
@@ -30696,10 +30363,10 @@ var _ = Describe(`SchematicsV1`, func() {
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				Expect(serviceExtensionsModel).ToNot(BeNil())
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 				Expect(serviceExtensionsModel.Name).To(Equal(core.StringPtr("flavor")))
-				Expect(serviceExtensionsModel.Value).To(Equal(core.StringPtr("standard")))
+				Expect(serviceExtensionsModel.Value).To(Equal(core.StringPtr("testString")))
 				Expect(serviceExtensionsModel.Type).To(Equal(core.StringPtr("string")))
 
 				// Construct an instance of the CatalogRef model
@@ -31294,16 +30961,14 @@ var _ = Describe(`SchematicsV1`, func() {
 
 				// Construct an instance of the UpdateAgentDataOptions model
 				agentID := "testString"
-				xFeatureAgents := true
 				updateAgentDataOptionsName := "MyDevAgent"
 				updateAgentDataOptionsResourceGroup := "Default"
 				updateAgentDataOptionsVersion := "v1.0.0"
 				updateAgentDataOptionsSchematicsLocation := "us-south"
 				updateAgentDataOptionsAgentLocation := "us-south"
 				var updateAgentDataOptionsAgentInfrastructure *schematicsv1.AgentInfrastructure = nil
-				updateAgentDataOptionsModel := schematicsService.NewUpdateAgentDataOptions(agentID, xFeatureAgents, updateAgentDataOptionsName, updateAgentDataOptionsResourceGroup, updateAgentDataOptionsVersion, updateAgentDataOptionsSchematicsLocation, updateAgentDataOptionsAgentLocation, updateAgentDataOptionsAgentInfrastructure)
+				updateAgentDataOptionsModel := schematicsService.NewUpdateAgentDataOptions(agentID, updateAgentDataOptionsName, updateAgentDataOptionsResourceGroup, updateAgentDataOptionsVersion, updateAgentDataOptionsSchematicsLocation, updateAgentDataOptionsAgentLocation, updateAgentDataOptionsAgentInfrastructure)
 				updateAgentDataOptionsModel.SetAgentID("testString")
-				updateAgentDataOptionsModel.SetXFeatureAgents(true)
 				updateAgentDataOptionsModel.SetName("MyDevAgent")
 				updateAgentDataOptionsModel.SetResourceGroup("Default")
 				updateAgentDataOptionsModel.SetVersion("v1.0.0")
@@ -31319,7 +30984,6 @@ var _ = Describe(`SchematicsV1`, func() {
 				updateAgentDataOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(updateAgentDataOptionsModel).ToNot(BeNil())
 				Expect(updateAgentDataOptionsModel.AgentID).To(Equal(core.StringPtr("testString")))
-				Expect(updateAgentDataOptionsModel.XFeatureAgents).To(Equal(core.BoolPtr(true)))
 				Expect(updateAgentDataOptionsModel.Name).To(Equal(core.StringPtr("MyDevAgent")))
 				Expect(updateAgentDataOptionsModel.ResourceGroup).To(Equal(core.StringPtr("Default")))
 				Expect(updateAgentDataOptionsModel.Version).To(Equal(core.StringPtr("v1.0.0")))
@@ -32035,10 +31699,10 @@ var _ = Describe(`SchematicsV1`, func() {
 				serviceExtensionsModel := new(schematicsv1.ServiceExtensions)
 				Expect(serviceExtensionsModel).ToNot(BeNil())
 				serviceExtensionsModel.Name = core.StringPtr("flavor")
-				serviceExtensionsModel.Value = core.StringPtr("standard")
+				serviceExtensionsModel.Value = core.StringPtr("testString")
 				serviceExtensionsModel.Type = core.StringPtr("string")
 				Expect(serviceExtensionsModel.Name).To(Equal(core.StringPtr("flavor")))
-				Expect(serviceExtensionsModel.Value).To(Equal(core.StringPtr("standard")))
+				Expect(serviceExtensionsModel.Value).To(Equal(core.StringPtr("testString")))
 				Expect(serviceExtensionsModel.Type).To(Equal(core.StringPtr("string")))
 
 				// Construct an instance of the CatalogRef model
